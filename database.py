@@ -259,29 +259,35 @@ async def init_db() -> None:
                 "INSERT INTO settings (key,value) VALUES ('pricing_v2_migrated','1')"
             )
         questions_path = Path(__file__).parent / "data" / "questions.json"
-        question_records = json.loads(questions_path.read_text(encoding="utf-8"))
-        for item in question_records:
-            existing = await _one(
-                conn,
-                "SELECT 1 FROM questions WHERE subject=? AND language=? AND question=? LIMIT 1",
-                (item["subject"], item["language"], item["question_text"]),
-            )
-            if existing is None:
-                await conn.execute(
-                    "INSERT INTO questions "
-                    "(subject,topic,language,question,options,correct,explanation,difficulty) "
-                    "VALUES (?,?,?,?,?,?,?,?)",
-                    (
-                        item["subject"],
-                        item.get("topic"),
-                        item["language"],
-                        item["question_text"],
-                        json.dumps(item["options"], ensure_ascii=False),
-                        json.dumps([item["correct_option_index"]]),
-                        item["explanation"],
-                        item["difficulty"],
-                    ),
+        if questions_path.is_file():
+            question_records = json.loads(questions_path.read_text(encoding="utf-8"))
+            for item in question_records:
+                existing = await _one(
+                    conn,
+                    "SELECT 1 FROM questions WHERE subject=? AND language=? AND question=? LIMIT 1",
+                    (item["subject"], item["language"], item["question_text"]),
                 )
+                if existing is None:
+                    await conn.execute(
+                        "INSERT INTO questions "
+                        "(subject,topic,language,question,options,correct,explanation,difficulty) "
+                        "VALUES (?,?,?,?,?,?,?,?)",
+                        (
+                            item["subject"],
+                            item.get("topic"),
+                            item["language"],
+                            item["question_text"],
+                            json.dumps(item["options"], ensure_ascii=False),
+                            json.dumps([item["correct_option_index"]]),
+                            item["explanation"],
+                            item["difficulty"],
+                        ),
+                    )
+        else:
+            logger.warning(
+                "Optional question seed file is missing: %s; skipping seed import",
+                questions_path,
+            )
         await conn.commit()
     logger.info("Database initialized at %s", DB_PATH)
 
