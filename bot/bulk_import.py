@@ -15,7 +15,7 @@ JSON_TEMPLATE = [
         "question_text": "Найдите корень уравнения: 2x + 6 = 14",
         "options": ["x = 2", "x = 4", "x = 6", "x = 8"],
         "correct_option_index": 1,
-        "explanation": "2x = 14 - 6 => 2x = 8 => x = 4",
+        "explanation": "🧩 Переносим 6 вправо: 2x = 14 - 6 = 8.\n🧮 Делим на 2: x = 4.",
     },
     {
         "subject": "english",
@@ -24,7 +24,7 @@ JSON_TEMPLATE = [
         "question_text": "Choose the correct form: She ___ to school every day.",
         "options": ["go", "goes", "going", "gone"],
         "correct_option_index": 1,
-        "explanation": "Use the third-person singular form 'goes'.",
+        "explanation": "🧩 The subject “she” is third-person singular.\n🧮 In the present simple, use “goes”.",
     },
     {
         "subject": "iq",
@@ -33,7 +33,7 @@ JSON_TEMPLATE = [
         "question_text": "Какое число продолжает последовательность: 2, 4, 8, 16, ...?",
         "options": ["18", "24", "32", "64"],
         "correct_option_index": 2,
-        "explanation": "Каждое следующее число вдвое больше предыдущего.",
+        "explanation": "🧩 Каждый член последовательности умножается на 2.\n🧮 16 × 2 = 32.",
     },
 ]
 

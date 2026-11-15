@@ -89,18 +89,44 @@ def profile_keyboard() -> InlineKeyboardMarkup:
 
 def premium_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🟢 7 дней — 150 ⭐", callback_data="sub:week")],
-        [InlineKeyboardButton(text="🟡 1 месяц — 450 ⭐", callback_data="sub:month")],
-        [InlineKeyboardButton(text="🔥 6 месяцев — 1800 ⭐ · выгодно", callback_data="sub:halfyear")],
+        [InlineKeyboardButton(text="🟢 1 неделя — 200 ⭐", callback_data="sub:week")],
+        [InlineKeyboardButton(text="🟡 1 месяц — 700 ⭐", callback_data="sub:month")],
+        [InlineKeyboardButton(text="🔥 3 месяца — 2000 ⭐ · выгодно", callback_data="sub:quarter")],
         [InlineKeyboardButton(text="🔙 Назад", callback_data="user:main")],
     ])
 
 
-def gift_keyboard() -> InlineKeyboardMarkup:
+def gift_keyboard(used_mocks: set[str] | None = None) -> InlineKeyboardMarkup:
+    used = used_mocks or set()
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🎁 Забрать 3 теста", callback_data="gift:claim")],
+        [InlineKeyboardButton(
+            text=f"{'✅' if 'english' in used else '🎁'} Бесплатный мок: Английский (100)",
+            callback_data="mock:english",
+        )],
+        [InlineKeyboardButton(
+            text=f"{'✅' if 'mathematics' in used else '🎁'} Бесплатный мок: Математика (100)",
+            callback_data="mock:mathematics",
+        )],
+        [InlineKeyboardButton(
+            text=f"{'✅' if 'iq' in used else '🎁'} Бесплатный мок: IQ (100)",
+            callback_data="mock:iq",
+        )],
         [InlineKeyboardButton(text="🏷 Ввести промокод", callback_data="gift:promo")],
         [InlineKeyboardButton(text="🔙 В меню", callback_data="user:main")],
+    ])
+
+
+def test_size_keyboard(subject: str, amount: int) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text=f"📝 Тренировочный тест ({amount} вопросов) — 25 ⭐",
+            callback_data=f"testsize:{subject}:regular",
+        )],
+        [InlineKeyboardButton(
+            text="🎯 Полный мок (100 вопросов) — 60 ⭐",
+            callback_data=f"testsize:{subject}:full",
+        )],
+        [InlineKeyboardButton(text="⬅️ К предметам", callback_data="goto:test")],
     ])
 
 
