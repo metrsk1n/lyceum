@@ -21,11 +21,12 @@ from config import settings
 logger = logging.getLogger(__name__)
 router = Router()
 SUBSCRIPTION_PLANS = {
-    "week": (150, 7),
-    "month": (450, 30),
-    "halfyear": (1800, 180),
+    "week": (200, 7),
+    "month": (700, 30),
+    "quarter": (2000, 90),
 }
 TEST_PRICE_STARS = 25
+FULL_TEST_PRICE_STARS = 60
 
 
 # ─── Payment history ──────────────────────────────────────────────────────────
@@ -207,6 +208,16 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
         ):
             await query.answer(ok=False, error_message="Не удалось проверить покупку теста.")
             return
+    elif payload.startswith("full_test:"):
+        parts = payload.split(":")
+        subjects = {subject["slug"] for subject in await db.get_subjects()}
+        if (
+            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != query.from_user.id
+            or parts[2] not in subjects or query.total_amount != FULL_TEST_PRICE_STARS
+            or query.currency != "XTR"
+        ):
+            await query.answer(ok=False, error_message="Не удалось проверить покупку полного мока.")
+            return
     elif payload.startswith("unlock:"):
         parts = payload.split(":")
         expected_amount = db.runtime.get_int("answer_unlock_price", settings.answer_unlock_price)
@@ -284,7 +295,7 @@ async def successful_payment(message: Message) -> None:
             if len(parts) == 4:
                 await db.consume_user_subscription_discount(user_id, parts[3])
             logger.info("Premium uid=%s plan=%s stars=%s", user_id, parts[1], amount)
-            plan_names = {"week": "7 дней", "month": "1 месяц", "halfyear": "6 месяцев"}
+            plan_names = {"week": "1 неделю", "month": "1 месяц", "quarter": "3 месяца"}
             await message.answer(
                 f"✅ Успешная покупка подписки Premium на {plan_names[parts[1]]}.\n"
                 f"Подписка действует до {datetime.fromisoformat(expires_at).strftime('%d.%m.%Y %H:%M')}."
@@ -305,6 +316,24 @@ async def successful_payment(message: Message) -> None:
         if await db.record_test_purchase(user_id, charge_id, payload, amount):
             await message.answer(
                 "✅ Оплата получена. Тест добавлен на ваш баланс.",
+                reply_markup=paid_test_keyboard(),
+            )
+        else:
+            await message.answer("✅ Этот платёж уже был обработан.")
+
+    elif payload.startswith("full_test:"):
+        parts = payload.split(":")
+        subjects = {subject["slug"] for subject in await db.get_subjects()}
+        if (
+            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != user_id
+            or parts[2] not in subjects or amount != FULL_TEST_PRICE_STARS or sp.currency != "XTR"
+        ):
+            logger.error("Invalid full test payment payload=%s amount=%s", payload, amount)
+            await message.answer("Платёж получен, но покупку полного мока не удалось проверить. Обратитесь в поддержку.")
+            return
+        if await db.record_full_test_purchase(user_id, charge_id, payload, amount):
+            await message.answer(
+                "✅ Оплата получена. Полный мок добавлен на ваш баланс.",
                 reply_markup=paid_test_keyboard(),
             )
         else:
@@ -345,7 +374,12 @@ async def successful_payment(message: Message) -> None:
                 f"   → {escape(str(correct_text))}"
             )
             if answer.get("explanation"):
-                lines.append(f"   💡 {escape(answer['explanation'])}")
+                steps = [
+                    f"\t{escape(line.strip())}"
+                    for line in answer["explanation"].splitlines()
+                    if line.strip()
+                ]
+                lines.append(f"<pre>{chr(10).join(steps)}</pre>")
             lines.append("")
 
         chunks: list[str] = []

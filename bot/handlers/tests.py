@@ -1,59 +1,147 @@
 from __future__ import annotations
 
 import random
+import json
+import logging
 import time
+from functools import lru_cache
 from html import escape
+from pathlib import Path
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, LabeledPrice
 
 import database as db
-from bot.keyboards import answer_keyboard, premium_keyboard, result_questions_keyboard
+from bot.keyboards import answer_keyboard, premium_keyboard, result_questions_keyboard, test_size_keyboard
 from bot.locale import t
 from bot.states import TestFlow
 from bot.handlers.payments import TEST_PRICE_STARS
 from config import settings
 
 router = Router()
+logger = logging.getLogger(__name__)
 
 OPTION_LETTERS = "АБВГДЕЖЗ"
 
 
+@lru_cache(maxsize=1)
+def _static_mocks() -> dict[str, list[dict]]:
+    path = Path(__file__).resolve().parents[2] / "data" / "static_mocks.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    expected = {"english", "mathematics", "iq"}
+    if set(data) != expected or any(len(data[subject]) != 100 for subject in expected):
+        raise ValueError(f"Static mock bank must have 100 questions per subject: {path}")
+    return data
+
+
 @router.callback_query(F.data.startswith("subject:"))
-async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
+async def choose_test_size(callback: CallbackQuery) -> None:
     subject = callback.data.split(":", 1)[1]
+    subjects = {item["slug"] for item in await db.get_subjects()}
+    if subject not in subjects:
+        await callback.answer("Предмет не найден.", show_alert=True)
+        return
     lang = await db.get_user_language(callback.from_user.id)
     amount = max(1, db.runtime.get_int("questions_per_test", settings.questions_per_test))
+    await callback.message.edit_text(
+        "Выберите формат теста:",
+        reply_markup=test_size_keyboard(subject, amount),
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("testsize:"))
+async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
+    parts = callback.data.split(":")
+    if len(parts) != 3 or parts[2] not in {"regular", "full"}:
+        await callback.answer("Некорректный формат теста.", show_alert=True)
+        return
+    subject, size = parts[1], parts[2]
+    subjects = {item["slug"] for item in await db.get_subjects()}
+    if subject not in subjects:
+        await callback.answer("Предмет не найден.", show_alert=True)
+        return
+
+    lang = await db.get_user_language(callback.from_user.id)
+    amount = 100 if size == "full" else max(
+        1, db.runtime.get_int("questions_per_test", settings.questions_per_test)
+    )
     questions = await db.get_unresolved_questions(callback.from_user.id, subject, lang, amount=amount)
     if not questions:
         await callback.message.answer(t(lang, "no_questions"))
         await callback.answer()
         return
 
-    access = await db.consume_test_access(callback.from_user.id, subscriber_daily_limit=5)
+    access = (
+        await db.consume_full_test_access(callback.from_user.id, subscriber_daily_limit=5)
+        if size == "full"
+        else await db.consume_test_access(callback.from_user.id, subscriber_daily_limit=5)
+    )
     if access == "daily_limit":
         await callback.message.answer("Вы использовали дневную квоту Premium (5 тестов). Новые тесты будут доступны завтра.")
         await callback.answer()
         return
     if access == "payment_required":
+        price = 60 if size == "full" else TEST_PRICE_STARS
+        payload_type = "full_test" if size == "full" else "test"
+        title = "Полный мок" if size == "full" else "Один тест"
+        description = "Полный тест из 100 вопросов" if size == "full" else "Доступ к новому тесту"
         try:
             await callback.bot.send_invoice(
                 chat_id=callback.from_user.id,
-                title="Один тест",
-                description="Доступ к новому тесту",
-                payload=f"test:{callback.from_user.id}:{subject}",
+                title=title,
+                description=description,
+                payload=f"{payload_type}:{callback.from_user.id}:{subject}",
                 provider_token="",
                 currency="XTR",
-                prices=[LabeledPrice(label="Один тест", amount=TEST_PRICE_STARS)],
+                prices=[LabeledPrice(label=title, amount=price)],
             )
         except Exception:
             await callback.message.answer("Не удалось выставить счёт. Попробуйте снова позже.")
         await callback.answer()
         return
 
-    random.shuffle(questions)
+    if size != "full":
+        random.shuffle(questions)
 
+    await _start_test(callback, state, questions, subject, lang)
+    await callback.answer()
+
+
+@router.callback_query(F.data.startswith("mock:"))
+async def start_free_mock(callback: CallbackQuery, state: FSMContext) -> None:
+    subject = callback.data.split(":", 1)[1]
+    if subject not in {"english", "mathematics", "iq"}:
+        await callback.answer("Бесплатный мок не найден.", show_alert=True)
+        return
+    lang = await db.get_user_language(callback.from_user.id)
+    mock_items = _static_mocks()[subject]
+    questions = [
+        {
+            "id": item["id"],
+            "question": item["question_text"],
+            "options": item["options"],
+            "correct": [item["correct_option_index"]],
+            "explanation": item["explanation"],
+        }
+        for item in mock_items
+    ]
+    if not await db.claim_free_mock(callback.from_user.id, subject):
+        await callback.answer("Этот бесплатный мок уже использован.", show_alert=True)
+        return
+    await _start_test(callback, state, questions, subject, lang, free_mock=True)
+    await callback.answer()
+
+
+async def _start_test(
+    callback: CallbackQuery,
+    state: FSMContext,
+    questions: list[dict],
+    subject: str,
+    lang: str,
+    free_mock: bool = False,
+) -> None:
     await state.set_state(TestFlow.answering)
     await state.update_data(
         questions=questions,
@@ -63,14 +151,11 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
         start_time=time.time(),
         score=0,
         option_map={},
+        free_mock=free_mock,
     )
 
-    try:
-        await callback.message.edit_text(f"🎯 Тест начался. Вопросов: {len(questions)}")
-    except Exception:
-        pass
+    await callback.message.answer(f"🎯 Тест начался. Вопросов: {len(questions)}")
     await _send_question(callback, state, questions[0], 1, len(questions), lang)
-    await callback.answer()
 
 
 def _shuffle_options_for_question(question: dict) -> tuple[list[str], dict[int, int]]:
@@ -162,13 +247,16 @@ async def _finish_test(callback: CallbackQuery, state: FSMContext, data: dict, a
     result_id = await db.save_result(
         user_id=callback.from_user.id,
         subject=subject,
-        mode="practice",
+        mode="free_mock" if data.get("free_mock") else "practice",
         score=score,
         total=total,
         time_sec=max(0, int(time.time() - data["start_time"])),
         answers=answers,
     )
-    await db.record_solved_questions(callback.from_user.id, subject, [answer["qid"] for answer in answers])
+    if data.get("free_mock"):
+        await db.complete_free_mock(callback.from_user.id, subject)
+    else:
+        await db.record_solved_questions(callback.from_user.id, subject, [answer["qid"] for answer in answers])
 
     percent = round(score / total * 100) if total else 0
     lines = [
@@ -222,11 +310,13 @@ async def review_question(callback: CallbackQuery) -> None:
     options = answer.get("options", [])
     correct_index = answer.get("correct", 0)
     correct_answer = options[correct_index] if 0 <= correct_index < len(options) else "Не указан"
+    steps = [line.strip() for line in explanation.splitlines() if line.strip()]
+    formatted_steps = "\n".join(f"\t{escape(step)}" for step in steps)
     text = (
         f"💡 <b>Разбор вопроса {index + 1}</b>\n\n"
         f"{escape(answer.get('question', ''))}\n\n"
         f"✅ Правильный ответ: {escape(correct_answer)}\n\n"
-        f"{escape(explanation)}"
+        f"<pre>{formatted_steps}</pre>"
     )
     await callback.message.answer(text)
     await callback.answer()

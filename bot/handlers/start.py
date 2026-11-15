@@ -148,29 +148,21 @@ async def user_premium(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "user:gift")
 async def user_gift(callback: CallbackQuery) -> None:
-    access = await db.get_user_access(callback.from_user.id)
-    gift_status = "Подарочные 3 теста можно забрать один раз." if not access["gift_claimed"] else (
-        f"Осталось подарочных тестов: {access['free_test_credits']}."
-    )
+    used_mocks = await db.get_free_mock_status(callback.from_user.id)
+    remaining = 3 - len(used_mocks)
     await callback.message.edit_text(
-        f"🎁 <b>Подарок</b>\n\n{gift_status}\n"
-        f"Premium: до 5 тестов в день. Без подписки следующий тест стоит 25 ⭐.",
-        reply_markup=gift_keyboard(),
+        f"🎁 <b>Бесплатные полные моки</b>\n\n"
+        f"Доступно: {remaining} из 3. Каждый мок содержит 100 фиксированных вопросов "
+        f"и доступен один раз для аккаунта.\n"
+        f"Платные тарифы: тест на 20 вопросов — 25 ⭐, полный мок — 60 ⭐.",
+        reply_markup=gift_keyboard(used_mocks),
     )
     await callback.answer()
 
 
 @router.callback_query(F.data == "gift:claim")
 async def claim_gift(callback: CallbackQuery) -> None:
-    if await db.claim_gift_tests(callback.from_user.id, 3):
-        access = await db.get_user_access(callback.from_user.id)
-        await callback.message.edit_text(
-            f"🎁 <b>Подарок</b>\n\nНачислено 3 теста. Осталось: {access['free_test_credits']}.",
-            reply_markup=gift_keyboard(),
-        )
-        await callback.answer("🎁 Начислено 3 теста!", show_alert=True)
-        return
-    await callback.answer("Подарок уже получен.", show_alert=True)
+    await callback.answer("Бесплатные моки доступны в меню «Подарок».", show_alert=True)
 
 
 @router.callback_query(F.data == "gift:promo")
@@ -256,14 +248,14 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
             reply_markup=premium_keyboard(),
         )
     elif action == "gift":
-        access = await db.get_user_access(user_id)
-        gift_status = "Подарочные 3 теста можно забрать один раз." if not access["gift_claimed"] else (
-            f"Осталось подарочных тестов: {access['free_test_credits']}."
-        )
+        used_mocks = await db.get_free_mock_status(user_id)
+        remaining = 3 - len(used_mocks)
         await message.answer(
-            f"🎁 <b>Подарок</b>\n\n{gift_status}\n"
-            f"Premium: до 5 тестов в день. Без подписки следующий тест стоит 25 ⭐.",
-            reply_markup=gift_keyboard(),
+            f"🎁 <b>Бесплатные полные моки</b>\n\n"
+            f"Доступно: {remaining} из 3. Каждый мок содержит 100 фиксированных вопросов "
+            f"и доступен один раз для аккаунта.\n"
+            f"Платные тарифы: тест на 20 вопросов — 25 ⭐, полный мок — 60 ⭐.",
+            reply_markup=gift_keyboard(used_mocks),
         )
     elif action == "mistakes":
         mistakes = await db.get_user_mistakes(user_id, limit=10)
