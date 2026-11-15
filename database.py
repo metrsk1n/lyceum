@@ -161,9 +161,18 @@ async def init_db() -> None:
                 gift_claimed             INTEGER NOT NULL DEFAULT 0,
                 free_test_credits        INTEGER NOT NULL DEFAULT 0,
                 paid_test_credits        INTEGER NOT NULL DEFAULT 0,
+                paid_full_test_credits  INTEGER NOT NULL DEFAULT 0,
                 explanation_credits      INTEGER NOT NULL DEFAULT 0,
                 subscription_discount    INTEGER NOT NULL DEFAULT 0,
                 subscription_discount_code TEXT
+            );
+
+            CREATE TABLE IF NOT EXISTS user_free_mocks (
+                user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                subject     TEXT NOT NULL,
+                started_at  TEXT NOT NULL DEFAULT (datetime('now')),
+                completed_at TEXT,
+                PRIMARY KEY (user_id, subject)
             );
 
             CREATE TABLE IF NOT EXISTS daily_test_usage (
@@ -219,13 +228,18 @@ async def init_db() -> None:
             await conn.execute("ALTER TABLE payments ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'")
         if "expires_at" not in payment_columns:
             await conn.execute("ALTER TABLE payments ADD COLUMN expires_at TEXT")
+        access_columns_cursor = await conn.execute("PRAGMA table_info(user_access)")
+        access_columns = {row[1] for row in await access_columns_cursor.fetchall()}
+        if "paid_full_test_credits" not in access_columns:
+            await conn.execute(
+                "ALTER TABLE user_access ADD COLUMN paid_full_test_credits INTEGER NOT NULL DEFAULT 0"
+            )
         await conn.commit()
 
         # Seed the built-in subjects without removing administrator-created ones.
         canonical = [
             ("mathematics", "Математика"),
             ("english",     "Английский"),
-            ("russian",     "Русский"),
             ("iq",          "IQ"),
         ]
         # Upsert canonical subjects
@@ -235,7 +249,39 @@ async def init_db() -> None:
                 " ON CONFLICT(slug) DO UPDATE SET title=excluded.title, is_active=1",
                 (slug, title),
             )
-        await conn.execute("UPDATE subjects SET is_active=0 WHERE slug='physics'")
+        await conn.execute("UPDATE subjects SET is_active=0 WHERE slug IN ('physics','russian')")
+        migration = await _one(conn, "SELECT value FROM settings WHERE key='pricing_v2_migrated'")
+        if migration is None:
+            await conn.execute(
+                "UPDATE settings SET value='25' WHERE key='answer_unlock_price' AND value IN ('50','75')"
+            )
+            await conn.execute(
+                "INSERT INTO settings (key,value) VALUES ('pricing_v2_migrated','1')"
+            )
+        questions_path = Path(__file__).parent / "data" / "questions.json"
+        question_records = json.loads(questions_path.read_text(encoding="utf-8"))
+        for item in question_records:
+            existing = await _one(
+                conn,
+                "SELECT 1 FROM questions WHERE subject=? AND language=? AND question=? LIMIT 1",
+                (item["subject"], item["language"], item["question_text"]),
+            )
+            if existing is None:
+                await conn.execute(
+                    "INSERT INTO questions "
+                    "(subject,topic,language,question,options,correct,explanation,difficulty) "
+                    "VALUES (?,?,?,?,?,?,?,?)",
+                    (
+                        item["subject"],
+                        item.get("topic"),
+                        item["language"],
+                        item["question_text"],
+                        json.dumps(item["options"], ensure_ascii=False),
+                        json.dumps([item["correct_option_index"]]),
+                        item["explanation"],
+                        item["difficulty"],
+                    ),
+                )
         await conn.commit()
     logger.info("Database initialized at %s", DB_PATH)
 
@@ -677,6 +723,31 @@ async def claim_gift_tests(user_id: int, amount: int = 3) -> bool:
         return cursor.rowcount == 1
 
 
+async def claim_free_mock(user_id: int, subject: str) -> bool:
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "INSERT OR IGNORE INTO user_free_mocks (user_id,subject) VALUES (?,?)",
+            (user_id, subject),
+        )
+        await conn.commit()
+        return cursor.rowcount == 1
+
+
+async def complete_free_mock(user_id: int, subject: str) -> None:
+    async with _db() as conn:
+        await conn.execute(
+            "UPDATE user_free_mocks SET completed_at=datetime('now') WHERE user_id=? AND subject=?",
+            (user_id, subject),
+        )
+        await conn.commit()
+
+
+async def get_free_mock_status(user_id: int) -> set[str]:
+    async with _db() as conn:
+        rows = await _all(conn, "SELECT subject FROM user_free_mocks WHERE user_id=?", (user_id,))
+        return {row["subject"] for row in rows}
+
+
 async def get_user_access(user_id: int) -> dict:
     async with _db() as conn:
         await _ensure_user_access(conn, user_id)
@@ -725,6 +796,39 @@ async def consume_test_access(user_id: int, subscriber_daily_limit: int = 5) -> 
         return "payment_required"
 
 
+async def consume_full_test_access(user_id: int, subscriber_daily_limit: int = 5) -> str:
+    if user_id in settings.admin_ids:
+        return "subscriber"
+
+    async with _db() as conn:
+        await _ensure_user_access(conn, user_id)
+        cursor = await conn.execute(
+            "UPDATE user_access SET paid_full_test_credits=paid_full_test_credits-1 "
+            "WHERE user_id=? AND paid_full_test_credits>0",
+            (user_id,),
+        )
+        if cursor.rowcount:
+            await conn.commit()
+            return "paid"
+        await conn.commit()
+
+    if await user_has_active_subscription(user_id):
+        async with _db() as conn:
+            usage_date = date.today().isoformat()
+            await conn.execute(
+                "INSERT OR IGNORE INTO daily_test_usage (user_id, usage_date, tests_used) VALUES (?,?,0)",
+                (user_id, usage_date),
+            )
+            cursor = await conn.execute(
+                "UPDATE daily_test_usage SET tests_used=tests_used+1 "
+                "WHERE user_id=? AND usage_date=? AND tests_used<?",
+                (user_id, usage_date, subscriber_daily_limit),
+            )
+            await conn.commit()
+            return "subscriber" if cursor.rowcount else "daily_limit"
+    return "payment_required"
+
+
 async def record_test_purchase(user_id: int, charge_id: str, payload: str, amount: int) -> bool:
     async with _db() as conn:
         cursor = await conn.execute(
@@ -736,6 +840,24 @@ async def record_test_purchase(user_id: int, charge_id: str, payload: str, amoun
             await _ensure_user_access(conn, user_id)
             await conn.execute(
                 "UPDATE user_access SET paid_test_credits=paid_test_credits+1 WHERE user_id=?",
+                (user_id,),
+            )
+        await conn.commit()
+        return cursor.rowcount == 1
+
+
+async def record_full_test_purchase(user_id: int, charge_id: str, payload: str, amount: int) -> bool:
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "INSERT OR IGNORE INTO payments "
+            "(user_id,charge_id,payload,amount,product_type,status) "
+            "VALUES (?,?,?,?,'full_test','paid')",
+            (user_id, charge_id, payload, amount),
+        )
+        if cursor.rowcount:
+            await _ensure_user_access(conn, user_id)
+            await conn.execute(
+                "UPDATE user_access SET paid_full_test_credits=paid_full_test_credits+1 WHERE user_id=?",
                 (user_id,),
             )
         await conn.commit()

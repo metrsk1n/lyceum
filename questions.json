@@ -1,0 +1,4502 @@
+[
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 2 × 4 + 3.",
+    "options": [
+      "5",
+      "11",
+      "9",
+      "14"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 11\n\n🧩 Сначала выполняем умножение: 2 × 4 = 8.\n🧮 Затем прибавляем 3: 8 + 3 = 11.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 3 × 5 + 4.",
+    "options": [
+      "12",
+      "11",
+      "19",
+      "27"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 19\n\n🧩 Сначала выполняем умножение: 3 × 5 = 15.\n🧮 Затем прибавляем 4: 15 + 4 = 19.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 4 × 6 + 5.",
+    "options": [
+      "44",
+      "19",
+      "15",
+      "29"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 29\n\n🧩 Сначала выполняем умножение: 4 × 6 = 24.\n🧮 Затем прибавляем 5: 24 + 5 = 29.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 5 × 7 + 6.",
+    "options": [
+      "41",
+      "29",
+      "18",
+      "65"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 41\n\n🧩 Сначала выполняем умножение: 5 × 7 = 35.\n🧮 Затем прибавляем 6: 35 + 6 = 41.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 6 × 8 + 7.",
+    "options": [
+      "41",
+      "55",
+      "21",
+      "90"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 55\n\n🧩 Сначала выполняем умножение: 6 × 8 = 48.\n🧮 Затем прибавляем 7: 48 + 7 = 55.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 2 × 9 + 8.",
+    "options": [
+      "19",
+      "10",
+      "26",
+      "34"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 26\n\n🧩 Сначала выполняем умножение: 2 × 9 = 18.\n🧮 Затем прибавляем 8: 18 + 8 = 26.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 3 × 10 + 9.",
+    "options": [
+      "57",
+      "21",
+      "22",
+      "39"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 39\n\n🧩 Сначала выполняем умножение: 3 × 10 = 30.\n🧮 Затем прибавляем 9: 30 + 9 = 39.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 4 × 4 + 10.",
+    "options": [
+      "26",
+      "6",
+      "18",
+      "56"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 26\n\n🧩 Сначала выполняем умножение: 4 × 4 = 16.\n🧮 Затем прибавляем 10: 16 + 10 = 26.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 5 × 5 + 11.",
+    "options": [
+      "14",
+      "36",
+      "21",
+      "80"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 36\n\n🧩 Сначала выполняем умножение: 5 × 5 = 25.\n🧮 Затем прибавляем 11: 25 + 11 = 36.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Арифметика",
+    "question_text": "Вычислите: 6 × 6 + 12.",
+    "options": [
+      "108",
+      "24",
+      "48",
+      "108 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 48\n\n🧩 Сначала выполняем умножение: 6 × 6 = 36.\n🧮 Затем прибавляем 12: 36 + 12 = 48.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 2x + 3 = 7.",
+    "options": [
+      "-2",
+      "3",
+      "1",
+      "2"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 2\n\n🧩 Перенесём свободный член: 2x = 7 − 3 = 4.\n🧮 Делим обе части на 2: x = 2.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 3x + 4 = 19.",
+    "options": [
+      "5",
+      "6",
+      "4",
+      "-5"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 5\n\n🧩 Перенесём свободный член: 3x = 19 − 4 = 15.\n🧮 Делим обе части на 3: x = 5.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 4x + 5 = 37.",
+    "options": [
+      "9",
+      "8",
+      "7",
+      "-8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 8\n\n🧩 Перенесём свободный член: 4x = 37 − 5 = 32.\n🧮 Делим обе части на 4: x = 8.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Дроби",
+    "question_text": "Вычислите: 1/3 + 2/3.",
+    "options": [
+      "2/3",
+      "3/6",
+      "3/3",
+      "4/3"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 3/3\n\n🧩 Знаменатели одинаковые, поэтому складываем числители: 1 + 2 = 3.\n🧮 Знаменатель остаётся 3. Получаем 3/3.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Дроби",
+    "question_text": "Вычислите: 2/4 + 1/4.",
+    "options": [
+      "4/4",
+      "3/8",
+      "2/4",
+      "3/4"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 3/4\n\n🧩 Знаменатели одинаковые, поэтому складываем числители: 2 + 1 = 3.\n🧮 Знаменатель остаётся 4. Получаем 3/4.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Дроби",
+    "question_text": "Вычислите: 1/5 + 2/5.",
+    "options": [
+      "3/5",
+      "3/10",
+      "2/5",
+      "4/5"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 3/5\n\n🧩 Знаменатели одинаковые, поэтому складываем числители: 1 + 2 = 3.\n🧮 Знаменатель остаётся 5. Получаем 3/5.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 10% от 100.",
+    "options": [
+      "20",
+      "10",
+      "90",
+      "90 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 10\n\n🧩 Переводим процент в дробь: 10% = 10/100.\n🧮 Умножаем: 100 × 10/100 = 10.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 15% от 120.",
+    "options": [
+      "102",
+      "33",
+      "18",
+      "36"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 18\n\n🧩 Переводим процент в дробь: 15% = 15/100.\n🧮 Умножаем: 120 × 15/100 = 18.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 20% от 140.",
+    "options": [
+      "56",
+      "48",
+      "112",
+      "28"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 28\n\n🧩 Переводим процент в дробь: 20% = 20/100.\n🧮 Умножаем: 140 × 20/100 = 28.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Найдите площадь прямоугольника со сторонами 4 см и 3 см.",
+    "options": [
+      "12 см²",
+      "14 см²",
+      "7 см²",
+      "16 см²"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 12 см²\n\n🧩 Площадь прямоугольника равна произведению его сторон.\n🧮 S = 4 × 3 = 12 см².",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Найдите площадь прямоугольника со сторонами 5 см и 4 см.",
+    "options": [
+      "18 см²",
+      "20 см²",
+      "9 см²",
+      "25 см²"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 20 см²\n\n🧩 Площадь прямоугольника равна произведению его сторон.\n🧮 S = 5 × 4 = 20 см².",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Найдите площадь прямоугольника со сторонами 6 см и 5 см.",
+    "options": [
+      "11 см²",
+      "22 см²",
+      "30 см²",
+      "36 см²"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 30 см²\n\n🧩 Площадь прямоугольника равна произведению его сторон.\n🧮 S = 6 × 5 = 30 см².",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Пропорции",
+    "question_text": "Число 20 разделили в отношении 2:3. Чему равна меньшая часть?",
+    "options": [
+      "13",
+      "12",
+      "5",
+      "8"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 8\n\n🧩 Всего частей: 2 + 3 = 5.\n🧮 Одна часть равна 20 ÷ 5. Меньшая часть: 20 × 2/5 = 8.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Пропорции",
+    "question_text": "Число 35 разделили в отношении 3:4. Чему равна меньшая часть?",
+    "options": [
+      "15",
+      "20",
+      "7",
+      "7 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 15\n\n🧩 Всего частей: 3 + 4 = 7.\n🧮 Одна часть равна 35 ÷ 7. Меньшая часть: 35 × 3/7 = 15.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Пропорции",
+    "question_text": "Число 54 разделили в отношении 4:5. Чему равна меньшая часть?",
+    "options": [
+      "30",
+      "24",
+      "9",
+      "29"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 24\n\n🧩 Всего частей: 4 + 5 = 9.\n🧮 Одна часть равна 54 ÷ 9. Меньшая часть: 54 × 4/9 = 24.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 2, 5, 8, …",
+    "options": [
+      "14",
+      "8",
+      "11",
+      "6"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 11\n\n🧩 Разность соседних членов постоянна: 5 − 2 = 3.\n🧮 Следующий член: 8 + 3 = 11.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 3, 7, 11, …",
+    "options": [
+      "12",
+      "11",
+      "19",
+      "15"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 15\n\n🧩 Разность соседних членов постоянна: 7 − 3 = 4.\n🧮 Следующий член: 11 + 4 = 15.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 4, 9, 14, …",
+    "options": [
+      "19",
+      "14",
+      "24",
+      "20"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 19\n\n🧩 Разность соседних членов постоянна: 9 − 4 = 5.\n🧮 Следующий член: 14 + 5 = 19.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Среднее арифметическое",
+    "question_text": "Найдите среднее арифметическое чисел 4, 8 и 12.",
+    "options": [
+      "9",
+      "8",
+      "24",
+      "24 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 8\n\n🧩 Складываем числа: 4 + 8 + 12 = 24.\n🧮 Делим сумму на количество чисел: 24 ÷ 3 = 8.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Среднее арифметическое",
+    "question_text": "Найдите среднее арифметическое чисел 5, 9 и 13.",
+    "options": [
+      "27",
+      "10",
+      "9",
+      "27 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 9\n\n🧩 Складываем числа: 5 + 9 + 13 = 27.\n🧮 Делим сумму на количество чисел: 27 ÷ 3 = 9.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Среднее арифметическое",
+    "question_text": "Найдите среднее арифметическое чисел 6, 10 и 14.",
+    "options": [
+      "30 (другой вариант)",
+      "11",
+      "30",
+      "10"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 10\n\n🧩 Складываем числа: 6 + 10 + 14 = 30.\n🧮 Делим сумму на количество чисел: 30 ÷ 3 = 10.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 2 красных и 3 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "2/5",
+      "3/5",
+      "2/3",
+      "1/5"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 2/5\n\n🧩 Благоприятных исходов 2, всего шаров 2 + 3 = 5.\n🧮 Вероятность = благоприятные исходы / все исходы = 2/5.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 3 красных и 4 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "4/7",
+      "3/7",
+      "3/4",
+      "1/7"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 3/7\n\n🧩 Благоприятных исходов 3, всего шаров 3 + 4 = 7.\n🧮 Вероятность = благоприятные исходы / все исходы = 3/7.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 4 красных и 5 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "4/5",
+      "5/9",
+      "4/9",
+      "1/9"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 4/9\n\n🧩 Благоприятных исходов 4, всего шаров 4 + 5 = 9.\n🧮 Вероятность = благоприятные исходы / все исходы = 4/9.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Разложение на множители",
+    "question_text": "Какое значение имеет выражение x² − 6x + 5x при x = 1?",
+    "options": [
+      "5",
+      "2",
+      "6",
+      "0"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 0\n\n🧩 Подставляем x = 1: 1² − 6·1 + 5·1.\n🧮 Получаем 1 − 6 + 5 = 0.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Разложение на множители",
+    "question_text": "Какое значение имеет выражение x² − 12x + 7x при x = 1?",
+    "options": [
+      "-4",
+      "6",
+      "12",
+      "7"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: -4\n\n🧩 Подставляем x = 1: 1² − 12·1 + 7·1.\n🧮 Получаем 1 − 12 + 7 = -4.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Разложение на множители",
+    "question_text": "Какое значение имеет выражение x² − 20x + 9x при x = 1?",
+    "options": [
+      "12",
+      "-10",
+      "20",
+      "9"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: -10\n\n🧩 Подставляем x = 1: 1² − 20·1 + 9·1.\n🧮 Получаем 1 − 20 + 9 = -10.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Движение",
+    "question_text": "Автомобиль ехал со скоростью 30 км/ч в течение 2 ч. Какой путь он прошёл?",
+    "options": [
+      "90 км",
+      "32 км",
+      "60 км",
+      "15 км"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 60 км\n\n🧩 Используем формулу пути: s = v × t.\n🧮 s = 30 × 2 = 60 км.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Движение",
+    "question_text": "Автомобиль ехал со скоростью 40 км/ч в течение 3 ч. Какой путь он прошёл?",
+    "options": [
+      "13 км",
+      "43 км",
+      "160 км",
+      "120 км"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 120 км\n\n🧩 Используем формулу пути: s = v × t.\n🧮 s = 40 × 3 = 120 км.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Движение",
+    "question_text": "Автомобиль ехал со скоростью 50 км/ч в течение 4 ч. Какой путь он прошёл?",
+    "options": [
+      "200 км",
+      "54 км",
+      "250 км",
+      "12 км"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 200 км\n\n🧩 Используем формулу пути: s = v × t.\n🧮 s = 50 × 4 = 200 км.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 7x + 8 = 64.",
+    "options": [
+      "9",
+      "8",
+      "7",
+      "-8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 8\n\n🧩 Перенесём свободный член: 7x = 64 − 8 = 56.\n🧮 Делим обе части на 7: x = 8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 2x + 9 = 13.",
+    "options": [
+      "1",
+      "3",
+      "2",
+      "-2"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 2\n\n🧩 Перенесём свободный член: 2x = 13 − 9 = 4.\n🧮 Делим обе части на 2: x = 2.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 3x + 10 = 25.",
+    "options": [
+      "-5",
+      "6",
+      "4",
+      "5"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 5\n\n🧩 Перенесём свободный член: 3x = 25 − 10 = 15.\n🧮 Делим обе части на 3: x = 5.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 4x + 11 = 43.",
+    "options": [
+      "8",
+      "9",
+      "7",
+      "-8"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 8\n\n🧩 Перенесём свободный член: 4x = 43 − 11 = 32.\n🧮 Делим обе части на 4: x = 8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 5x + 3 = 13.",
+    "options": [
+      "3",
+      "2",
+      "1",
+      "-2"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 2\n\n🧩 Перенесём свободный член: 5x = 13 − 3 = 10.\n🧮 Делим обе части на 5: x = 2.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Линейные уравнения",
+    "question_text": "Решите уравнение: 6x + 4 = 34.",
+    "options": [
+      "4",
+      "6",
+      "5",
+      "-5"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 5\n\n🧩 Перенесём свободный член: 6x = 34 − 4 = 30.\n🧮 Делим обе части на 6: x = 5.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 7x + 10 = 0.",
+    "options": [
+      "10",
+      "5",
+      "-2",
+      "2"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 2\n\n🧩 Ищем два числа с суммой 7 и произведением 10: это 2 и 5.\n🧮 Уравнение раскладывается: (x − 2)(x − 5) = 0. Корни 2 и 5; меньший — 2.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 9x + 18 = 0.",
+    "options": [
+      "3",
+      "6",
+      "-3",
+      "18"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 3\n\n🧩 Ищем два числа с суммой 9 и произведением 18: это 3 и 6.\n🧮 Уравнение раскладывается: (x − 3)(x − 6) = 0. Корни 3 и 6; меньший — 3.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 11x + 28 = 0.",
+    "options": [
+      "7",
+      "4",
+      "-4",
+      "28"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 4\n\n🧩 Ищем два числа с суммой 11 и произведением 28: это 4 и 7.\n🧮 Уравнение раскладывается: (x − 4)(x − 7) = 0. Корни 4 и 7; меньший — 4.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 13x + 40 = 0.",
+    "options": [
+      "-5",
+      "8",
+      "5",
+      "40"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 5\n\n🧩 Ищем два числа с суммой 13 и произведением 40: это 5 и 8.\n🧮 Уравнение раскладывается: (x − 5)(x − 8) = 0. Корни 5 и 8; меньший — 5.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 15x + 54 = 0.",
+    "options": [
+      "54",
+      "9",
+      "-6",
+      "6"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 6\n\n🧩 Ищем два числа с суммой 15 и произведением 54: это 6 и 9.\n🧮 Уравнение раскладывается: (x − 6)(x − 9) = 0. Корни 6 и 9; меньший — 6.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Квадратные уравнения",
+    "question_text": "Найдите меньший корень уравнения x² − 17x + 70 = 0.",
+    "options": [
+      "7",
+      "10",
+      "-7",
+      "70"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 7\n\n🧩 Ищем два числа с суммой 17 и произведением 70: это 7 и 10.\n🧮 Уравнение раскладывается: (x − 7)(x − 10) = 0. Корни 7 и 10; меньший — 7.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = -1 и 2x + 2y = 10.",
+    "options": [
+      "-1",
+      "5",
+      "10",
+      "6"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 5\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 5.\n🧮 Требуемая сумма уже найдена: x + y = 5.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = -2 и 2x + 2y = 16.",
+    "options": [
+      "16",
+      "-2",
+      "8",
+      "9"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 8\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 8.\n🧮 Требуемая сумма уже найдена: x + y = 8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = -3 и 2x + 2y = 22.",
+    "options": [
+      "12",
+      "-3",
+      "22",
+      "11"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 11\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 11.\n🧮 Требуемая сумма уже найдена: x + y = 11.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = -4 и 2x + 2y = 28.",
+    "options": [
+      "14",
+      "-4",
+      "28",
+      "15"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 14\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 14.\n🧮 Требуемая сумма уже найдена: x + y = 14.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = 2 и 2x + 2y = 20.",
+    "options": [
+      "2",
+      "10",
+      "20",
+      "11"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 10\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 10.\n🧮 Требуемая сумма уже найдена: x + y = 10.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Системы уравнений",
+    "question_text": "Найдите x + y, если x − y = 1 и 2x + 2y = 26.",
+    "options": [
+      "26",
+      "1",
+      "13",
+      "14"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 13\n\n🧩 Во втором уравнении делим обе части на 2: x + y = 13.\n🧮 Требуемая сумма уже найдена: x + y = 13.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 25% от 160.",
+    "options": [
+      "80",
+      "65",
+      "120",
+      "40"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 40\n\n🧩 Переводим процент в дробь: 25% = 25/100.\n🧮 Умножаем: 160 × 25/100 = 40.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 30% от 180.",
+    "options": [
+      "54",
+      "84",
+      "126",
+      "108"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 54\n\n🧩 Переводим процент в дробь: 30% = 30/100.\n🧮 Умножаем: 180 × 30/100 = 54.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 35% от 200.",
+    "options": [
+      "105",
+      "70",
+      "130",
+      "140"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 70\n\n🧩 Переводим процент в дробь: 35% = 35/100.\n🧮 Умножаем: 200 × 35/100 = 70.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 40% от 220.",
+    "options": [
+      "132",
+      "128",
+      "88",
+      "176"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 88\n\n🧩 Переводим процент в дробь: 40% = 40/100.\n🧮 Умножаем: 220 × 40/100 = 88.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 10% от 240.",
+    "options": [
+      "48",
+      "34",
+      "216",
+      "24"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 24\n\n🧩 Переводим процент в дробь: 10% = 10/100.\n🧮 Умножаем: 240 × 10/100 = 24.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Проценты",
+    "question_text": "Найдите 15% от 100.",
+    "options": [
+      "15",
+      "30",
+      "85",
+      "85 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 15\n\n🧩 Переводим процент в дробь: 15% = 15/100.\n🧮 Умножаем: 100 × 15/100 = 15.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 5, 11, 17, …",
+    "options": [
+      "17",
+      "23",
+      "29",
+      "30"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 23\n\n🧩 Разность соседних членов постоянна: 11 − 5 = 6.\n🧮 Следующий член: 17 + 6 = 23.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 6, 13, 20, …",
+    "options": [
+      "34",
+      "20",
+      "27",
+      "42"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 27\n\n🧩 Разность соседних членов постоянна: 13 − 6 = 7.\n🧮 Следующий член: 20 + 7 = 27.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 7, 15, 23, …",
+    "options": [
+      "56",
+      "23",
+      "39",
+      "31"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 31\n\n🧩 Разность соседних членов постоянна: 15 − 7 = 8.\n🧮 Следующий член: 23 + 8 = 31.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 8, 11, 14, …",
+    "options": [
+      "17",
+      "14",
+      "20",
+      "24"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 17\n\n🧩 Разность соседних членов постоянна: 11 − 8 = 3.\n🧮 Следующий член: 14 + 3 = 17.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 9, 13, 17, …",
+    "options": [
+      "17",
+      "21",
+      "25",
+      "36"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 21\n\n🧩 Разность соседних членов постоянна: 13 − 9 = 4.\n🧮 Следующий член: 17 + 4 = 21.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Найдите следующий член последовательности: 2, 7, 12, …",
+    "options": [
+      "22",
+      "12",
+      "17",
+      "10"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 17\n\n🧩 Разность соседних членов постоянна: 7 − 2 = 5.\n🧮 Следующий член: 12 + 5 = 17.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 2 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "4 см² (другой вариант)",
+      "2π см²",
+      "4 см²",
+      "4π см²"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 4π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 2: S = π × 2² = 4π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 3 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "9π см²",
+      "6π см²",
+      "3π см²",
+      "9 см²"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 9π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 3: S = π × 3² = 9π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 4 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "8π см²",
+      "16π см²",
+      "4π см²",
+      "16 см²"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 16π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 4: S = π × 4² = 16π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 5 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "5π см²",
+      "10π см²",
+      "25π см²",
+      "25 см²"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 25π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 5: S = π × 5² = 25π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 6 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "36 см²",
+      "12π см²",
+      "6π см²",
+      "36π см²"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 36π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 6: S = π × 6² = 36π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Геометрия",
+    "question_text": "Радиус круга равен 7 см. Чему равна площадь круга, если π оставить символом?",
+    "options": [
+      "49π см²",
+      "14π см²",
+      "7π см²",
+      "49 см²"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 49π см²\n\n🧩 Площадь круга вычисляется по формуле S = πr².\n🧮 Подставляем r = 7: S = π × 7² = 49π см².",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 5 красных и 6 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "6/11",
+      "5/11",
+      "5/6",
+      "1/11"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 5/11\n\n🧩 Благоприятных исходов 5, всего шаров 5 + 6 = 11.\n🧮 Вероятность = благоприятные исходы / все исходы = 5/11.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 2 красных и 7 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "2/7",
+      "7/9",
+      "2/9",
+      "1/9"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 2/9\n\n🧩 Благоприятных исходов 2, всего шаров 2 + 7 = 9.\n🧮 Вероятность = благоприятные исходы / все исходы = 2/9.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 3 красных и 3 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "1/6 (другой вариант)",
+      "3/3",
+      "1/6",
+      "3/6"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 3/6\n\n🧩 Благоприятных исходов 3, всего шаров 3 + 3 = 6.\n🧮 Вероятность = благоприятные исходы / все исходы = 3/6.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 4 красных и 4 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "4/8",
+      "4/4",
+      "1/8",
+      "1/8 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 4/8\n\n🧩 Благоприятных исходов 4, всего шаров 4 + 4 = 8.\n🧮 Вероятность = благоприятные исходы / все исходы = 4/8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 5 красных и 5 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "5/5",
+      "5/10",
+      "1/10",
+      "1/10 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 5/10\n\n🧩 Благоприятных исходов 5, всего шаров 5 + 5 = 10.\n🧮 Вероятность = благоприятные исходы / все исходы = 5/10.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Вероятность",
+    "question_text": "В мешке 2 красных и 6 синих шаров. Какова вероятность вынуть красный шар?",
+    "options": [
+      "2/6",
+      "6/8",
+      "2/8",
+      "1/8"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 2/8\n\n🧩 Благоприятных исходов 2, всего шаров 2 + 6 = 8.\n🧮 Вероятность = благоприятные исходы / все исходы = 2/8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (2²)^2 ÷ 2^1.",
+    "options": [
+      "2",
+      "16",
+      "4",
+      "8"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 8\n\n🧩 При возведении степени в степень показатели перемножаются: (2²)^2 = 2^4.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 2^4 ÷ 2^1 = 2^3 = 2^3 = 8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (3²)^4 ÷ 3^3.",
+    "options": [
+      "243",
+      "729",
+      "81",
+      "27"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 243\n\n🧩 При возведении степени в степень показатели перемножаются: (3²)^4 = 3^8.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 3^8 ÷ 3^3 = 3^5 = 3^5 = 243.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (4²)^2 ÷ 4^1.",
+    "options": [
+      "256",
+      "64",
+      "16",
+      "4"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 64\n\n🧩 При возведении степени в степень показатели перемножаются: (4²)^2 = 4^4.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 4^4 ÷ 4^1 = 4^3 = 4^3 = 64.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (5²)^4 ÷ 5^3.",
+    "options": [
+      "625",
+      "15625",
+      "3125",
+      "125"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 3125\n\n🧩 При возведении степени в степень показатели перемножаются: (5²)^4 = 5^8.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 5^8 ÷ 5^3 = 5^5 = 5^5 = 3125.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (6²)^2 ÷ 6^1.",
+    "options": [
+      "6",
+      "1296",
+      "36",
+      "216"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 216\n\n🧩 При возведении степени в степень показатели перемножаются: (6²)^2 = 6^4.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 6^4 ÷ 6^1 = 6^3 = 6^3 = 216.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Степени",
+    "question_text": "Упростите выражение (2²)^4 ÷ 2^3.",
+    "options": [
+      "32",
+      "64",
+      "16",
+      "8"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 32\n\n🧩 При возведении степени в степень показатели перемножаются: (2²)^4 = 2^8.\n🧮 При делении степеней с одинаковым основанием показатели вычитаются: 2^8 ÷ 2^3 = 2^5 = 2^5 = 32.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 4 ч, второй — за 6 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "10 ч",
+      "12/5 ч",
+      "4 ч",
+      "2 ч"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 12/5 ч\n\n🧩 Их скорости работы: 1/4 и 1/6 работы в час.\n🧮 Вместе: 1/4 + 1/6 = (10)/24. Время равно обратной величине: 24/10 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 5 ч, второй — за 7 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "5 ч",
+      "12 ч",
+      "35/12 ч",
+      "2 ч"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 35/12 ч\n\n🧩 Их скорости работы: 1/5 и 1/7 работы в час.\n🧮 Вместе: 1/5 + 1/7 = (12)/35. Время равно обратной величине: 35/12 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 6 ч, второй — за 8 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "2 ч",
+      "14 ч",
+      "6 ч",
+      "24/7 ч"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 24/7 ч\n\n🧩 Их скорости работы: 1/6 и 1/8 работы в час.\n🧮 Вместе: 1/6 + 1/8 = (14)/48. Время равно обратной величине: 48/14 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 7 ч, второй — за 9 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "63/16 ч",
+      "16 ч",
+      "7 ч",
+      "2 ч"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 63/16 ч\n\n🧩 Их скорости работы: 1/7 и 1/9 работы в час.\n🧮 Вместе: 1/7 + 1/9 = (16)/63. Время равно обратной величине: 63/16 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 8 ч, второй — за 6 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "14 ч",
+      "24/7 ч",
+      "6 ч",
+      "2 ч"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 24/7 ч\n\n🧩 Их скорости работы: 1/8 и 1/6 работы в час.\n🧮 Вместе: 1/8 + 1/6 = (14)/48. Время равно обратной величине: 48/14 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Совместная работа",
+    "question_text": "Первый мастер выполняет работу за 4 ч, второй — за 7 ч. За сколько часов они выполнят её вместе?",
+    "options": [
+      "4 ч",
+      "11 ч",
+      "28/11 ч",
+      "3 ч"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 28/11 ч\n\n🧩 Их скорости работы: 1/4 и 1/7 работы в час.\n🧮 Вместе: 1/4 + 1/7 = (11)/28. Время равно обратной величине: 28/11 ч.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 2x > 6?",
+    "options": [
+      "-4",
+      "3",
+      "5",
+      "4"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 4\n\n🧩 Делим обе части на положительное число 2; знак неравенства не меняется.\n🧮 Получаем x > 3. Наименьшее целое решение — 4.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 3x > 12?",
+    "options": [
+      "5",
+      "4",
+      "6",
+      "-5"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 5\n\n🧩 Делим обе части на положительное число 3; знак неравенства не меняется.\n🧮 Получаем x > 4. Наименьшее целое решение — 5.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 4x > 20?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "-6"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 6\n\n🧩 Делим обе части на положительное число 4; знак неравенства не меняется.\n🧮 Получаем x > 5. Наименьшее целое решение — 6.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 5x > 30?",
+    "options": [
+      "8",
+      "6",
+      "7",
+      "-7"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 7\n\n🧩 Делим обе части на положительное число 5; знак неравенства не меняется.\n🧮 Получаем x > 6. Наименьшее целое решение — 7.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 6x > 42?",
+    "options": [
+      "-8",
+      "7",
+      "9",
+      "8"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 8\n\n🧩 Делим обе части на положительное число 6; знак неравенства не меняется.\n🧮 Получаем x > 7. Наименьшее целое решение — 8.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "mathematics",
+    "language": "ru",
+    "topic": "Неравенства",
+    "question_text": "Какое наименьшее целое число x удовлетворяет неравенству 2x > 16?",
+    "options": [
+      "9",
+      "8",
+      "10",
+      "-9"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 9\n\n🧩 Делим обе части на положительное число 2; знак неравенства не меняется.\n🧮 Получаем x > 8. Наименьшее целое решение — 9.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct form: My sister ___ a student.",
+    "options": [
+      "are",
+      "is",
+      "am",
+      "be"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: is\n\n🧩 The subject is “my sister”, which is third-person singular.\n🧮 The correct present form of “to be” is “is”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the plural form of “child”.",
+    "options": [
+      "childes",
+      "childs",
+      "children",
+      "childrens"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: children\n\n🧩 “Child” has an irregular plural.\n🧮 Its standard plural form is “children”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct article: I saw ___ elephant at the zoo.",
+    "options": [
+      "no article",
+      "a",
+      "the",
+      "an"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: an\n\n🧩 “Elephant” begins with a vowel sound.\n🧮 Use “an” before a singular countable noun beginning with a vowel sound.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the opposite of “early”.",
+    "options": [
+      "late",
+      "fast",
+      "soon",
+      "quick"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: late\n\n🧩 We need the antonym, not a synonym.\n🧮 The opposite of “early” is “late”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct form: They ___ football on Sundays.",
+    "options": [
+      "plays",
+      "play",
+      "playing",
+      "played"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: play\n\n🧩 “They” is a plural subject and the sentence describes a habit.\n🧮 Use the base verb in the present simple: “play”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct preposition: The book is ___ the table.",
+    "options": [
+      "into",
+      "at",
+      "on",
+      "from"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: on\n\n🧩 The book is resting on the surface.\n🧮 The correct preposition is “on”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "What is the past form of “go”?",
+    "options": [
+      "going",
+      "goed",
+      "gone",
+      "went"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: went\n\n🧩 “Go” is an irregular verb.\n🧮 Its past simple form is “went”; “gone” is its past participle.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct pronoun: This is Anna. ___ is my friend.",
+    "options": [
+      "She",
+      "He",
+      "They",
+      "It"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: She\n\n🧩 Anna is one person referred to with a feminine pronoun.\n🧮 Use “she”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose the correct form: We ___ at home now.",
+    "options": [
+      "is",
+      "are",
+      "am",
+      "be"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: are\n\n🧩 “We” takes the plural form of “to be”.\n🧮 The correct form is “are”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Grammar and vocabulary",
+    "question_text": "Choose a synonym for “begin”.",
+    "options": [
+      "close",
+      "finish",
+      "start",
+      "leave"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: start\n\n🧩 A synonym has a similar meaning.\n🧮 “Start” means the same as “begin”.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: Maya ___ the task already.",
+    "options": [
+      "will finish",
+      "finished",
+      "is finishing",
+      "has finished"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: has finished\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. A singular subject takes “has”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: The workers ___ the task already.",
+    "options": [
+      "have arrived",
+      "arrived",
+      "are arriving",
+      "will arrive"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: have arrived\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. Plural subjects take “have”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: Our teacher ___ the task already.",
+    "options": [
+      "wrote",
+      "has written",
+      "is writing",
+      "will write"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: has written\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. A singular subject takes “has”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Articles",
+    "question_text": "Choose the correct article: It took me ___ hour to finish.",
+    "options": [
+      "the",
+      "a",
+      "an",
+      "no article"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: an\n\n🧩 Choose “a/an” by the first sound, not simply the first letter.\n🧮 “hour” begins with a vowel sound, so “an” is correct.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Articles",
+    "question_text": "Choose the correct article: It took me ___ university to finish.",
+    "options": [
+      "no article",
+      "an",
+      "the",
+      "a"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: a\n\n🧩 Choose “a/an” by the first sound, not simply the first letter.\n🧮 “university” begins with a consonant sound, so “a” is correct.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Articles",
+    "question_text": "Choose the correct article: It took me ___ honest answer to finish.",
+    "options": [
+      "an",
+      "a",
+      "the",
+      "no article"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: an\n\n🧩 Choose “a/an” by the first sound, not simply the first letter.\n🧮 “honest answer” begins with a vowel sound, so “an” is correct.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Comparatives",
+    "question_text": "Complete the sentence with the comparative form: This route is ___ than the old one (careful).",
+    "options": [
+      "carefuller",
+      "more careful",
+      "most careful",
+      "careful"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: more careful\n\n🧩 The sentence compares two routes, so it needs a comparative adjective.\n🧮 The comparative form of “careful” is “more careful”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Comparatives",
+    "question_text": "Complete the sentence with the comparative form: This route is ___ than the old one (good).",
+    "options": [
+      "best",
+      "gooder",
+      "better",
+      "good"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: better\n\n🧩 The sentence compares two routes, so it needs a comparative adjective.\n🧮 The comparative form of “good” is “better”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Comparatives",
+    "question_text": "Complete the sentence with the comparative form: This route is ___ than the old one (far).",
+    "options": [
+      "far",
+      "farrer",
+      "farthest",
+      "farther"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: farther\n\n🧩 The sentence compares two routes, so it needs a comparative adjective.\n🧮 The comparative form of “far” is “farther”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “interested ___ science”.",
+    "options": [
+      "in",
+      "on",
+      "at",
+      "for"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: in\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The adjective “interested” is followed by “in”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “depend ___ the weather”.",
+    "options": [
+      "of",
+      "on",
+      "at",
+      "with"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: on\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The verb “depend” is followed by “on”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “good ___ solving problems”.",
+    "options": [
+      "on",
+      "in",
+      "at",
+      "for"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: at\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 “Good at” is used before a skill or activity.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Modal verbs",
+    "question_text": "You ___ wear a seat belt; it is the law.",
+    "options": [
+      "would",
+      "might",
+      "could",
+      "must"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: must\n\n🧩 Identify the meaning required by the context.\n🧮 “Must” expresses a strong obligation.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Modal verbs",
+    "question_text": "___ I borrow your pen, please?",
+    "options": [
+      "Could",
+      "Must",
+      "Should",
+      "Need"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Could\n\n🧩 Identify the meaning required by the context.\n🧮 “Could I…?” is a polite request.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Modal verbs",
+    "question_text": "You ___ see a doctor if the pain continues.",
+    "options": [
+      "mustn't",
+      "should",
+      "can't",
+      "wouldn't"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: should\n\n🧩 Identify the meaning required by the context.\n🧮 “Should” gives advice.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Linking words",
+    "question_text": "It was raining, ___ we continued the match.",
+    "options": [
+      "so",
+      "because",
+      "but",
+      "unless"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: but\n\n🧩 Determine the logical relationship between the clauses.\n🧮 The ideas contrast.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Linking words",
+    "question_text": "She studied hard, ___ she passed the exam.",
+    "options": [
+      "but",
+      "although",
+      "unless",
+      "so"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: so\n\n🧩 Determine the logical relationship between the clauses.\n🧮 The second clause is a result.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Linking words",
+    "question_text": "___ he was tired, he finished the report.",
+    "options": [
+      "Although",
+      "Because",
+      "So",
+      "Unless"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Although\n\n🧩 Determine the logical relationship between the clauses.\n🧮 The clauses contrast.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Quantifiers",
+    "question_text": "There isn't ___ milk left.",
+    "options": [
+      "many",
+      "much",
+      "few",
+      "several"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: much\n\n🧩 Check whether the noun is countable or uncountable.\n🧮 “Milk” is uncountable, so use “much” in a negative sentence.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Quantifiers",
+    "question_text": "How ___ books did you borrow?",
+    "options": [
+      "little",
+      "much",
+      "many",
+      "any"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: many\n\n🧩 Check whether the noun is countable or uncountable.\n🧮 “Books” is a plural countable noun, so use “many”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Quantifiers",
+    "question_text": "We have ___ time, so let's hurry.",
+    "options": [
+      "several",
+      "few",
+      "many",
+      "little"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: little\n\n🧩 Check whether the noun is countable or uncountable.\n🧮 “Time” is uncountable; “little” means not much.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "She answered the question ___. (CONFIDENT)",
+    "options": [
+      "confidently",
+      "confident",
+      "confidence",
+      "confidentness"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: confidently\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adverb modifies the verb “answered”; the adverb is “confidently”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "The decision was completely ___. (EXPECT)",
+    "options": [
+      "unexpectedly",
+      "unexpected",
+      "expectation",
+      "expecting"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: unexpected\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adjective is required after “was”; “unexpected” fits the meaning.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "Their ___ surprised everyone. (ARRIVE)",
+    "options": [
+      "arrivingly",
+      "arrive",
+      "arrival",
+      "arrived"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: arrival\n\n🧩 Identify the part of speech required by the sentence.\n🧮 A noun is needed as the subject; the noun form is “arrival”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The letters ___ every morning. (send)",
+    "options": [
+      "have sent",
+      "are send",
+      "was sent",
+      "are sent"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: are sent\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The letters” is plural, so the correct form is “are sent”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The bridge ___ every morning. (build)",
+    "options": [
+      "is built",
+      "is build",
+      "was built",
+      "have built"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: is built\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The bridge” is singular, so the correct form is “is built”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: These meals ___ every morning. (prepare)",
+    "options": [
+      "are prepare",
+      "are prepared",
+      "was prepared",
+      "have prepared"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: are prepared\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “These meals” is plural, so the correct form is “are prepared”.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If water reaches 100°C, it ___. (boil)",
+    "options": [
+      "would boil",
+      "will boil",
+      "boils",
+      "boiled"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: boils\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 A general truth uses the zero conditional: if + present simple, present simple.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If I had more time, I ___ another language. (learn)",
+    "options": [
+      "would have learned",
+      "will learn",
+      "learned",
+      "would learn"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: would learn\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 An unreal or hypothetical present uses if + past simple and would + base verb.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If she had left earlier, she ___ the train. (catch)",
+    "options": [
+      "would have caught",
+      "would catch",
+      "will catch",
+      "caught"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: would have caught\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 A past unreal condition uses if + past perfect and would have + past participle.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: I ___ the task already.",
+    "options": [
+      "saw",
+      "have seen",
+      "am seeing",
+      "will see"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: have seen\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. Plural subjects take “have”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: The train ___ the task already.",
+    "options": [
+      "is leaving",
+      "left",
+      "has left",
+      "will leave"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: has left\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. A singular subject takes “has”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: They ___ the task already.",
+    "options": [
+      "will complete",
+      "completed",
+      "are completing",
+      "have completed"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: have completed\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. Plural subjects take “have”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: Maya ___ the task by now.",
+    "options": [
+      "has finished",
+      "finished",
+      "is finishing",
+      "will finish"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: has finished\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. A singular subject takes “has”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: The workers ___ the task by now.",
+    "options": [
+      "arrived",
+      "have arrived",
+      "are arriving",
+      "will arrive"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: have arrived\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. Plural subjects take “have”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Verb tenses",
+    "question_text": "Choose the correct form: Our teacher ___ the task by now.",
+    "options": [
+      "is writing",
+      "wrote",
+      "has written",
+      "will write"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: has written\n\n🧩 “Already” commonly signals a completed action with present relevance.\n🧮 Use the present perfect: have/has + past participle. A singular subject takes “has”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If it rains tomorrow, we ___ at home. (stay)",
+    "options": [
+      "would have stayed",
+      "would stay",
+      "stayed",
+      "will stay"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: will stay\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 A real future possibility uses if + present simple and will + base verb.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If he ___ harder, he would pass. (study)",
+    "options": [
+      "studied",
+      "studies",
+      "will study",
+      "had studied"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: studied\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 The second conditional uses past simple in the if-clause.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If they had known the address, they ___ us. (visit)",
+    "options": [
+      "will visit",
+      "would have visited",
+      "would visit",
+      "visited"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: would have visited\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 The third conditional uses would have + past participle in the result clause.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If you heat ice, it ___. (melt)",
+    "options": [
+      "would melt",
+      "will melt",
+      "melts",
+      "melted"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: melts\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 A general truth uses the zero conditional: present simple in both clauses.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If we finish early, we ___ you. (call)",
+    "options": [
+      "would have called",
+      "would call",
+      "called",
+      "will call"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: will call\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 A real future possibility uses if + present simple and will + base verb.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Conditionals",
+    "question_text": "If I were in your position, I ___ the offer. (accept)",
+    "options": [
+      "would accept",
+      "will accept",
+      "accepted",
+      "would have accepted"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: would accept\n\n🧩 Identify whether the sentence describes a fact, a real future possibility, or an unreal condition.\n🧮 The second conditional uses if + past simple and would + base verb.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The report ___ every morning. (write)",
+    "options": [
+      "is write",
+      "is written",
+      "was written",
+      "have written"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: is written\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The report” is singular, so the correct form is “is written”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The rooms ___ every morning. (clean)",
+    "options": [
+      "was cleaned",
+      "are clean",
+      "are cleaned",
+      "have cleaned"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: are cleaned\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The rooms” is plural, so the correct form is “are cleaned”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The results ___ every morning. (publish)",
+    "options": [
+      "have published",
+      "are publish",
+      "was published",
+      "are published"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: are published\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The results” is plural, so the correct form is “are published”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The packages ___ every morning. (deliver)",
+    "options": [
+      "are delivered",
+      "are deliver",
+      "was delivered",
+      "have delivered"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: are delivered\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The packages” is plural, so the correct form is “are delivered”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The museum ___ every morning. (renovate)",
+    "options": [
+      "is renovate",
+      "is renovated",
+      "was renovated",
+      "have renovated"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: is renovated\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The museum” is singular, so the correct form is “is renovated”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Passive voice",
+    "question_text": "Complete the passive sentence: The documents ___ every morning. (check)",
+    "options": [
+      "was checked",
+      "are check",
+      "are checked",
+      "have checked"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: are checked\n\n🧩 In the present simple passive, use am/is/are + past participle.\n🧮 “The documents” is plural, so the correct form is “are checked”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“I am tired,” she said. → She said that she ___ tired.",
+    "options": [
+      "will be",
+      "is",
+      "has been",
+      "was"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: was\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 In reported speech after a past reporting verb, present simple commonly shifts back to past simple.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“We have finished,” they said. → They said that they ___ finished.",
+    "options": [
+      "had",
+      "have",
+      "will have",
+      "were"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: had\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 Present perfect shifts back to past perfect in standard reported speech.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“I can swim,” he said. → He said that he ___ swim.",
+    "options": [
+      "can",
+      "could",
+      "may",
+      "will"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: could\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 The modal “can” usually shifts to “could” after a past reporting verb.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“I will call,” she said. → She said that she ___ call.",
+    "options": [
+      "can",
+      "will",
+      "would",
+      "had"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: would\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 The modal “will” shifts to “would” in reported speech.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“I saw him,” Tom said. → Tom said that he ___ him.",
+    "options": [
+      "would see",
+      "has seen",
+      "saw",
+      "had seen"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: had seen\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 Past simple commonly shifts to past perfect in reported speech.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Reported speech",
+    "question_text": "“We are working,” they said. → They said that they ___ working.",
+    "options": [
+      "were",
+      "are",
+      "have been",
+      "will be"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: were\n\n🧩 The reporting verb “said” is in the past, so the tense usually moves one step back.\n🧮 Present continuous shifts back to past continuous.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "The scientist ___ discovered the vaccine won an award.",
+    "options": [
+      "which",
+      "who",
+      "whose",
+      "where"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: who\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 Use “who” for a person acting as the subject of a relative clause.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "This is the house ___ my grandmother was born.",
+    "options": [
+      "who",
+      "which",
+      "where",
+      "whose"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: where\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 Use “where” to refer to a place.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "The book, ___ I borrowed yesterday, is fascinating.",
+    "options": [
+      "whose",
+      "who",
+      "where",
+      "which"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: which\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 Use “which” for a thing in a non-defining relative clause.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "The student ___ essay won the prize thanked her teacher.",
+    "options": [
+      "whose",
+      "who",
+      "which",
+      "where"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: whose\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 Use “whose” to show possession.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "The day ___ we first met was rainy.",
+    "options": [
+      "where",
+      "when",
+      "who",
+      "whose"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: when\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 Use “when” to refer to a time.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Relative clauses",
+    "question_text": "The colleague to ___ I spoke was very helpful.",
+    "options": [
+      "which",
+      "who",
+      "whom",
+      "whose"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: whom\n\n🧩 Identify whether the missing word refers to a person, place, time, thing, or possession.\n🧮 After a preposition in formal English, use the object form “whom” for a person.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “apologised ___ being late”.",
+    "options": [
+      "with",
+      "to",
+      "at",
+      "for"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: for\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 “Apologise for” introduces the reason.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “arrived ___ the airport”.",
+    "options": [
+      "at",
+      "in",
+      "on",
+      "to"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: at\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 Use “at” for a particular point or place.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “responsible ___ the project”.",
+    "options": [
+      "of",
+      "for",
+      "to",
+      "with"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: for\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The adjective “responsible” is followed by “for”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “keen ___ learning new skills”.",
+    "options": [
+      "for",
+      "at",
+      "on",
+      "with"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: on\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The adjective “keen” is followed by “on”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “objected ___ the proposed changes”.",
+    "options": [
+      "at",
+      "for",
+      "with",
+      "to"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: to\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The verb “object” is followed by “to”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Prepositions",
+    "question_text": "Choose the correct preposition in the phrase “succeeded ___ solving the puzzle”.",
+    "options": [
+      "in",
+      "at",
+      "on",
+      "for"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: in\n\n🧩 This phrase uses a fixed adjective/verb + preposition pattern.\n🧮 The verb “succeed” is followed by “in”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "Please ___ the lights before you leave. (switch off)",
+    "options": [
+      "turn up",
+      "turn off",
+      "turn into",
+      "turn over"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: turn off\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Turn off” means to stop a device or light.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "I ___ an old friend at the station yesterday.",
+    "options": [
+      "ran out",
+      "ran over",
+      "ran into",
+      "ran away"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: ran into\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Run into” means to meet someone unexpectedly.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "The meeting was ___ until Friday.",
+    "options": [
+      "put out",
+      "put on",
+      "put up",
+      "put off"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: put off\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Put off” means to postpone.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "Could you ___ this word in a dictionary?",
+    "options": [
+      "look up",
+      "look after",
+      "look into",
+      "look down"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: look up\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Look up” means to search for information.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "She ___ her younger brother after school.",
+    "options": [
+      "looks up",
+      "looks after",
+      "looks into",
+      "looks for"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: looks after\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Look after” means to take care of someone.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Phrasal verbs",
+    "question_text": "We have ___ sugar, so we need to buy some.",
+    "options": [
+      "run over",
+      "run into",
+      "run out of",
+      "run away"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: run out of\n\n🧩 Interpret the whole verb + particle combination in context.\n🧮 “Run out of” means to have none left.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "We were impressed by her ___ during the interview. (CONFIDENT)",
+    "options": [
+      "confidential",
+      "confident",
+      "confidently",
+      "confidence"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: confidence\n\n🧩 Identify the part of speech required by the sentence.\n🧮 A noun is needed after the possessive adjective “her”; the noun is “confidence”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "The team made a ___ improvement. (SIGNIFY)",
+    "options": [
+      "significant",
+      "significantly",
+      "significance",
+      "signified"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: significant\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adjective is needed before the noun “improvement”; the adjective is “significant”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "The new system operates ___. (EFFICIENT)",
+    "options": [
+      "efficient",
+      "efficiently",
+      "efficiency",
+      "inefficient"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: efficiently\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adverb modifies the verb “operates”; the adverb is “efficiently”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "There is no ___ that the plan will work. (CERTAIN)",
+    "options": [
+      "certainly",
+      "certain",
+      "certainty",
+      "certify"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: certainty\n\n🧩 Identify the part of speech required by the sentence.\n🧮 A noun is needed after “no”; the noun is “certainty”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "The instructions were ___ and easy to follow. (HELP)",
+    "options": [
+      "help",
+      "helpfully",
+      "helpless",
+      "helpful"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: helpful\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adjective is needed after “were”; “helpful” fits the meaning.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Word formation",
+    "question_text": "The discovery was extremely ___. (IMPORT)",
+    "options": [
+      "important",
+      "importance",
+      "importantly",
+      "import"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: important\n\n🧩 Identify the part of speech required by the sentence.\n🧮 An adjective is needed after “was”; the adjective is “important”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Rarely ___ such a beautiful performance.",
+    "options": [
+      "I have seen",
+      "have I seen",
+      "did I saw",
+      "I saw"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: have I seen\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 A negative adverb at the beginning triggers subject–auxiliary inversion; present perfect uses “have I seen”.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Not only ___ the exam, but she also won a prize.",
+    "options": [
+      "passed she",
+      "she passed",
+      "did she pass",
+      "has she pass"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: did she pass\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 “Not only” at the beginning of a clause triggers inversion; use did + subject + base verb.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Only after the meeting ___ the mistake.",
+    "options": [
+      "we did noticed",
+      "we noticed",
+      "noticed we",
+      "did we notice"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: did we notice\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 “Only after” at the beginning triggers inversion in the main clause.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Never ___ such a difficult puzzle before.",
+    "options": [
+      "had they solved",
+      "they had solved",
+      "did they solved",
+      "they solve"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: had they solved\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 “Never” at the beginning requires inversion; the past perfect is had + participle.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Under no circumstances ___ this door.",
+    "options": [
+      "you should open",
+      "should you open",
+      "open you",
+      "you open"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: should you open\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 A negative limiting phrase at the beginning triggers inversion.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Inversion",
+    "question_text": "Hardly ___ home when it began to snow.",
+    "options": [
+      "did we arrived",
+      "we had arrived",
+      "had we arrived",
+      "we arrive"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: had we arrived\n\n🧩 The sentence begins with a restrictive or negative expression.\n🧮 “Hardly … when” takes inversion and commonly uses past perfect.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "The instructions were so ___ that nobody misunderstood them.",
+    "options": [
+      "rough",
+      "scarce",
+      "narrow",
+      "clear"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: clear\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Clear” means easy to understand.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "The committee will ___ the proposal before voting.",
+    "options": [
+      "evaluate",
+      "evaporate",
+      "imitate",
+      "hesitate"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: evaluate\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Evaluate” means to assess or judge.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "The medication had an ___ effect, so the patient recovered quickly.",
+    "options": [
+      "identical",
+      "immediate",
+      "ordinary",
+      "distant"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: immediate\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Immediate” means happening without delay.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "Although the evidence was ___, the jury reached a decision.",
+    "options": [
+      "literal",
+      "limitless",
+      "limited",
+      "liable"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: limited\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Limited” means restricted in amount.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "The two reports ___ each other on the main point.",
+    "options": [
+      "construct",
+      "contribute",
+      "convince",
+      "contradict"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: contradict\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Contradict” means to state the opposite of something.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "english",
+    "language": "en",
+    "topic": "Vocabulary in context",
+    "question_text": "The old building was carefully ___ to preserve its history.",
+    "options": [
+      "restored",
+      "rejected",
+      "reduced",
+      "repeated"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: restored\n\n🧩 Use the surrounding clause to infer the required meaning.\n🧮 “Restored” means repaired and returned to a former condition.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Какое число следующее: 2, 4, 6, 8, …?",
+    "options": [
+      "9",
+      "10",
+      "12",
+      "16"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 10\n\n🧩 Каждый раз прибавляется 2.\n🧮 8 + 2 = 10.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Какое число следующее: 5, 10, 15, 20, …?",
+    "options": [
+      "24",
+      "22",
+      "25",
+      "30"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 25\n\n🧩 Разность соседних чисел равна 5.\n🧮 20 + 5 = 25.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Книга относится к чтению так же, как вилка к …",
+    "options": [
+      "рисованию",
+      "письму",
+      "одежде",
+      "еде"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: еде\n\n🧩 Книга — инструмент для чтения.\n🧮 Вилка — инструмент для еды.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Лишнее слово",
+    "question_text": "Какое слово лишнее: круг, квадрат, треугольник, яблоко?",
+    "options": [
+      "яблоко",
+      "круг",
+      "квадрат",
+      "треугольник"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: яблоко\n\n🧩 Три слова обозначают геометрические фигуры.\n🧮 Яблоко — фрукт, поэтому оно лишнее.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Счёт",
+    "question_text": "У Маши 3 пары носков. Сколько это отдельных носков?",
+    "options": [
+      "3",
+      "6",
+      "5",
+      "9"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 6\n\n🧩 В одной паре два носка.\n🧮 3 × 2 = 6 носков.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Последовательности",
+    "question_text": "Какое число следующее: 1, 3, 5, 7, …?",
+    "options": [
+      "10",
+      "8",
+      "9",
+      "11"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 9\n\n🧩 Это последовательность нечётных чисел с шагом 2.\n🧮 7 + 2 = 9.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Сравнение",
+    "question_text": "Али выше Бора, а Бор выше Вали. Кто самый низкий?",
+    "options": [
+      "Нельзя определить",
+      "Али",
+      "Бор",
+      "Валя"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Валя\n\n🧩 Порядок роста: Али > Бор > Валя.\n🧮 Самая низкая — Валя.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Время",
+    "question_text": "Сейчас 3 часа дня. Какое время будет через 4 часа?",
+    "options": [
+      "7 часов вечера",
+      "6 часов вечера",
+      "8 часов вечера",
+      "7 часов утра"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 7 часов вечера\n\n🧩 Прибавляем 4 часа к 3 часам дня.\n🧮 Получаем 7 часов вечера.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Счёт",
+    "question_text": "На столе 4 красных и 2 синих карандаша. Сколько всего карандашей?",
+    "options": [
+      "2",
+      "6",
+      "4",
+      "8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 6\n\n🧩 Складываем количество карандашей двух цветов.\n🧮 4 + 2 = 6.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные ряды",
+    "question_text": "Какая буква следующая: A, B, C, D, …?",
+    "options": [
+      "G",
+      "F",
+      "E",
+      "A"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: E\n\n🧩 Буквы идут в алфавитном порядке.\n🧮 После D идёт E.",
+    "difficulty": "easy"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 3, 7, 13, 21, …",
+    "options": [
+      "42",
+      "23",
+      "33",
+      "31"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 31\n\n🧩 Разности: 4, 6, 8 — они увеличиваются на 2.\n🧮 Следующая разность 10, значит 21 + 10 = 31.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 4, 9, 17, 28, …",
+    "options": [
+      "42",
+      "31",
+      "45",
+      "56"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 42\n\n🧩 Разности: 5, 8, 11 — они увеличиваются на 3.\n🧮 Следующая разность 14, значит 28 + 14 = 42.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 5, 11, 21, 35, …",
+    "options": [
+      "39",
+      "53",
+      "57",
+      "70"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 53\n\n🧩 Разности: 6, 10, 14 — они увеличиваются на 4.\n🧮 Следующая разность 18, значит 35 + 18 = 53.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 2, 4, 8, 16, …?",
+    "options": [
+      "18 (другой вариант)",
+      "18",
+      "32",
+      "18 (другой вариант) (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 32\n\n🧩 Каждый член умножается на 2: 4 ÷ 2 = 2.\n🧮 Следующий член: 16 × 2 = 32.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 3, 9, 27, 81, …?",
+    "options": [
+      "162 (другой вариант)",
+      "84",
+      "162",
+      "243"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 243\n\n🧩 Каждый член умножается на 3: 9 ÷ 3 = 3.\n🧮 Следующий член: 81 × 3 = 243.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 4, 16, 64, 256, …?",
+    "options": [
+      "1024",
+      "260",
+      "512",
+      "512 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 1024\n\n🧩 Каждый член умножается на 4: 16 ÷ 4 = 4.\n🧮 Следующий член: 256 × 4 = 1024.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 2, 10, 4, 12, 6, 14, …",
+    "options": [
+      "16",
+      "8",
+      "10",
+      "10 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 8\n\n🧩 Здесь переплетены два ряда: 2, 4, 6 и 10, 12, 14.\n🧮 Продолжаем первый ряд: 6 + 2 = 8.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 3, 12, 6, 15, 9, 18, …",
+    "options": [
+      "15",
+      "21",
+      "12",
+      "15 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 12\n\n🧩 Здесь переплетены два ряда: 3, 6, 9 и 12, 15, 18.\n🧮 Продолжаем первый ряд: 9 + 3 = 12.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 4, 14, 8, 18, 12, 22, …",
+    "options": [
+      "20 (другой вариант)",
+      "26",
+      "20",
+      "16"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 16\n\n🧩 Здесь переплетены два ряда: 4, 8, 12 и 14, 18, 22.\n🧮 Продолжаем первый ряд: 12 + 4 = 16.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 4, 9, 16, 25, …?",
+    "options": [
+      "36",
+      "37",
+      "30",
+      "29"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 36\n\n🧩 Члены ряда — квадраты последовательных чисел: 2², 3², 4², 5².\n🧮 Следующий член — 6² = 36.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 9, 16, 25, 36, …?",
+    "options": [
+      "50",
+      "49",
+      "42",
+      "40"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 49\n\n🧩 Члены ряда — квадраты последовательных чисел: 3², 4², 5², 6².\n🧮 Следующий член — 7² = 49.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 16, 25, 36, 49, …?",
+    "options": [
+      "56",
+      "65",
+      "64",
+      "53"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 64\n\n🧩 Члены ряда — квадраты последовательных чисел: 4², 5², 6², 7².\n🧮 Следующий член — 8² = 64.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: A, C, E, G, …?",
+    "options": [
+      "G",
+      "J",
+      "H",
+      "I"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: I\n\n🧩 Позиции букв в английском алфавите увеличиваются на 2.\n🧮 После G пропускаем ещё 1 букв и получаем I.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: B, E, H, K, …?",
+    "options": [
+      "N",
+      "O",
+      "M",
+      "K"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: N\n\n🧩 Позиции букв в английском алфавите увеличиваются на 3.\n🧮 После K пропускаем ещё 2 букв и получаем N.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: C, G, K, O, …?",
+    "options": [
+      "T",
+      "S",
+      "R",
+      "O"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: S\n\n🧩 Позиции букв в английском алфавите увеличиваются на 4.\n🧮 После O пропускаем ещё 3 букв и получаем S.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все лиры — моры. Ни один мор не является тевом. Какой вывод обязательно верен?",
+    "options": [
+      "Все тевы — лиры.",
+      "Некоторые лиры — тевы.",
+      "Ни одна лира не является тевом.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Ни одна лира не является тевом.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Все лиры входят в множество моров, а моры не пересекаются с тевами.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все врачи имеют образование. Некоторые исследователи — врачи. Какой вывод обязательно верен?",
+    "options": [
+      "Нельзя определить.",
+      "Все исследователи — врачи.",
+      "Ни один исследователь не образован.",
+      "Некоторые исследователи имеют образование."
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Некоторые исследователи имеют образование.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Некоторые исследователи являются врачами, а значит, имеют образование.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Ни один квадрат не является кругом. Фигура X — квадрат. Какой вывод обязательно верен?",
+    "options": [
+      "Фигура X не является кругом.",
+      "Фигура X — круг.",
+      "Все круги — квадраты.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Фигура X не является кругом.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 X принадлежит классу квадратов, который не пересекается с классом кругов.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Али старше Бек. Бек старше Вали. Кто младше всех из этих троих?",
+    "options": [
+      "Али",
+      "Вали",
+      "Бек",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: Вали\n\n🧩 Из условий получаем цепочку: Али старше Бек, а Бек старше Вали.\n🧮 Следовательно, младше всех Вали.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Бек старше Вали. Вали старше Дина. Кто младше всех из этих троих?",
+    "options": [
+      "Вали",
+      "Бек",
+      "Дина",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Дина\n\n🧩 Из условий получаем цепочку: Бек старше Вали, а Вали старше Дина.\n🧮 Следовательно, младше всех Дина.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Вали старше Дина. Дина старше Егор. Кто младше всех из этих троих?",
+    "options": [
+      "Недостаточно данных",
+      "Вали",
+      "Дина",
+      "Егор"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Егор\n\n🧩 Из условий получаем цепочку: Вали старше Дина, а Дина старше Егор.\n🧮 Следовательно, младше всех Егор.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: птица относится к «гнездо», как пчела относится к …",
+    "options": [
+      "улей",
+      "мёд",
+      "крыло",
+      "цветок"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: улей\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Птица живёт в гнезде; пчёлы живут в улье.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: автор относится к «книга», как композитор относится к …",
+    "options": [
+      "оркестр",
+      "музыка",
+      "нота",
+      "сцена"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: музыка\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Автор создаёт книгу; композитор создаёт музыку.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: термометр относится к «температура», как барометр относится к …",
+    "options": [
+      "расстояние",
+      "скорость",
+      "давление",
+      "масса"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: давление\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Термометр измеряет температуру; барометр измеряет давление.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 2, чему равно 2 ⊙ 3?",
+    "options": [
+      "7 (другой вариант)",
+      "10",
+      "7",
+      "8"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 8\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 2.\n🧮 2 ⊙ 3 = 2 + 3 × 2 = 2 + 6 = 8.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 3, чему равно 3 ⊙ 4?",
+    "options": [
+      "15",
+      "21",
+      "10",
+      "10 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 15\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 3.\n🧮 3 ⊙ 4 = 3 + 4 × 3 = 3 + 12 = 15.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 4, чему равно 4 ⊙ 5?",
+    "options": [
+      "36",
+      "24",
+      "13",
+      "13 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 24\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 4.\n🧮 4 ⊙ 5 = 4 + 5 × 4 = 4 + 20 = 24.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Календарная логика",
+    "question_text": "Сегодня среда. Какой день недели будет через 2 дней?",
+    "options": [
+      "суббота",
+      "четверг",
+      "пятница",
+      "понедельник"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: пятница\n\n🧩 Дни недели повторяются циклом из 7 дней.\n🧮 Сдвигаемся на 2 позиций вперёд от среда: получаем пятница.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Календарная логика",
+    "question_text": "Сегодня четверг. Какой день недели будет через 3 дней?",
+    "options": [
+      "среда",
+      "суббота",
+      "понедельник",
+      "воскресенье"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: воскресенье\n\n🧩 Дни недели повторяются циклом из 7 дней.\n🧮 Сдвигаемся на 3 позиций вперёд от четверг: получаем воскресенье.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Календарная логика",
+    "question_text": "Сегодня пятница. Какой день недели будет через 4 дней?",
+    "options": [
+      "вторник",
+      "понедельник",
+      "среда",
+      "пятница"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: вторник\n\n🧩 Дни недели повторяются циклом из 7 дней.\n🧮 Сдвигаемся на 4 позиций вперёд от пятница: получаем вторник.",
+    "difficulty": "medium"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 6, 13, 25, 42, …",
+    "options": [
+      "47",
+      "64",
+      "69",
+      "84"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 64\n\n🧩 Разности: 7, 12, 17 — они увеличиваются на 5.\n🧮 Следующая разность 22, значит 42 + 22 = 64.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 7, 15, 25, 37, …",
+    "options": [
+      "53",
+      "39",
+      "51",
+      "74"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 51\n\n🧩 Разности: 8, 10, 12 — они увеличиваются на 2.\n🧮 Следующая разность 14, значит 37 + 14 = 51.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 8, 17, 29, 44, …",
+    "options": [
+      "88",
+      "47",
+      "65",
+      "62"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 62\n\n🧩 Разности: 9, 12, 15 — они увеличиваются на 3.\n🧮 Следующая разность 18, значит 44 + 18 = 62.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 9, 19, 33, 51, …",
+    "options": [
+      "73",
+      "55",
+      "77",
+      "102"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 73\n\n🧩 Разности: 10, 14, 18 — они увеличиваются на 4.\n🧮 Следующая разность 22, значит 51 + 22 = 73.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 10, 21, 37, 58, …",
+    "options": [
+      "63",
+      "84",
+      "89",
+      "116"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 84\n\n🧩 Разности: 11, 16, 21 — они увеличиваются на 5.\n🧮 Следующая разность 26, значит 58 + 26 = 84.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые последовательности",
+    "question_text": "Найдите следующее число: 11, 23, 37, 53, …",
+    "options": [
+      "73",
+      "55",
+      "71",
+      "106"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 71\n\n🧩 Разности: 12, 14, 16 — они увеличиваются на 2.\n🧮 Следующая разность 18, значит 53 + 18 = 71.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 5, 10, 20, 40, …?",
+    "options": [
+      "45 (другой вариант)",
+      "42",
+      "45",
+      "80"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 80\n\n🧩 Каждый член умножается на 2: 10 ÷ 5 = 2.\n🧮 Следующий член: 40 × 2 = 80.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 6, 18, 54, 162, …?",
+    "options": [
+      "486",
+      "165",
+      "324",
+      "168"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 486\n\n🧩 Каждый член умножается на 3: 18 ÷ 6 = 3.\n🧮 Следующий член: 162 × 3 = 486.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 2, 8, 32, 128, …?",
+    "options": [
+      "132",
+      "512",
+      "256",
+      "130"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 512\n\n🧩 Каждый член умножается на 4: 8 ÷ 2 = 4.\n🧮 Следующий член: 128 × 4 = 512.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 3, 6, 12, 24, …?",
+    "options": [
+      "27",
+      "26",
+      "48",
+      "27 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 48\n\n🧩 Каждый член умножается на 2: 6 ÷ 3 = 2.\n🧮 Следующий член: 24 × 2 = 48.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 4, 12, 36, 108, …?",
+    "options": [
+      "112",
+      "111",
+      "216",
+      "324"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 324\n\n🧩 Каждый член умножается на 3: 12 ÷ 4 = 3.\n🧮 Следующий член: 108 × 3 = 324.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Геометрические последовательности",
+    "question_text": "Какое число продолжает ряд: 5, 20, 80, 320, …?",
+    "options": [
+      "1280",
+      "324",
+      "640",
+      "325"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 1280\n\n🧩 Каждый член умножается на 4: 20 ÷ 5 = 4.\n🧮 Следующий член: 320 × 4 = 1280.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 5, 16, 10, 21, 15, 26, …",
+    "options": [
+      "31",
+      "20",
+      "25",
+      "25 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 20\n\n🧩 Здесь переплетены два ряда: 5, 10, 15 и 16, 21, 26.\n🧮 Продолжаем первый ряд: 15 + 5 = 20.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 6, 18, 8, 20, 10, 22, …",
+    "options": [
+      "14",
+      "24",
+      "12",
+      "14 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 12\n\n🧩 Здесь переплетены два ряда: 6, 8, 10 и 18, 20, 22.\n🧮 Продолжаем первый ряд: 10 + 2 = 12.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 7, 20, 10, 23, 13, 26, …",
+    "options": [
+      "19 (другой вариант)",
+      "29",
+      "19",
+      "16"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 16\n\n🧩 Здесь переплетены два ряда: 7, 10, 13 и 20, 23, 26.\n🧮 Продолжаем первый ряд: 13 + 3 = 16.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 8, 22, 12, 26, 16, 30, …",
+    "options": [
+      "20",
+      "34",
+      "24",
+      "24 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 20\n\n🧩 Здесь переплетены два ряда: 8, 12, 16 и 22, 26, 30.\n🧮 Продолжаем первый ряд: 16 + 4 = 20.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 9, 24, 14, 29, 19, 34, …",
+    "options": [
+      "39",
+      "24",
+      "29",
+      "29 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 24\n\n🧩 Здесь переплетены два ряда: 9, 14, 19 и 24, 29, 34.\n🧮 Продолжаем первый ряд: 19 + 5 = 24.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Чередующиеся ряды",
+    "question_text": "Найдите следующее число: 10, 26, 12, 28, 14, 30, …",
+    "options": [
+      "18",
+      "32",
+      "16",
+      "18 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 16\n\n🧩 Здесь переплетены два ряда: 10, 12, 14 и 26, 28, 30.\n🧮 Продолжаем первый ряд: 14 + 2 = 16.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 25, 36, 49, 64, …?",
+    "options": [
+      "68",
+      "82",
+      "72",
+      "81"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 81\n\n🧩 Члены ряда — квадраты последовательных чисел: 5², 6², 7², 8².\n🧮 Следующий член — 9² = 81.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 36, 49, 64, 81, …?",
+    "options": [
+      "100",
+      "101",
+      "90",
+      "85"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 100\n\n🧩 Члены ряда — квадраты последовательных чисел: 6², 7², 8², 9².\n🧮 Следующий член — 10² = 100.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 49, 64, 81, 100, …?",
+    "options": [
+      "122",
+      "121",
+      "110",
+      "104"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 121\n\n🧩 Члены ряда — квадраты последовательных чисел: 7², 8², 9², 10².\n🧮 Следующий член — 11² = 121.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 64, 81, 100, 121, …?",
+    "options": [
+      "132",
+      "145",
+      "144",
+      "125"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 144\n\n🧩 Члены ряда — квадраты последовательных чисел: 8², 9², 10², 11².\n🧮 Следующий член — 12² = 144.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 81, 100, 121, 144, …?",
+    "options": [
+      "148",
+      "170",
+      "156",
+      "169"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 169\n\n🧩 Члены ряда — квадраты последовательных чисел: 9², 10², 11², 12².\n🧮 Следующий член — 13² = 169.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Квадраты",
+    "question_text": "Какое число следующее: 100, 121, 144, 169, …?",
+    "options": [
+      "196",
+      "197",
+      "182",
+      "173"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 196\n\n🧩 Члены ряда — квадраты последовательных чисел: 10², 11², 12², 13².\n🧮 Следующий член — 14² = 196.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: D, F, H, J, …?",
+    "options": [
+      "M",
+      "L",
+      "K",
+      "J"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: L\n\n🧩 Позиции букв в английском алфавите увеличиваются на 2.\n🧮 После J пропускаем ещё 1 букв и получаем L.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: E, H, K, N, …?",
+    "options": [
+      "P",
+      "R",
+      "Q",
+      "N"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Q\n\n🧩 Позиции букв в английском алфавите увеличиваются на 3.\n🧮 После N пропускаем ещё 2 букв и получаем Q.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: A, E, I, M, …?",
+    "options": [
+      "M",
+      "R",
+      "P",
+      "Q"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Q\n\n🧩 Позиции букв в английском алфавите увеличиваются на 4.\n🧮 После M пропускаем ещё 3 букв и получаем Q.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: B, D, F, H, …?",
+    "options": [
+      "J",
+      "K",
+      "I",
+      "H"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: J\n\n🧩 Позиции букв в английском алфавите увеличиваются на 2.\n🧮 После H пропускаем ещё 1 букв и получаем J.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: C, F, I, L, …?",
+    "options": [
+      "P",
+      "O",
+      "N",
+      "L"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: O\n\n🧩 Позиции букв в английском алфавите увеличиваются на 3.\n🧮 После L пропускаем ещё 2 букв и получаем O.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Буквенные последовательности",
+    "question_text": "Какая буква продолжает ряд: D, H, L, P, …?",
+    "options": [
+      "S",
+      "U",
+      "T",
+      "P"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: T\n\n🧩 Позиции букв в английском алфавите увеличиваются на 4.\n🧮 После P пропускаем ещё 3 букв и получаем T.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все А относятся к Б. Все Б относятся к В. Какой вывод обязательно верен?",
+    "options": [
+      "Нельзя определить.",
+      "Все В относятся к А.",
+      "Ни одно А не относится к В.",
+      "Все А относятся к В."
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Все А относятся к В.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Принадлежность к А означает принадлежность к Б, а значит и к В.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Некоторые музыканты — преподаватели. Все преподаватели умеют объяснять. Какой вывод обязательно верен?",
+    "options": [
+      "Некоторые музыканты умеют объяснять.",
+      "Все музыканты — преподаватели.",
+      "Ни один музыкант не умеет объяснять.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Некоторые музыканты умеют объяснять.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Те музыканты, которые являются преподавателями, умеют объяснять.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все зелы — раны. Ни один ран не является силом. Какой вывод обязательно верен?",
+    "options": [
+      "Некоторые зели — силы.",
+      "Ни один зел не является силом.",
+      "Все силы — зелы.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: Ни один зел не является силом.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Зели входят в множество ранов, которое не пересекается с множеством силов.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все пилоты проходят обучение. Все прошедшие обучение сдают экзамен. Какой вывод обязательно верен?",
+    "options": [
+      "Ни один пилот не сдаёт экзамен.",
+      "Все сдавшие экзамен — пилоты.",
+      "Все пилоты сдают экзамен.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Все пилоты сдают экзамен.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Каждый пилот проходит обучение, а каждый прошедший обучение сдаёт экзамен.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Некоторые художники — архитекторы. Ни один архитектор не работает без чертежей. Какой вывод обязательно верен?",
+    "options": [
+      "Нельзя определить.",
+      "Все художники — архитекторы.",
+      "Некоторые архитекторы работают без чертежей.",
+      "Некоторые художники не работают без чертежей."
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Некоторые художники не работают без чертежей.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 Художники, которые являются архитекторами, не работают без чертежей.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Логические выводы",
+    "question_text": "Все маяки заметны ночью. Объект X — маяк. Какой вывод обязательно верен?",
+    "options": [
+      "Объект X заметен ночью.",
+      "Объект X заметен только ночью.",
+      "Все заметные ночью объекты — маяки.",
+      "Нельзя определить."
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Объект X заметен ночью.\n\n🧩 Используем только данные посылки; не добавляем предположений.\n🧮 X является маяком, а каждый маяк заметен ночью.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Дина старше Егор. Егор старше Лола. Кто младше всех из этих троих?",
+    "options": [
+      "Дина",
+      "Лола",
+      "Егор",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: Лола\n\n🧩 Из условий получаем цепочку: Дина старше Егор, а Егор старше Лола.\n🧮 Следовательно, младше всех Лола.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Егор старше Лола. Лола старше Малика. Кто младше всех из этих троих?",
+    "options": [
+      "Лола",
+      "Егор",
+      "Малика",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Малика\n\n🧩 Из условий получаем цепочку: Егор старше Лола, а Лола старше Малика.\n🧮 Следовательно, младше всех Малика.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Лола старше Малика. Малика старше Тимур. Кто младше всех из этих троих?",
+    "options": [
+      "Недостаточно данных",
+      "Лола",
+      "Малика",
+      "Тимур"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: Тимур\n\n🧩 Из условий получаем цепочку: Лола старше Малика, а Малика старше Тимур.\n🧮 Следовательно, младше всех Тимур.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Малика старше Тимур. Тимур старше Нодир. Кто младше всех из этих троих?",
+    "options": [
+      "Нодир",
+      "Малика",
+      "Тимур",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: Нодир\n\n🧩 Из условий получаем цепочку: Малика старше Тимур, а Тимур старше Нодир.\n🧮 Следовательно, младше всех Нодир.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Тимур старше Нодир. Нодир старше Сара. Кто младше всех из этих троих?",
+    "options": [
+      "Тимур",
+      "Сара",
+      "Нодир",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: Сара\n\n🧩 Из условий получаем цепочку: Тимур старше Нодир, а Нодир старше Сара.\n🧮 Следовательно, младше всех Сара.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Порядок и сравнение",
+    "question_text": "Нодир старше Сара. Сара старше Азиз. Кто младше всех из этих троих?",
+    "options": [
+      "Сара",
+      "Нодир",
+      "Азиз",
+      "Недостаточно данных"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: Азиз\n\n🧩 Из условий получаем цепочку: Нодир старше Сара, а Сара старше Азиз.\n🧮 Следовательно, младше всех Азиз.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: семя относится к «растение», как яйцо относится к …",
+    "options": [
+      "клюв",
+      "гнездо",
+      "перо",
+      "птица"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: птица\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Из семени развивается растение; из яйца может развиться птица.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: врач относится к «пациент», как учитель относится к …",
+    "options": [
+      "ученик",
+      "книга",
+      "школа",
+      "урок"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: ученик\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Врач оказывает помощь пациенту; учитель обучает ученика.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: секунда относится к «минута», как сантиметр относится к …",
+    "options": [
+      "линейка",
+      "метр",
+      "километр",
+      "грамм"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: метр\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Минута состоит из секунд; метр состоит из сантиметров.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: ключ относится к «замок», как пароль относится к …",
+    "options": [
+      "письмо",
+      "экран",
+      "аккаунт",
+      "клавиатура"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: аккаунт\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Ключ открывает замок; пароль даёт доступ к аккаунту.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: рыба относится к «вода», как птица относится к …",
+    "options": [
+      "земля",
+      "лес",
+      "гнездо",
+      "воздух"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: воздух\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Рыба передвигается в воде; птица передвигается в воздухе.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Аналогии",
+    "question_text": "Завершите аналогию: термометр относится к «температура», как весы относится к …",
+    "options": [
+      "масса",
+      "высота",
+      "длина",
+      "объём"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: масса\n\n🧩 Определяем связь первой пары и применяем её ко второй.\n🧮 Термометр измеряет температуру; весы измеряют массу.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 5, чему равно 5 ⊙ 6?",
+    "options": [
+      "55",
+      "35",
+      "16",
+      "16 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 35\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 5.\n🧮 5 ⊙ 6 = 5 + 6 × 5 = 5 + 30 = 35.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 6, чему равно 6 ⊙ 7?",
+    "options": [
+      "19",
+      "78",
+      "48",
+      "19 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 48\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 6.\n🧮 6 ⊙ 7 = 6 + 7 × 6 = 6 + 42 = 48.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 2, чему равно 7 ⊙ 8?",
+    "options": [
+      "17",
+      "30",
+      "58",
+      "23"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 23\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 2.\n🧮 7 ⊙ 8 = 7 + 8 × 2 = 7 + 16 = 23.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 3, чему равно 8 ⊙ 3?",
+    "options": [
+      "17",
+      "33",
+      "27",
+      "14"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 17\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 3.\n🧮 8 ⊙ 3 = 8 + 3 × 3 = 8 + 9 = 17.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 4, чему равно 2 ⊙ 4?",
+    "options": [
+      "24",
+      "18",
+      "12",
+      "10"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 18\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 4.\n🧮 2 ⊙ 4 = 2 + 4 × 4 = 2 + 16 = 18.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Числовые закономерности",
+    "question_text": "Если операция ⊙ определена как a ⊙ b = a + b × 5, чему равно 3 ⊙ 5?",
+    "options": [
+      "20",
+      "40",
+      "28",
+      "13"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 28\n\n🧩 По правилу ⊙ сначала умножаем второй аргумент на 5.\n🧮 3 ⊙ 5 = 3 + 5 × 5 = 3 + 25 = 28.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, …",
+    "options": [
+      "12 (другой вариант)",
+      "18",
+      "12",
+      "16"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 16\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 7; 9 + 7 = 16.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, 16, …",
+    "options": [
+      "25",
+      "27",
+      "20",
+      "20 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 25\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 9; 16 + 9 = 25.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, 16, 25, …",
+    "options": [
+      "38",
+      "36",
+      "30",
+      "30 (другой вариант)"
+    ],
+    "correct_option_index": 1,
+    "explanation": "✅ Ответ: 36\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 11; 25 + 11 = 36.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, 16, 25, 36, …",
+    "options": [
+      "42",
+      "51",
+      "49",
+      "42 (другой вариант)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "✅ Ответ: 49\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 13; 36 + 13 = 49.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, 16, 25, 36, 49, …",
+    "options": [
+      "56 (другой вариант)",
+      "66",
+      "56",
+      "64"
+    ],
+    "correct_option_index": 3,
+    "explanation": "✅ Ответ: 64\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 15; 49 + 15 = 64.",
+    "difficulty": "hard"
+  },
+  {
+    "subject": "iq",
+    "language": "ru",
+    "topic": "Закономерности и разности",
+    "question_text": "Найдите следующее число: 1, 4, 9, 16, 25, 36, 49, 64, …",
+    "options": [
+      "81",
+      "83",
+      "72",
+      "72 (другой вариант)"
+    ],
+    "correct_option_index": 0,
+    "explanation": "✅ Ответ: 81\n\n🧩 Разности между квадратами увеличиваются на 2: 3, 5, 7, …\n🧮 Следующая разность 17; 64 + 17 = 81.",
+    "difficulty": "hard"
+  }
+]
