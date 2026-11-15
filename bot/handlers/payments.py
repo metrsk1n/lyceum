@@ -13,8 +13,20 @@ from aiogram.types import (
 )
 
 import database as db
-from bot.keyboards import donation_confirm_keyboard, main_menu, paid_test_keyboard
+from bot.keyboards import (
+    donation_confirm_keyboard,
+    main_menu,
+    paid_full_test_keyboard,
+    paid_test_keyboard,
+    result_questions_keyboard,
+)
 from bot.locale import t
+from bot.pricing import (
+    EXPLANATION_PRICE_STARS,
+    FULL_MOCK_SUBJECTS,
+    FULL_TEST_PRICE_STARS,
+    TEST_PRICE_STARS,
+)
 from bot.states import DonationFlow
 from config import settings
 
@@ -25,8 +37,15 @@ SUBSCRIPTION_PLANS = {
     "month": (700, 30),
     "quarter": (2000, 90),
 }
-TEST_PRICE_STARS = 25
-FULL_TEST_PRICE_STARS = 60
+
+
+def _result_has_subject(result: dict, subject: str) -> bool:
+    if result["subject"] == "full_mock":
+        return (
+            subject in FULL_MOCK_SUBJECTS
+            and any(answer.get("subject") == subject for answer in result["answers"])
+        )
+    return subject == result["subject"]
 
 
 # ─── Payment history ──────────────────────────────────────────────────────────
@@ -55,25 +74,72 @@ async def show_payments(message: Message, state: FSMContext) -> None:
 async def unlock_answers(callback: CallbackQuery) -> None:
     parts = callback.data.split(":")
     try:
-        if len(parts) != 3:
+        if len(parts) == 4:
+            result_id = int(parts[1])
+            subject = parts[2]
+            price = int(parts[3])
+        elif len(parts) == 3:
+            result_id = int(parts[1])
+            subject = None
+            price = int(parts[2])
+        else:
             raise ValueError
-        result_id = int(parts[1])
-        price = int(parts[2])
     except ValueError:
         await callback.answer("Некорректный запрос на разбор.", show_alert=True)
         return
-    expected_price = db.runtime.get_int("answer_unlock_price", settings.answer_unlock_price)
-    if price != expected_price:
+    if price != EXPLANATION_PRICE_STARS:
         await callback.answer("Цена изменилась. Обновите сообщение и попробуйте снова.", show_alert=True)
         return
-    if await db.get_result_for_user(result_id, callback.from_user.id) is None:
+    result = await db.get_result_for_user(result_id, callback.from_user.id)
+    if result is None:
         await callback.answer("Результат не найден.", show_alert=True)
         return
+    if subject is not None and not _result_has_subject(result, subject):
+        await callback.answer("В этом результате нет такого предмета.", show_alert=True)
+        return
+    has_subscription = await db.user_has_active_subscription(callback.from_user.id)
+    if subject is None and result["subject"] == "full_mock":
+        lang = await db.get_user_language(callback.from_user.id)
+        titles = {
+            "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"},
+            "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"},
+            "iq": {"ru": "IQ", "en": "IQ", "uz": "IQ"},
+        }
+        unlock_subjects = [
+            (slug, titles[slug].get(lang, slug))
+            for slug in ("mathematics", "english", "iq")
+            if _result_has_subject(result, slug)
+        ] if not has_subscription else []
+        await callback.message.edit_reply_markup(
+            reply_markup=result_questions_keyboard(
+                result_id,
+                len(result["answers"]),
+                EXPLANATION_PRICE_STARS,
+                lang,
+                unlock_subjects,
+            ),
+        )
+        await callback.answer(
+            "Premium уже открывает разборы без доплаты."
+            if has_subscription else "Выберите предмет для разбора."
+        )
+        return
+    if has_subscription:
+        await callback.answer("Premium уже открывает разборы без доплаты.")
+        return
+    if await db.user_has_unlocked_result(callback.from_user.id, result_id, subject):
+        await callback.answer("Разбор этого предмета уже открыт.", show_alert=True)
+        return
+    payment_payload = (
+        f"unlock:{callback.from_user.id}:{result_id}:{subject}"
+        if subject is not None
+        else f"unlock:{callback.from_user.id}:{result_id}"
+    )
     await callback.bot.send_invoice(
         chat_id=callback.from_user.id,
-        title="Разбор теста",
-        description="Открытие правильных ответов и объяснений",
-        payload=f"unlock:{callback.from_user.id}:{result_id}",
+        title="Разбор предмета",
+        description="Открытие объяснений по выбранному предмету",
+        payload=payment_payload,
         provider_token="",
         currency="XTR",
         prices=[LabeledPrice(label="Stars", amount=price)],
@@ -99,7 +165,7 @@ async def premium_subscription(callback: CallbackQuery) -> None:
     await callback.bot.send_invoice(
         chat_id=callback.from_user.id,
         title="Premium подписка",
-        description="Доступ к подробному разбору ответов и истории ошибок",
+        description="До 5 тестов в день, подробные разборы ответов и история ошибок",
         payload=payload,
         provider_token="",
         currency="XTR",
@@ -212,20 +278,33 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
         parts = payload.split(":")
         subjects = {subject["slug"] for subject in await db.get_subjects()}
         if (
-            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != query.from_user.id
-            or parts[2] not in subjects or query.total_amount != FULL_TEST_PRICE_STARS
+            len(parts) not in {2, 3} or not parts[1].isdigit()
+            or int(parts[1]) != query.from_user.id
+            or (len(parts) == 3 and parts[2] not in subjects)
+            or query.total_amount != FULL_TEST_PRICE_STARS
             or query.currency != "XTR"
         ):
             await query.answer(ok=False, error_message="Не удалось проверить покупку полного мока.")
             return
     elif payload.startswith("unlock:"):
         parts = payload.split(":")
-        expected_amount = db.runtime.get_int("answer_unlock_price", settings.answer_unlock_price)
+        result = None
+        valid_payload = (
+            len(parts) in {3, 4}
+            and parts[1].isdigit()
+            and int(parts[1]) == query.from_user.id
+            and parts[2].isdigit()
+        )
+        if valid_payload:
+            result = await db.get_result_for_user(int(parts[2]), query.from_user.id)
+        if len(parts) == 3 and result is not None and result["subject"] == "full_mock":
+            valid_payload = False
+        if len(parts) == 4 and result is not None:
+            valid_payload = valid_payload and _result_has_subject(result, parts[3])
         if (
-            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != query.from_user.id
-            or not parts[2].isdigit()
-            or query.total_amount != expected_amount or query.currency != "XTR"
-            or await db.get_result_for_user(int(parts[2]), query.from_user.id) is None
+            not valid_payload
+            or query.total_amount != EXPLANATION_PRICE_STARS
+            or query.currency != "XTR"
         ):
             await query.answer(ok=False, error_message="Не удалось проверить покупку разбора.")
             return
@@ -325,27 +404,34 @@ async def successful_payment(message: Message) -> None:
         parts = payload.split(":")
         subjects = {subject["slug"] for subject in await db.get_subjects()}
         if (
-            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != user_id
-            or parts[2] not in subjects or amount != FULL_TEST_PRICE_STARS or sp.currency != "XTR"
+            len(parts) not in {2, 3} or not parts[1].isdigit()
+            or int(parts[1]) != user_id
+            or (len(parts) == 3 and parts[2] not in subjects)
+            or amount != FULL_TEST_PRICE_STARS or sp.currency != "XTR"
         ):
             logger.error("Invalid full test payment payload=%s amount=%s", payload, amount)
             await message.answer("Платёж получен, но покупку полного мока не удалось проверить. Обратитесь в поддержку.")
             return
         if await db.record_full_test_purchase(user_id, charge_id, payload, amount):
             await message.answer(
-                "✅ Оплата получена. Полный мок добавлен на ваш баланс.",
-                reply_markup=paid_test_keyboard(),
+                "✅ Оплата получена. Полный мок (60 вопросов: по 20 по математике, английскому и IQ) добавлен на баланс.",
+                reply_markup=paid_full_test_keyboard(),
             )
         else:
             await message.answer("✅ Этот платёж уже был обработан.")
 
     elif payload.startswith("unlock:"):
         parts = payload.split(":")
-        expected_amount = db.runtime.get_int("answer_unlock_price", settings.answer_unlock_price)
+        valid_payload = (
+            len(parts) in {3, 4}
+            and parts[1].isdigit()
+            and int(parts[1]) == user_id
+            and parts[2].isdigit()
+        )
         if (
-            len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != user_id
-            or not parts[2].isdigit()
-            or amount != expected_amount or sp.currency != "XTR"
+            not valid_payload
+            or amount != EXPLANATION_PRICE_STARS
+            or sp.currency != "XTR"
         ):
             logger.error("Invalid unlock payment payload=%s amount=%s", payload, amount)
             await message.answer("Платёж получен, но покупку разбора не удалось проверить. Обратитесь в поддержку.")
@@ -356,11 +442,25 @@ async def successful_payment(message: Message) -> None:
             logger.error("Paid unlock refers to missing result: uid=%s result_id=%s", user_id, result_id)
             await message.answer("Платёж получен, но результат не найден. Обратитесь в поддержку.")
             return
+        subject = parts[3] if len(parts) == 4 else None
+        if subject is not None and not _result_has_subject(result, subject):
+            logger.error(
+                "Paid unlock refers to missing subject: uid=%s result_id=%s subject=%s",
+                user_id,
+                result_id,
+                subject,
+            )
+            await message.answer("Платёж получен, но предмет не найден. Обратитесь в поддержку.")
+            return
         if await db.record_paid_payment(user_id, charge_id, payload, amount, "unlock"):
             logger.info("Unlock uid=%s stars=%s", user_id, amount)
         await message.answer(t(lang, "unlock_success"))
         lines = [t(lang, "answers_list")]
-        for i, answer in enumerate(result["answers"], 1):
+        unlock_answers_list = [
+            answer for answer in result["answers"]
+            if subject is None or (answer.get("subject") or result["subject"]) == subject
+        ]
+        for i, answer in enumerate(unlock_answers_list, 1):
             mark = "✅" if answer.get("is_correct") else "❌"
             options = answer.get("options", [])
             correct_index = answer.get("correct", 0)

@@ -19,6 +19,7 @@ from bot.handlers import (
     statistics_router,
     tests_router,
 )
+from bot.middlewares import BanMiddleware
 from config import settings
 import database as db
 from bot.subscription_notifications import run_subscription_expiry_notifier
@@ -75,6 +76,10 @@ async def main() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
     dp = Dispatcher()
+    ban_middleware = BanMiddleware()
+    dp.message.outer_middleware(ban_middleware)
+    dp.callback_query.outer_middleware(ban_middleware)
+    dp.pre_checkout_query.outer_middleware(ban_middleware)
 
     # ORDER MATTERS:
     # start_router is FIRST → its handlers (menu buttons, /start, ❌ Отмена)

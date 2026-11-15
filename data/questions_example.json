@@ -6,7 +6,7 @@
     "question_text": "Чему равно 2 + 2?",
     "options": ["3", "4", "5", "6"],
     "correct_option_index": 1,
-    "explanation": "2 + 2 = 4.",
+    "explanation": "🧩 Считаем сумму двух чисел.\n🧮 2 + 2 = 4.",
     "difficulty": "easy"
   }
 ]

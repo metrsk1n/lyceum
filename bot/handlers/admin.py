@@ -66,6 +66,35 @@ async def _deny(callback: CallbackQuery) -> None:
     await callback.answer("⛔ Доступ запрещён.", show_alert=True)
 
 
+def _admin_user_card(info: dict) -> tuple[str, InlineKeyboardMarkup]:
+    user_id = info["id"]
+    name = escape(info.get("first_name") or info.get("username") or str(user_id))
+    username = escape(info.get("username") or "—")
+    status = "⛔ Заблокирован" if info.get("is_banned") else "✅ Активен"
+    text = (
+        f"👤 <b>Пользователь</b>\n\n"
+        f"ID: <code>{user_id}</code>\n"
+        f"Имя: {name}\n"
+        f"Username: @{username}\n"
+        f"Статус: {status}\n"
+        f"Язык: {info['language'].upper()}\n"
+        f"Регистрация: {info['created_at'][:10]}\n\n"
+        f"📝 Тестов пройдено: <b>{info['test_count']}</b>\n"
+        f"📊 Средний результат: <b>{info['avg_score']}%</b>\n"
+        f"💳 Платежей: <b>{info['payment_count']}</b>\n"
+        f"⭐ Потрачено Stars: <b>{info['stars_spent']}</b>"
+    )
+    button_label = "✅ Разблокировать" if info.get("is_banned") else "⛔ Заблокировать"
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text=button_label,
+            callback_data=f"adm:user_ban:{user_id}",
+        )],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="adm:users")],
+    ])
+    return text, keyboard
+
+
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
 def _question_preview(q: dict) -> str:
@@ -204,7 +233,7 @@ async def admin_broadcast_receive(message: Message, state: FSMContext) -> None:
     )
     await state.set_state(AdminFlow.broadcast_confirm)
     await message.answer(
-        "Сообщение получено. Подтвердите отправку всем зарегистрированным пользователям.",
+        "Сообщение получено. Подтвердите отправку всем незаблокированным пользователям.",
         reply_markup=admin_broadcast_confirm_keyboard(),
     )
 
@@ -284,7 +313,12 @@ async def admin_promos_list(callback: CallbackQuery) -> None:
     total_pages = max(1, (total + PROMO_PAGE_SIZE - 1) // PROMO_PAGE_SIZE)
     page = min(page, total_pages - 1)
     promos = await db.list_promo_codes(limit=PROMO_PAGE_SIZE, offset=page * PROMO_PAGE_SIZE)
-    labels = {"tests": "Тесты", "explanations": "Разборы", "discount": "Скидка"}
+    labels = {
+        "tests": "Тесты",
+        "full_tests": "Полные моки",
+        "explanations": "Разборы",
+        "discount": "Скидка",
+    }
     lines = ["🏷 <b>Промокоды</b>\n"]
     if not promos:
         lines.append("Промокодов пока нет.")
@@ -301,6 +335,49 @@ async def admin_promos_list(callback: CallbackQuery) -> None:
         reply_markup=admin_promos_keyboard(promos, page, total_pages),
     )
     await callback.answer()
+
+
+@router.callback_query(F.data.startswith("adm:promo_toggle:"))
+async def admin_promo_toggle(callback: CallbackQuery) -> None:
+    if not is_admin(callback.from_user.id):
+        await _deny(callback)
+        return
+    try:
+        _, _, code, page_text = callback.data.split(":")
+        page = max(0, int(page_text))
+    except (AttributeError, ValueError):
+        await callback.answer("Некорректный запрос.", show_alert=True)
+        return
+    if not await db.toggle_promo_code(code):
+        await callback.answer("Промокод не найден.", show_alert=True)
+        return
+    total = await db.count_promo_codes()
+    total_pages = max(1, (total + PROMO_PAGE_SIZE - 1) // PROMO_PAGE_SIZE)
+    page = min(page, total_pages - 1)
+    promos = await db.list_promo_codes(
+        limit=PROMO_PAGE_SIZE,
+        offset=page * PROMO_PAGE_SIZE,
+    )
+    labels = {
+        "tests": "Тесты",
+        "full_tests": "Полные моки",
+        "explanations": "Разборы",
+        "discount": "Скидка",
+    }
+    lines = ["🏷 <b>Промокоды</b>\n"]
+    for promo in promos:
+        limit = str(promo["max_uses"]) if promo["max_uses"] else "∞"
+        expiry = promo["expires_at"] or "без срока"
+        active = "активен" if promo["is_active"] else "выключен"
+        lines.append(
+            f"<code>{promo['code']}</code> · {labels.get(promo['reward_type'], promo['reward_type'])} "
+            f"{promo['value']} · {promo['uses_count']}/{limit} · {expiry} · {active}"
+        )
+    await callback.message.edit_text(
+        "\n".join(lines) if promos else "Промокодов пока нет.",
+        reply_markup=admin_promos_keyboard(promos, page, total_pages),
+    )
+    await callback.answer("Статус промокода изменён.")
 
 
 @router.callback_query(F.data.startswith("adm:promo:"))
@@ -361,8 +438,9 @@ async def admin_promo_add_start(callback: CallbackQuery, state: FSMContext) -> N
     await state.set_state(AdminFlow.promo_waiting)
     await callback.message.answer(
         "Отправьте промокод одной строкой:\n"
-        "<code>КОД tests|explanations|discount КОЛИЧЕСТВО [ЛИМИТ] [YYYY-MM-DD]</code>\n\n"
+        "<code>КОД tests|full_tests|explanations|discount КОЛИЧЕСТВО [ЛИМИТ] [YYYY-MM-DD]</code>\n\n"
         "Например: <code>JUNE tests 3 100 2026-12-31</code>. "
+        "Тип <code>full_tests</code> начисляет полный мок за 60 ⭐. "
         "Лимит и срок можно не указывать; лимит 0 означает без ограничений. "
         "Скидка задаётся в процентах, максимум 90%."
     )
@@ -383,8 +461,8 @@ async def admin_promo_add(message: Message, state: FSMContext) -> None:
     if not re.fullmatch(r"[A-Z0-9_-]{3,32}", code):
         await message.answer("Код: 3–32 символа, латинские буквы, цифры, _ или -.")
         return
-    if reward_type not in {"tests", "explanations", "discount"}:
-        await message.answer("Тип: tests, explanations или discount.")
+    if reward_type not in {"tests", "full_tests", "explanations", "discount"}:
+        await message.answer("Тип: tests, full_tests, explanations или discount.")
         return
 
     try:
@@ -1011,8 +1089,8 @@ async def admin_users_list_cb(callback: CallbackQuery) -> None:
 
     lines = [f"👥 <b>Пользователи {page * PAGE_SIZE + 1}–{min((page + 1) * PAGE_SIZE, total)} из {total}</b>\n"]
     for u in users:
-        name = u.get("first_name") or u.get("username") or str(u["id"])
-        uname = f"@{u['username']}" if u.get("username") else "—"
+        name = escape(u.get("first_name") or u.get("username") or str(u["id"]))
+        uname = f"@{escape(u['username'])}" if u.get("username") else "—"
         lines.append(f"<code>{u['id']}</code> {name} {uname} [{u['language']}] {u['created_at'][:10]}")
 
     await callback.message.edit_text(
@@ -1047,22 +1125,38 @@ async def admin_users_search_execute(message: Message, state: FSMContext) -> Non
     if not info:
         await message.answer(f"❌ Пользователь с ID {user_id} не найден.", reply_markup=admin_main_keyboard())
         return
-    name = info.get("first_name") or info.get("username") or str(user_id)
-    text = (
-        f"👤 <b>Пользователь</b>\n\n"
-        f"ID: <code>{info['id']}</code>\n"
-        f"Имя: {name}\n"
-        f"Username: @{info.get('username') or '—'}\n"
-        f"Язык: {info['language'].upper()}\n"
-        f"Регистрация: {info['created_at'][:10]}\n\n"
-        f"📝 Тестов пройдено: <b>{info['test_count']}</b>\n"
-        f"📊 Средний результат: <b>{info['avg_score']}%</b>\n"
-        f"💳 Платежей: <b>{info['payment_count']}</b>\n"
-        f"⭐ Потрачено Stars: <b>{info['stars_spent']}</b>"
-    )
-    from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-    kb = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🔙 Назад", callback_data="adm:users")]])
+    text, kb = _admin_user_card(info)
     await message.answer(text, reply_markup=kb)
+
+
+@router.callback_query(F.data.startswith("adm:user_ban:"))
+async def admin_toggle_user_ban(callback: CallbackQuery) -> None:
+    if not is_admin(callback.from_user.id):
+        await _deny(callback)
+        return
+    try:
+        user_id = int(callback.data.rsplit(":", 1)[1])
+    except (AttributeError, ValueError):
+        await callback.answer("Некорректный пользователь.", show_alert=True)
+        return
+    if user_id in settings.admin_ids:
+        await callback.answer("Нельзя блокировать администратора.", show_alert=True)
+        return
+    info = await db.get_user_admin_info(user_id)
+    if info is None:
+        await callback.answer("Пользователь не найден.", show_alert=True)
+        return
+    changed = await db.set_user_banned(user_id, not bool(info["is_banned"]))
+    if not changed:
+        await callback.answer("Не удалось изменить статус пользователя.", show_alert=True)
+        return
+    info = await db.get_user_admin_info(user_id)
+    if info is None:
+        await callback.answer("Пользователь не найден.", show_alert=True)
+        return
+    text, keyboard = _admin_user_card(info)
+    await callback.message.edit_text(text, reply_markup=keyboard)
+    await callback.answer("Статус пользователя изменён.")
 
 
 # ─── STATISTICS ───────────────────────────────────────────────────────────────
@@ -1185,24 +1279,18 @@ async def _show_donations(callback: CallbackQuery, page: int) -> None:
 # ─── SETTINGS ─────────────────────────────────────────────────────────────────
 
 SETTING_DEFAULTS = {
-    "answer_unlock_price": settings.answer_unlock_price,
     "donation_min_stars": settings.donation_min_stars,
     "donation_max_stars": settings.donation_max_stars,
-    "questions_per_test": settings.questions_per_test,
 }
 
 SETTING_RANGES = {
-    "answer_unlock_price": (1, 10000),
     "donation_min_stars": (1, 100),
     "donation_max_stars": (100, 100000),
-    "questions_per_test": (5, 100),
 }
 
 SETTING_LABELS = {
-    "answer_unlock_price": "💰 Цена открытия ответов",
     "donation_min_stars": "⭐ Минимальный донат",
     "donation_max_stars": "⭐ Максимальный донат",
-    "questions_per_test": "❓ Вопросов в тесте (макс)",
 }
 
 

@@ -9,8 +9,6 @@ class Settings(BaseSettings):
     bot_token: str = ""
     admin_ids: list[int] = []
     default_language: str = "ru"
-    questions_per_test: int = 20
-    answer_unlock_price: int = 25
     donation_min_stars: int = 1
     donation_max_stars: int = 10000
     log_level: str = "INFO"

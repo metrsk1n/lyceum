@@ -92,6 +92,7 @@ async def init_db() -> None:
                 username    TEXT,
                 first_name  TEXT,
                 language    TEXT NOT NULL DEFAULT 'ru',
+                is_banned   INTEGER NOT NULL DEFAULT 0,
                 created_at  TEXT NOT NULL DEFAULT (datetime('now'))
             );
 
@@ -220,6 +221,13 @@ async def init_db() -> None:
         if not any(row[1] == "topic" for row in columns):
             await conn.execute("ALTER TABLE questions ADD COLUMN topic TEXT")
 
+        user_columns_cursor = await conn.execute("PRAGMA table_info(users)")
+        user_columns = {row[1] for row in await user_columns_cursor.fetchall()}
+        if "is_banned" not in user_columns:
+            await conn.execute(
+                "ALTER TABLE users ADD COLUMN is_banned INTEGER NOT NULL DEFAULT 0"
+            )
+
         payment_columns_cursor = await conn.execute("PRAGMA table_info(payments)")
         payment_columns = {row[1] for row in await payment_columns_cursor.fetchall()}
         if "product_type" not in payment_columns:
@@ -338,8 +346,24 @@ async def count_users() -> int:
 
 async def get_all_user_ids() -> list[int]:
     async with _db() as conn:
-        rows = await _all(conn, "SELECT id FROM users ORDER BY id")
+        rows = await _all(conn, "SELECT id FROM users WHERE is_banned=0 ORDER BY id")
         return [row["id"] for row in rows]
+
+
+async def is_user_banned(user_id: int) -> bool:
+    async with _db() as conn:
+        row = await _one(conn, "SELECT is_banned FROM users WHERE id=?", (user_id,))
+        return bool(row["is_banned"]) if row else False
+
+
+async def set_user_banned(user_id: int, is_banned: bool) -> bool:
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "UPDATE users SET is_banned=? WHERE id=?",
+            (int(is_banned), user_id),
+        )
+        await conn.commit()
+        return cursor.rowcount == 1
 
 
 async def count_new_today() -> int:
@@ -887,6 +911,10 @@ async def consume_explanation_access(user_id: int) -> bool:
 async def create_promo_code(
     code: str, reward_type: str, value: int, max_uses: int, expires_at: str | None, created_by: int,
 ) -> None:
+    if reward_type not in {"tests", "full_tests", "explanations", "discount"}:
+        raise ValueError(f"Unsupported promo reward type: {reward_type}")
+    if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 90):
+        raise ValueError("Invalid promo value or usage limit")
     async with _db() as conn:
         await conn.execute(
             "INSERT INTO promo_codes (code,reward_type,value,max_uses,expires_at,created_by) VALUES (?,?,?,?,?,?)",
@@ -915,6 +943,11 @@ async def redeem_promo_code(user_id: int, code: str) -> dict | None:
                 "UPDATE user_access SET free_test_credits=free_test_credits+? WHERE user_id=?",
                 (promo["value"], user_id),
             )
+        elif promo["reward_type"] == "full_tests":
+            await conn.execute(
+                "UPDATE user_access SET paid_full_test_credits=paid_full_test_credits+? WHERE user_id=?",
+                (promo["value"], user_id),
+            )
         elif promo["reward_type"] == "explanations":
             await conn.execute(
                 "UPDATE user_access SET explanation_credits=explanation_credits+? WHERE user_id=?",
@@ -938,6 +971,17 @@ async def redeem_promo_code(user_id: int, code: str) -> dict | None:
         await conn.execute("UPDATE promo_codes SET uses_count=uses_count+1 WHERE code=?", (normalized_code,))
         await conn.commit()
         return {"reward_type": promo["reward_type"], "value": promo["value"]}
+
+
+async def toggle_promo_code(code: str) -> bool:
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "UPDATE promo_codes SET is_active=CASE WHEN is_active=1 THEN 0 ELSE 1 END "
+            "WHERE code=?",
+            (code.upper(),),
+        )
+        await conn.commit()
+        return cursor.rowcount == 1
 
 
 async def get_user_subscription_discount(user_id: int) -> tuple[int, str] | None:
@@ -1081,14 +1125,30 @@ async def user_has_active_subscription(user_id: int) -> bool:
         return False
 
 
-async def user_has_unlocked_result(user_id: int, result_id: int) -> bool:
+async def user_has_unlocked_result(
+    user_id: int,
+    result_id: int,
+    subject: str | None = None,
+) -> bool:
     async with _db() as conn:
-        row = await _one(
-            conn,
-            "SELECT 1 FROM payments WHERE user_id=? AND payload=? "
-            "AND status='paid' AND product_type='unlock'",
-            (user_id, f"unlock:{user_id}:{result_id}"),
-        )
+        if subject is None:
+            row = await _one(
+                conn,
+                "SELECT 1 FROM payments WHERE user_id=? AND payload IN (?,?) "
+                "AND status='paid' AND product_type='unlock'",
+                (user_id, f"unlock:{user_id}:{result_id}", f"unlock:{user_id}:{result_id}:all"),
+            )
+        else:
+            row = await _one(
+                conn,
+                "SELECT 1 FROM payments WHERE user_id=? AND "
+                "(payload=? OR payload=?) AND status='paid' AND product_type='unlock'",
+                (
+                    user_id,
+                    f"unlock:{user_id}:{result_id}:{subject}",
+                    f"unlock:{user_id}:{result_id}",
+                ),
+            )
         return row is not None
 
 

@@ -12,12 +12,11 @@ from bot.keyboards import (
     premium_keyboard,
     profile_keyboard,
     promo_back_keyboard,
-    subject_keyboard,
+    test_choice_keyboard,
     user_main_menu,
 )
 from bot.locale import t
 from bot.states import PromoFlow
-from config import settings
 
 router = Router()
 
@@ -131,7 +130,10 @@ async def user_start_test(callback: CallbackQuery, state: FSMContext) -> None:
         await callback.message.edit_text(t(lang, "no_questions"))
         await callback.answer()
         return
-    await callback.message.edit_text(t(lang, "choose_subject"), reply_markup=subject_keyboard(subjects))
+    await callback.message.edit_text(
+        t(lang, "choose_subject"),
+        reply_markup=test_choice_keyboard(lang),
+    )
     await callback.answer()
 
 
@@ -140,7 +142,8 @@ async def user_premium(callback: CallbackQuery) -> None:
     lang = await _lang(callback.from_user.id)
     await callback.message.edit_text(
         "💎 <b>Подписка Premium</b>\n\n"
-        "Доступ к подробному разбору ответов, история ошибок и расширенный режим подготовки.",
+        "До 5 тестов в день и подробные разборы без доплаты, пока подписка активна. "
+        "Также доступны история ошибок и расширенный режим подготовки.",
         reply_markup=premium_keyboard(),
     )
     await callback.answer()
@@ -151,10 +154,11 @@ async def user_gift(callback: CallbackQuery) -> None:
     used_mocks = await db.get_free_mock_status(callback.from_user.id)
     remaining = 3 - len(used_mocks)
     await callback.message.edit_text(
-        f"🎁 <b>Бесплатные полные моки</b>\n\n"
-        f"Доступно: {remaining} из 3. Каждый мок содержит 100 фиксированных вопросов "
-        f"и доступен один раз для аккаунта.\n"
-        f"Платные тарифы: тест на 20 вопросов — 25 ⭐, полный мок — 60 ⭐.",
+        f"🎁 <b>Бесплатные предметные моки</b>\n\n"
+        f"Доступно: {remaining} из 3 бесплатных предметных моков. Каждый содержит "
+        f"100 фиксированных вопросов по одному предмету и доступен один раз.\n"
+        f"Платные тарифы: тест на 20 вопросов по выбранному предмету — 25 ⭐; "
+        f"полный мок по математике, английскому и IQ (по 20 вопросов) — 60 ⭐.",
         reply_markup=gift_keyboard(used_mocks),
     )
     await callback.answer()
@@ -192,6 +196,7 @@ async def redeem_promo_code(message: Message, state: FSMContext) -> None:
         return
     reward_messages = {
         "tests": f"✅ Промокод активирован: начислено {result['value']} тестов.",
+        "full_tests": f"✅ Промокод активирован: начислено {result['value']} полных моков.",
         "explanations": f"✅ Промокод активирован: начислено {result['value']} разборов.",
         "discount": f"✅ Скидка {result['value']}% применится к следующей покупке подписки.",
     }
@@ -239,22 +244,24 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
         subjects = await db.get_subjects()
         await message.answer(
             t(lang, "choose_subject") if subjects else t(lang, "no_questions"),
-            reply_markup=subject_keyboard(subjects) if subjects else None,
+            reply_markup=test_choice_keyboard(lang) if subjects else None,
         )
     elif action == "premium":
         await message.answer(
             "💎 <b>Подписка Premium</b>\n\n"
-            "Доступ к подробному разбору ответов, истории ошибок и расширенному режиму подготовки.",
+            "До 5 тестов в день и подробные разборы без доплаты, пока подписка активна. "
+            "Также доступны история ошибок и расширенный режим подготовки.",
             reply_markup=premium_keyboard(),
         )
     elif action == "gift":
         used_mocks = await db.get_free_mock_status(user_id)
         remaining = 3 - len(used_mocks)
         await message.answer(
-            f"🎁 <b>Бесплатные полные моки</b>\n\n"
-            f"Доступно: {remaining} из 3. Каждый мок содержит 100 фиксированных вопросов "
-            f"и доступен один раз для аккаунта.\n"
-            f"Платные тарифы: тест на 20 вопросов — 25 ⭐, полный мок — 60 ⭐.",
+            f"🎁 <b>Бесплатные предметные моки</b>\n\n"
+            f"Доступно: {remaining} из 3 бесплатных предметных моков. Каждый содержит "
+            f"100 фиксированных вопросов по одному предмету и доступен один раз.\n"
+            f"Платные тарифы: тест на 20 вопросов по выбранному предмету — 25 ⭐; "
+            f"полный мок по математике, английскому и IQ (по 20 вопросов) — 60 ⭐.",
             reply_markup=gift_keyboard(used_mocks),
         )
     elif action == "mistakes":
@@ -297,8 +304,18 @@ async def show_history_result(callback: CallbackQuery) -> None:
         await callback.answer("Результат не найден.", show_alert=True)
         return
 
+    lang = await _lang(callback.from_user.id)
     subjects = {item["slug"]: item["title"] for item in await db.get_subjects()}
-    subject = subjects.get(result["subject"], result["subject"])
+    subject = subjects.get(
+        result["subject"],
+        {
+            "ru": "Полный мок · математика, английский и IQ",
+            "en": "Full mock · Mathematics, English, and IQ",
+            "uz": "To'liq mock · Matematika, Ingliz tili va IQ",
+        }.get(lang, "Полный мок")
+        if result["subject"] == "full_mock"
+        else result["subject"],
+    )
     percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
     lines = [
         f"📊 <b>{subject}</b> · {str(result['finished_at'])[:10]}",
@@ -313,14 +330,31 @@ async def show_history_result(callback: CallbackQuery) -> None:
         lines.append(f"{index}. {selected_letter} — {status}")
     lines.append("\nВыберите номер, чтобы открыть разбор:")
     from bot.keyboards import result_questions_keyboard
-    lang = await _lang(callback.from_user.id)
+    from bot.pricing import EXPLANATION_PRICE_STARS
+    result_subjects = list(dict.fromkeys(
+        answer.get("subject") or result["subject"]
+        for answer in result["answers"]
+        if result["subject"] != "full_mock" or answer.get("subject") in {"mathematics", "english", "iq"}
+    ))
+    titles = {slug: title for slug, title in subjects.items()}
+    titles.update({
+        "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"}.get(lang, "Математика"),
+        "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"}.get(lang, "Английский"),
+        "iq": "IQ",
+    })
+    unlock_subjects = (
+        []
+        if await db.user_has_active_subscription(callback.from_user.id)
+        else [(slug, titles.get(slug, slug)) for slug in result_subjects]
+    )
     await callback.message.answer(
         "\n".join(lines),
         reply_markup=result_questions_keyboard(
             result_id,
             len(result["answers"]),
-            db.runtime.get_int("answer_unlock_price", settings.answer_unlock_price),
+            EXPLANATION_PRICE_STARS,
             lang,
+            unlock_subjects,
         ),
     )
     await callback.answer()
@@ -365,7 +399,10 @@ async def show_subjects(message: Message, state: FSMContext) -> None:
     if not subjects:
         await message.answer(t(lang, "no_questions"))
         return
-    await message.answer(t(lang, "choose_subject"), reply_markup=subject_keyboard(subjects))
+    await message.answer(
+        t(lang, "choose_subject"),
+        reply_markup=test_choice_keyboard(lang),
+    )
 
 
 # ─── Stats shortcut ───────────────────────────────────────────────────────────
@@ -386,7 +423,7 @@ async def goto_test(callback: CallbackQuery, state: FSMContext) -> None:
     subjects = await db.get_subjects()
     await callback.message.answer(
         t(lang, "choose_subject") if subjects else t(lang, "no_questions"),
-        reply_markup=subject_keyboard(subjects) if subjects else None,
+        reply_markup=test_choice_keyboard(lang) if subjects else None,
     )
     await callback.answer()
 
