@@ -5,6 +5,13 @@ from aiogram.types import (
     KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove,
 )
 
+from bot.pricing import (
+    EXPLANATION_PRICE_STARS,
+    FULL_TEST_PRICE_STARS,
+    TEST_PRICE_STARS,
+    TEST_QUESTIONS,
+)
+
 remove_keyboard = ReplyKeyboardRemove()
 
 OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"]
@@ -64,9 +71,9 @@ def main_menu(lang: str = "ru") -> ReplyKeyboardMarkup:
 
 def user_main_menu(lang: str = "ru") -> ReplyKeyboardMarkup:
     labels = {
-        "ru": ["👤 Профиль", "🎯 Начать тест", "💎 Премиум", "🕘 История", "🎁 Подарок"],
-        "uz": ["👤 Profil", "🎯 Test boshlash", "💎 Premium", "🕘 Tarix", "🎁 Sovg'a"],
-        "en": ["👤 Profile", "🎯 Start test", "💎 Premium", "🕘 History", "🎁 Gift"],
+        "ru": ["👤 Профиль", "🎯 Начать тест", "💎 Премиум", "🕘 История", "✨ Ещё"],
+        "uz": ["👤 Profil", "🎯 Test boshlash", "💎 Premium", "🕘 Tarix", "✨ Boshqa"],
+        "en": ["👤 Profile", "🎯 Start test", "💎 Premium", "🕘 History", "✨ More"],
     }
     buttons = labels.get(lang, labels["ru"])
     return ReplyKeyboardMarkup(
@@ -81,64 +88,170 @@ def user_main_menu(lang: str = "ru") -> ReplyKeyboardMarkup:
     )
 
 
-def profile_keyboard() -> InlineKeyboardMarkup:
-    return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="🔙 Назад", callback_data="user:main"),
-    ]])
-
-
-def premium_keyboard() -> InlineKeyboardMarkup:
+def profile_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {
+        "ru": ("🌐 Изменить язык", "🔙 Назад"),
+        "uz": ("🌐 Tilni o'zgartirish", "🔙 Orqaga"),
+        "en": ("🌐 Change language", "🔙 Back"),
+    }
+    language_label, back_label = labels.get(lang, labels["ru"])
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🟢 1 неделя — 200 ⭐", callback_data="sub:week")],
-        [InlineKeyboardButton(text="🟡 1 месяц — 700 ⭐", callback_data="sub:month")],
-        [InlineKeyboardButton(text="🔥 3 месяца — 2000 ⭐ · выгодно", callback_data="sub:quarter")],
-        [InlineKeyboardButton(text="🔙 Назад", callback_data="user:main")],
+        [InlineKeyboardButton(text=language_label, callback_data="user:language")],
+        [InlineKeyboardButton(text=back_label, callback_data="user:main")],
     ])
 
 
-def gift_keyboard(used_mocks: set[str] | None = None) -> InlineKeyboardMarkup:
-    used = used_mocks or set()
+def result_questions_keyboard(
+    result_id: int,
+    total: int,
+    unlock_price: int = EXPLANATION_PRICE_STARS,
+    lang: str = "ru",
+    unlock_subjects: list[tuple[str, str]] | None = None,
+    session_id: int | None = None,
+    session_status: str | None = None,
+    can_retake: bool = False,
+) -> InlineKeyboardMarkup:
+    buttons = [
+        InlineKeyboardButton(text=str(index + 1), callback_data=f"review:{result_id}:{index}")
+        for index in range(total)
+    ]
+    rows = [buttons[index:index + 5] for index in range(0, len(buttons), 5)]
+    labels = {
+        "ru": "🔓 Разбор {subject} — {price} ⭐",
+        "en": "🔓 {subject} explanations — {price} ⭐",
+        "uz": "🔓 {subject} tahlili — {price} ⭐",
+    }
+    for subject, title in unlock_subjects or []:
+        rows.append([InlineKeyboardButton(
+            text=labels.get(lang, labels["ru"]).format(subject=title, price=unlock_price)[:64],
+            callback_data=f"unlock:{result_id}:{subject}:{unlock_price}",
+        )])
+    if session_id is not None:
+        action_labels = {
+            "ru": ("▶️ Продолжить сессию", "🔄 Пересдать этот набор"),
+            "uz": ("▶️ Seansni davom ettirish", "🔄 Shu testni qayta topshirish"),
+            "en": ("▶️ Resume session", "🔄 Retake this set"),
+        }
+        resume_label, retake_label = action_labels.get(lang, action_labels["ru"])
+        if session_status == "in_progress":
+            rows.append([InlineKeyboardButton(
+                text=resume_label,
+                callback_data=f"history:resume:{session_id}",
+            )])
+        if can_retake:
+            rows.append([InlineKeyboardButton(
+                text=retake_label,
+                callback_data=f"history:retake:{session_id}",
+            )])
+    nav_labels = {
+        "ru": ("💎 Premium", "🎯 Новый тест"),
+        "uz": ("💎 Premium", "🎯 Yangi test"),
+        "en": ("💎 Premium", "🎯 New test"),
+    }
+    premium_label, new_test_label = nav_labels.get(lang, nav_labels["ru"])
+    rows.append([
+        InlineKeyboardButton(text=premium_label, callback_data="user:premium"),
+        InlineKeyboardButton(text=new_test_label, callback_data="goto:test"),
+    ])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def premium_keyboard(lang: str = "ru", prices: dict[str, int] | None = None) -> InlineKeyboardMarkup:
+    labels = {
+        "ru": ("🟢 1 неделя", "🟡 1 месяц", "🔥 3 месяца · выгодно", "🔙 Назад"),
+        "uz": ("🟢 1 hafta", "🟡 1 oy", "🔥 3 oy · foydali", "🔙 Orqaga"),
+        "en": ("🟢 1 week", "🟡 1 month", "🔥 3 months · best value", "🔙 Back"),
+    }
+    week, month, quarter, back = labels.get(lang, labels["ru"])
+    prices = prices or {"week": 200, "month": 700, "quarter": 2000}
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(
-            text=f"{'✅' if 'english' in used else '🎁'} Бесплатный мок: Английский (100)",
-            callback_data="mock:english",
-        )],
-        [InlineKeyboardButton(
-            text=f"{'✅' if 'mathematics' in used else '🎁'} Бесплатный мок: Математика (100)",
-            callback_data="mock:mathematics",
-        )],
-        [InlineKeyboardButton(
-            text=f"{'✅' if 'iq' in used else '🎁'} Бесплатный мок: IQ (100)",
-            callback_data="mock:iq",
-        )],
-        [InlineKeyboardButton(text="🏷 Ввести промокод", callback_data="gift:promo")],
-        [InlineKeyboardButton(text="🔙 В меню", callback_data="user:main")],
+        [InlineKeyboardButton(text=f"{week} — {prices['week']} ⭐", callback_data="sub:week")],
+        [InlineKeyboardButton(text=f"{month} — {prices['month']} ⭐", callback_data="sub:month")],
+        [InlineKeyboardButton(text=f"{quarter} — {prices['quarter']} ⭐", callback_data="sub:quarter")],
+        [InlineKeyboardButton(text=back, callback_data="user:main")],
     ])
 
 
-def test_size_keyboard(subject: str, amount: int) -> InlineKeyboardMarkup:
+def more_keyboard(free_full_mock_credits: int = 0, lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {
+        "ru": ("🏷 Активировать промокод", "📜 История промокодов", "🎁 Бесплатные моки · полный мок ×{credits}", "🔙 В меню"),
+        "uz": ("🏷 Promokodni faollashtirish", "📜 Promokodlar tarixi", "🎁 Bepul mocklar · to'liq mock ×{credits}", "🔙 Menyu"),
+        "en": ("🏷 Activate promo code", "📜 Promo code history", "🎁 Free mocks · full mock ×{credits}", "🔙 Menu"),
+    }
+    activate_label, history_label, mocks_label, back_label = labels.get(lang, labels["ru"])
+    rows = [
+        [InlineKeyboardButton(text=activate_label, callback_data="gift:promo")],
+        [InlineKeyboardButton(text=history_label, callback_data="user:promo_history")],
+    ]
+    if free_full_mock_credits:
+        rows.append([InlineKeyboardButton(
+            text=mocks_label.format(credits=free_full_mock_credits)[:64],
+            callback_data="user:free_mocks",
+        )])
+    rows.append([InlineKeyboardButton(text=back_label, callback_data="user:main")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def free_full_mock_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {
+        "ru": ("🎯 Начать бесплатный полный мок · 60 вопросов", "⬅️ Назад"),
+        "uz": ("🎯 Bepul to'liq mockni boshlash · 60 savol", "⬅️ Orqaga"),
+        "en": ("🎯 Start free full mock · 60 questions", "⬅️ Back"),
+    }
+    start_label, back_label = labels.get(lang, labels["ru"])
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=start_label[:64], callback_data="mock:full")],
+        [InlineKeyboardButton(text=back_label, callback_data="user:more")],
+    ])
+
+
+def test_size_keyboard(
+    subject: str,
+    amount: int,
+    full_mock_price: int,
+    lang: str = "ru",
+) -> InlineKeyboardMarkup:
+    labels = {
+        "ru": ("📝 Тест по предмету ({amount} вопросов) — {price} ⭐", "🎯 Полный мок · 60 вопросов — {price} ⭐", "⬅️ К предметам"),
+        "uz": ("📝 Fan bo'yicha test ({amount} savol) — {price} ⭐", "🎯 To'liq mock · 60 savol — {price} ⭐", "⬅️ Fanlarga"),
+        "en": ("📝 Subject test ({amount} questions) — {price} ⭐", "🎯 Full mock · 60 questions — {price} ⭐", "⬅️ Subjects"),
+    }
+    regular_label, full_label, back_label = labels.get(lang, labels["ru"])
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(
-            text=f"📝 Тренировочный тест ({amount} вопросов) — 25 ⭐",
+            text=regular_label.format(amount=amount, price=TEST_PRICE_STARS)[:64],
             callback_data=f"testsize:{subject}:regular",
         )],
         [InlineKeyboardButton(
-            text="🎯 Полный мок (100 вопросов) — 60 ⭐",
-            callback_data=f"testsize:{subject}:full",
+            text=full_label.format(price=full_mock_price)[:64],
+            callback_data="testsize:all:full",
         )],
-        [InlineKeyboardButton(text="⬅️ К предметам", callback_data="goto:test")],
+        [InlineKeyboardButton(text=back_label, callback_data="goto:test")],
     ])
 
 
-def promo_back_keyboard() -> InlineKeyboardMarkup:
+def promo_back_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {"ru": "🔙 В раздел «Ещё»", "uz": "🔙 «Yana» bo'limiga", "en": "🔙 More"}
     return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="🔙 В подарок", callback_data="user:gift"),
+        InlineKeyboardButton(text=labels.get(lang, labels["ru"]), callback_data="user:more"),
     ]])
 
 
-def paid_test_keyboard() -> InlineKeyboardMarkup:
+def paid_test_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {"ru": "🎯 Выбрать предмет", "uz": "🎯 Fanni tanlash", "en": "🎯 Choose a subject"}
     return InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="🎯 Выбрать предмет", callback_data="goto:test"),
+        InlineKeyboardButton(text=labels.get(lang, labels["ru"]), callback_data="goto:test"),
+    ]])
+
+
+def paid_full_test_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    labels = {
+        "ru": "🎯 Начать полный мок (60 вопросов)",
+        "uz": "🎯 To'liq mockni boshlash (60 savol)",
+        "en": "🎯 Start full mock (60 questions)",
+    }
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text=labels.get(lang, labels["ru"]), callback_data="testsize:all:full"),
     ]])
 
 
@@ -175,41 +288,54 @@ def subject_keyboard(subjects: list[dict]) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def result_questions_keyboard(
-    result_id: int,
-    total: int,
-    unlock_price: int | None = None,
+def test_choice_keyboard(
     lang: str = "ru",
+    resume_session_id: int | None = None,
 ) -> InlineKeyboardMarkup:
-    buttons = [
-        InlineKeyboardButton(text=str(index + 1), callback_data=f"review:{result_id}:{index}")
-        for index in range(total)
-    ]
-    rows = [buttons[index:index + 5] for index in range(0, len(buttons), 5)]
-    if unlock_price is not None:
-        unlock_labels = {
-            "ru": f"🔓 Разобрать этот тест за {unlock_price} ⭐",
-            "uz": f"🔓 Bu test tahlili — {unlock_price} ⭐",
-            "en": f"🔓 Unlock this test for {unlock_price} ⭐",
-        }
+    rows = []
+    localized_labels = {
+        "ru": ("Математика", "Английский", "IQ", "Полный мок"),
+        "en": ("Mathematics", "English", "IQ", "Full mock"),
+        "uz": ("Matematika", "Ingliz tili", "IQ", "To'liq mock"),
+    }
+    labels = localized_labels.get(lang, localized_labels["ru"])
+    resume_labels = {
+        "ru": "▶️ Продолжить незавершённый тест",
+        "en": "▶️ Resume unfinished test",
+        "uz": "▶️ Tugallanmagan testni davom ettirish",
+    }
+    if resume_session_id is not None:
         rows.append([InlineKeyboardButton(
-            text=unlock_labels.get(lang, unlock_labels["ru"]),
-            callback_data=f"unlock:{result_id}:{unlock_price}",
+            text=resume_labels.get(lang, resume_labels["ru"]),
+            callback_data=f"history:resume:{resume_session_id}",
         )])
-    rows.append([
-        InlineKeyboardButton(text="💎 Premium", callback_data="user:premium"),
-        InlineKeyboardButton(text="🎯 Новый тест", callback_data="goto:test"),
-    ])
+    question_word = {"ru": "вопросов", "en": "questions", "uz": "savol"}.get(lang, "questions")
+    subject_slugs = ("mathematics", "english", "iq")
+    for slug, title in zip(subject_slugs, labels):
+        color = SUBJECT_COLORS.get(slug, "⚪")
+        rows.append([InlineKeyboardButton(
+            text=f"{color} {title} · {TEST_QUESTIONS} {question_word} — {TEST_PRICE_STARS} ⭐",
+            callback_data=f"testsize:{slug}:regular",
+        )])
+    rows.append([InlineKeyboardButton(
+        text=f"🎯 {labels[3]} · 60 {question_word} — {FULL_TEST_PRICE_STARS} ⭐",
+        callback_data="testsize:all:full",
+    )])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def result_history_keyboard(results: list[dict]) -> InlineKeyboardMarkup:
+def result_history_keyboard(results: list[dict], lang: str = "ru") -> InlineKeyboardMarkup:
     rows = []
     for result in results:
-        date = str(result.get("finished_at", ""))[:10]
-        label = f"{date} · {result['score']}/{result['total']}"
+        date = str(result.get("started_at") or result.get("finished_at", ""))[:10]
+        answered = len(result.get("answers", []))
+        if result.get("status") == "in_progress":
+            label = f"⏸ {date} · {answered}/{result['total']}"
+        else:
+            label = f"{date} · {result['score']}/{result['total']}"
         rows.append([InlineKeyboardButton(text=label, callback_data=f"history:{result['id']}")])
-    rows.append([InlineKeyboardButton(text="🔙 В меню", callback_data="user:main")])
+    back_labels = {"ru": "🔙 В меню", "uz": "🔙 Menyu", "en": "🔙 Menu"}
+    rows.append([InlineKeyboardButton(text=back_labels.get(lang, back_labels["ru"]), callback_data="user:main")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -287,10 +413,16 @@ def admin_promos_keyboard(
 ) -> InlineKeyboardMarkup:
     rows = []
     for promo in promos or []:
-        rows.append([InlineKeyboardButton(
-            text=f"📊 {promo['code']}",
-            callback_data=f"adm:promo:{promo['code']}:0:{page}",
-        )])
+        rows.append([
+            InlineKeyboardButton(
+                text=f"📊 {promo['code']}",
+                callback_data=f"adm:promo:{promo['code']}:0:{page}",
+            ),
+            InlineKeyboardButton(
+                text="🔴 Выкл." if promo["is_active"] else "🟢 Вкл.",
+                callback_data=f"adm:promo_toggle:{promo['code']}:{page}",
+            ),
+        ])
     if total_pages > 1:
         navigation = []
         if page > 0:
@@ -467,10 +599,12 @@ def admin_donations_keyboard(page: int, total_pages: int) -> InlineKeyboardMarku
 
 def admin_settings_keyboard(current: dict, defaults: dict) -> InlineKeyboardMarkup:
     keys = [
-        ("answer_unlock_price", "💰 Цена открытия ответов"),
         ("donation_min_stars",  "🟢 Мин. донат Stars"),
         ("donation_max_stars",  "🔴 Макс. донат Stars"),
-        ("questions_per_test",  "❓ Вопросов в тесте"),
+        ("premium_week_stars", "💎 Premium: неделя ⭐"),
+        ("premium_month_stars", "💎 Premium: месяц ⭐"),
+        ("premium_quarter_stars", "💎 Premium: 3 месяца ⭐"),
+        ("premium_discount_percent", "🏷️ Скидка Premium %"),
     ]
     rows = []
     for key, label in keys:
