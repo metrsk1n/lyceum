@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import random
+import uuid
 from contextlib import asynccontextmanager
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -126,6 +127,10 @@ async def init_db() -> None:
                 total        INTEGER NOT NULL DEFAULT 0,
                 time_sec     INTEGER NOT NULL DEFAULT 0,
                 answers_json TEXT NOT NULL DEFAULT '[]',
+                questions_json TEXT NOT NULL DEFAULT '[]',
+                current_index INTEGER NOT NULL DEFAULT 0,
+                status       TEXT NOT NULL DEFAULT 'completed',
+                started_at   TEXT NOT NULL DEFAULT (datetime('now')),
                 finished_at  TEXT NOT NULL DEFAULT (datetime('now'))
             );
 
@@ -246,6 +251,27 @@ async def init_db() -> None:
         if "free_full_mock_credits" not in access_columns:
             await conn.execute(
                 "ALTER TABLE user_access ADD COLUMN free_full_mock_credits INTEGER NOT NULL DEFAULT 0"
+            )
+        result_columns_cursor = await conn.execute("PRAGMA table_info(results)")
+        result_columns = {row[1] for row in await result_columns_cursor.fetchall()}
+        if "questions_json" not in result_columns:
+            await conn.execute(
+                "ALTER TABLE results ADD COLUMN questions_json TEXT NOT NULL DEFAULT '[]'"
+            )
+        if "current_index" not in result_columns:
+            await conn.execute(
+                "ALTER TABLE results ADD COLUMN current_index INTEGER NOT NULL DEFAULT 0"
+            )
+        if "status" not in result_columns:
+            await conn.execute(
+                "ALTER TABLE results ADD COLUMN status TEXT NOT NULL DEFAULT 'completed'"
+            )
+        if "started_at" not in result_columns:
+            await conn.execute(
+                "ALTER TABLE results ADD COLUMN started_at TEXT NOT NULL DEFAULT ''"
+            )
+            await conn.execute(
+                "UPDATE results SET started_at=finished_at WHERE started_at=''"
             )
         await conn.commit()
 
@@ -394,7 +420,12 @@ async def get_user_admin_info(user_id: int) -> dict | None:
         u = await _one(conn, "SELECT * FROM users WHERE id=?", (user_id,))
         if not u:
             return None
-        tr = await _one(conn, "SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) FROM results WHERE user_id=? AND total>0", (user_id,))
+        tr = await _one(
+            conn,
+            "SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) "
+            "FROM results WHERE user_id=? AND total>0 AND status='completed'",
+            (user_id,),
+        )
         pr = await _one(conn, "SELECT COUNT(*), COALESCE(SUM(amount),0) FROM payments WHERE user_id=? AND status='paid'", (user_id,))
         result = dict(u)
         result["test_count"] = tr[0] if tr else 0
@@ -708,6 +739,90 @@ async def save_result(
         return cursor.lastrowid
 
 
+async def create_test_session(
+    user_id: int,
+    subject: str,
+    mode: str,
+    total: int,
+    questions: list[dict],
+) -> int:
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "INSERT INTO results "
+            "(user_id,subject,mode,total,answers_json,questions_json,current_index,status) "
+            "VALUES (?,?,?,?,?,?,0,'in_progress')",
+            (
+                user_id,
+                subject,
+                mode,
+                total,
+                "[]",
+                json.dumps(questions, ensure_ascii=False),
+            ),
+        )
+        await conn.commit()
+        return cursor.lastrowid
+
+
+async def update_test_session(
+    session_id: int,
+    user_id: int,
+    *,
+    score: int,
+    total: int,
+    time_sec: int,
+    answers: list[dict],
+    current_index: int,
+    status: str,
+) -> bool:
+    if status not in {"in_progress", "completed"}:
+        raise ValueError(f"Invalid test session status: {status}")
+    async with _db() as conn:
+        cursor = await conn.execute(
+            "UPDATE results SET score=?,total=?,time_sec=?,answers_json=?,"
+            "current_index=?,status=?,finished_at=CASE WHEN ?='completed' "
+            "THEN datetime('now') ELSE finished_at END "
+            "WHERE id=? AND user_id=?",
+            (
+                score,
+                total,
+                time_sec,
+                json.dumps(answers, ensure_ascii=False),
+                current_index,
+                status,
+                status,
+                session_id,
+                user_id,
+            ),
+        )
+        await conn.commit()
+        return cursor.rowcount == 1
+
+
+def _questions_from_session_answers(answers: list[dict], subject: str) -> list[dict]:
+    questions = []
+    for answer in answers:
+        question_id = answer.get("qid")
+        correct = answer.get("correct")
+        options = answer.get("options")
+        if (
+            not isinstance(question_id, int)
+            or not isinstance(correct, int)
+            or not isinstance(options, list)
+            or not options
+        ):
+            return []
+        questions.append({
+            "id": question_id,
+            "subject": answer.get("subject") or subject,
+            "question": answer.get("question", ""),
+            "options": options,
+            "correct": [correct],
+            "explanation": answer.get("explanation") or "",
+        })
+    return questions
+
+
 async def get_result_for_user(result_id: int, user_id: int) -> dict | None:
     async with _db() as conn:
         row = await _one(conn, "SELECT * FROM results WHERE id=? AND user_id=?", (result_id, user_id))
@@ -715,29 +830,56 @@ async def get_result_for_user(result_id: int, user_id: int) -> dict | None:
             return None
         result = dict(row)
         result["answers"] = json.loads(result["answers_json"])
+        result["questions"] = json.loads(result["questions_json"])
+        if not result["questions"] and result["answers"]:
+            result["questions"] = _questions_from_session_answers(
+                result["answers"],
+                result["subject"],
+            )
         return result
 
 
 async def get_user_results(user_id: int, limit: int = 10) -> list[dict]:
     async with _db() as conn:
-        rows = await _all(conn, "SELECT * FROM results WHERE user_id=? ORDER BY finished_at DESC LIMIT ?", (user_id, limit))
+        rows = await _all(
+            conn,
+            "SELECT * FROM results WHERE user_id=? "
+            "ORDER BY started_at DESC,id DESC LIMIT ?",
+            (user_id, limit),
+        )
         result = []
         for r in rows:
             item = dict(r)
             item["answers"] = json.loads(item["answers_json"])
+            item["questions"] = json.loads(item["questions_json"])
+            if not item["questions"] and item["answers"]:
+                item["questions"] = _questions_from_session_answers(
+                    item["answers"],
+                    item["subject"],
+                )
             result.append(item)
         return result
 
 
 async def get_user_stats(user_id: int) -> dict:
     async with _db() as conn:
-        row = await _one(conn, "SELECT COUNT(*) as t, SUM(score) as c, SUM(total) as q FROM results WHERE user_id=?", (user_id,))
+        row = await _one(
+            conn,
+            "SELECT COUNT(*) as t, SUM(score) as c, SUM(total) as q "
+            "FROM results WHERE user_id=? AND status='completed'",
+            (user_id,),
+        )
         if not row or not row["t"]:
             return {"total_tests": 0, "correct": 0, "total_q": 0, "accuracy": 0.0, "best": 0.0}
         correct = row["c"] or 0
         total_q = row["q"] or 0
         accuracy = round(correct / total_q * 100, 1) if total_q else 0.0
-        best_row = await _one(conn, "SELECT MAX(CAST(score AS REAL)/total*100) as b FROM results WHERE user_id=? AND total>0", (user_id,))
+        best_row = await _one(
+            conn,
+            "SELECT MAX(CAST(score AS REAL)/total*100) as b "
+            "FROM results WHERE user_id=? AND status='completed' AND total>0",
+            (user_id,),
+        )
         best = round(best_row["b"] or 0.0, 1) if best_row else 0.0
         return {"total_tests": row["t"], "correct": correct, "total_q": total_q, "accuracy": accuracy, "best": best}
 
@@ -930,7 +1072,7 @@ async def create_promo_code(
 ) -> None:
     if reward_type not in {"tests", "full_tests", "free_full_mocks", "explanations", "discount"}:
         raise ValueError(f"Unsupported promo reward type: {reward_type}")
-    if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 90):
+    if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 100):
         raise ValueError("Invalid promo value or usage limit")
     async with _db() as conn:
         await conn.execute(
@@ -976,6 +1118,8 @@ async def redeem_promo_code(user_id: int, code: str) -> dict | None:
                 (promo["value"], user_id),
             )
         elif promo["reward_type"] == "discount":
+            if not 1 <= promo["value"] <= 100:
+                return {"error": "invalid"}
             access = await _one(conn, "SELECT subscription_discount FROM user_access WHERE user_id=?", (user_id,))
             if access["subscription_discount"]:
                 return {"error": "discount_pending"}
@@ -1029,6 +1173,74 @@ async def consume_user_subscription_discount(user_id: int, code: str) -> bool:
         return cursor.rowcount == 1
 
 
+async def grant_free_subscription_from_discount(
+    user_id: int,
+    plan: str,
+    days: int,
+    code: str | None = None,
+) -> datetime | None:
+    if plan not in {"week", "month", "quarter"} or days not in {7, 30, 90}:
+        raise ValueError("Invalid free subscription plan")
+    now = datetime.now()
+    async with _db() as conn:
+        await conn.execute("BEGIN IMMEDIATE")
+        access = await _one(
+            conn,
+            "SELECT subscription_discount,subscription_discount_code "
+            "FROM user_access WHERE user_id=?",
+            (user_id,),
+        )
+        if code is None:
+            if RuntimeSettings.get_int("premium_discount_percent", 0) != 100:
+                return None
+        elif (
+            access is None
+            or access["subscription_discount"] != 100
+            or access["subscription_discount_code"] != code
+        ):
+            return None
+
+        rows = await _all(
+            conn,
+            "SELECT expires_at FROM payments WHERE user_id=? AND status='paid' "
+            "AND product_type='subscription' AND expires_at IS NOT NULL",
+            (user_id,),
+        )
+        expirations = []
+        for row in rows:
+            try:
+                expiry = datetime.fromisoformat(row["expires_at"])
+            except ValueError:
+                continue
+            if expiry > now:
+                expirations.append(expiry)
+        starts_at = max(expirations, default=now)
+        expires_at = starts_at + timedelta(days=days)
+        cursor = await conn.execute(
+            "INSERT INTO payments "
+            "(user_id,charge_id,payload,amount,product_type,status,expires_at) "
+            "VALUES (?,?,?,0,'subscription','paid',?)",
+            (
+                user_id,
+                f"promo-free:{uuid.uuid4()}",
+                f"sub:{plan}:{user_id}:{code or 'admin-discount'}",
+                expires_at.isoformat(timespec="seconds"),
+            ),
+        )
+        if cursor.rowcount != 1:
+            raise RuntimeError("Unable to record free subscription")
+        if code is not None:
+            cleared = await conn.execute(
+                "UPDATE user_access SET subscription_discount=0,subscription_discount_code=NULL "
+                "WHERE user_id=? AND subscription_discount=100 AND subscription_discount_code=?",
+                (user_id, code),
+            )
+            if cleared.rowcount != 1:
+                raise RuntimeError("Unable to consume 100% subscription discount")
+        await conn.commit()
+        return expires_at
+
+
 async def list_promo_codes(limit: int = 20, offset: int = 0) -> list[dict]:
     async with _db() as conn:
         rows = await _all(
@@ -1077,7 +1289,7 @@ async def get_user_promo_redemptions(user_id: int, limit: int = 20) -> list[dict
 
 async def count_results() -> int:
     async with _db() as conn:
-        row = await _one(conn, "SELECT COUNT(*) FROM results")
+        row = await _one(conn, "SELECT COUNT(*) FROM results WHERE status='completed'")
         return row[0] if row else 0
 
 
@@ -1086,16 +1298,28 @@ async def get_admin_stats(days: int | None = None) -> dict:
         if days:
             df = f"datetime('now', '-{days} days')"
             u_cnt = (await _one(conn, f"SELECT COUNT(*) FROM users WHERE datetime(created_at)>={df}"))[0]
-            tr = await _one(conn, f"SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) FROM results WHERE total>0 AND datetime(finished_at)>={df}")
+            tr = await _one(
+                conn,
+                f"SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) "
+                f"FROM results WHERE total>0 AND status='completed' AND datetime(finished_at)>={df}",
+            )
             pr = await _one(conn, f"SELECT COUNT(*), COALESCE(SUM(amount),0) FROM payments WHERE status='paid' AND datetime(created_at)>={df}")
             dr = await _one(conn, f"SELECT COUNT(*), COALESCE(SUM(amount),0) FROM donations WHERE status='paid' AND datetime(created_at)>={df}")
         else:
             u_cnt = (await _one(conn, "SELECT COUNT(*) FROM users"))[0]
-            tr = await _one(conn, "SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) FROM results WHERE total>0")
+            tr = await _one(
+                conn,
+                "SELECT COUNT(*), COALESCE(AVG(CAST(score AS REAL)/total*100),0) "
+                "FROM results WHERE total>0 AND status='completed'",
+            )
             pr = await _one(conn, "SELECT COUNT(*), COALESCE(SUM(amount),0) FROM payments WHERE status='paid'")
             dr = await _one(conn, "SELECT COUNT(*), COALESCE(SUM(amount),0) FROM donations WHERE status='paid'")
         qr = await _one(conn, "SELECT COUNT(*) FROM questions WHERE is_active=1")
-        pop = await _all(conn, "SELECT subject, COUNT(*) as cnt FROM results GROUP BY subject ORDER BY cnt DESC LIMIT 3")
+        pop = await _all(
+            conn,
+            "SELECT subject, COUNT(*) as cnt FROM results "
+            "WHERE status='completed' GROUP BY subject ORDER BY cnt DESC LIMIT 3",
+        )
         return {
             "users": u_cnt or 0,
             "tests": tr[0] if tr else 0,
