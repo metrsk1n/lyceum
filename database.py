@@ -163,6 +163,7 @@ async def init_db() -> None:
                 free_test_credits        INTEGER NOT NULL DEFAULT 0,
                 paid_test_credits        INTEGER NOT NULL DEFAULT 0,
                 paid_full_test_credits  INTEGER NOT NULL DEFAULT 0,
+                free_full_mock_credits  INTEGER NOT NULL DEFAULT 0,
                 explanation_credits      INTEGER NOT NULL DEFAULT 0,
                 subscription_discount    INTEGER NOT NULL DEFAULT 0,
                 subscription_discount_code TEXT
@@ -241,6 +242,10 @@ async def init_db() -> None:
         if "paid_full_test_credits" not in access_columns:
             await conn.execute(
                 "ALTER TABLE user_access ADD COLUMN paid_full_test_credits INTEGER NOT NULL DEFAULT 0"
+            )
+        if "free_full_mock_credits" not in access_columns:
+            await conn.execute(
+                "ALTER TABLE user_access ADD COLUMN free_full_mock_credits INTEGER NOT NULL DEFAULT 0"
             )
         await conn.commit()
 
@@ -793,6 +798,18 @@ async def get_user_access(user_id: int) -> dict:
         return result
 
 
+async def consume_free_full_mock_credit(user_id: int) -> bool:
+    async with _db() as conn:
+        await _ensure_user_access(conn, user_id)
+        cursor = await conn.execute(
+            "UPDATE user_access SET free_full_mock_credits=free_full_mock_credits-1 "
+            "WHERE user_id=? AND free_full_mock_credits>0",
+            (user_id,),
+        )
+        await conn.commit()
+        return cursor.rowcount == 1
+
+
 async def consume_test_access(user_id: int, subscriber_daily_limit: int = 5) -> str:
     if user_id in settings.admin_ids:
         return "subscriber"
@@ -911,7 +928,7 @@ async def consume_explanation_access(user_id: int) -> bool:
 async def create_promo_code(
     code: str, reward_type: str, value: int, max_uses: int, expires_at: str | None, created_by: int,
 ) -> None:
-    if reward_type not in {"tests", "full_tests", "explanations", "discount"}:
+    if reward_type not in {"tests", "full_tests", "free_full_mocks", "explanations", "discount"}:
         raise ValueError(f"Unsupported promo reward type: {reward_type}")
     if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 90):
         raise ValueError("Invalid promo value or usage limit")
@@ -946,6 +963,11 @@ async def redeem_promo_code(user_id: int, code: str) -> dict | None:
         elif promo["reward_type"] == "full_tests":
             await conn.execute(
                 "UPDATE user_access SET paid_full_test_credits=paid_full_test_credits+? WHERE user_id=?",
+                (promo["value"], user_id),
+            )
+        elif promo["reward_type"] == "free_full_mocks":
+            await conn.execute(
+                "UPDATE user_access SET free_full_mock_credits=free_full_mock_credits+? WHERE user_id=?",
                 (promo["value"], user_id),
             )
         elif promo["reward_type"] == "explanations":
@@ -1039,6 +1061,18 @@ async def get_promo_redemptions(code: str, limit: int = 20, offset: int = 0) -> 
             (code.upper(), limit, offset),
         )
         return (count_row[0] if count_row else 0, [dict(row) for row in rows])
+
+
+async def get_user_promo_redemptions(user_id: int, limit: int = 20) -> list[dict]:
+    async with _db() as conn:
+        rows = await _all(
+            conn,
+            "SELECT r.code,p.reward_type,p.value,r.redeemed_at "
+            "FROM promo_redemptions r JOIN promo_codes p ON p.code=r.code "
+            "WHERE r.user_id=? ORDER BY r.redeemed_at DESC,r.code LIMIT ?",
+            (user_id, limit),
+        )
+        return [dict(row) for row in rows]
 
 
 async def count_results() -> int:
