@@ -48,19 +48,20 @@ def _static_mocks() -> dict[str, list[dict]]:
 
 @router.callback_query(F.data.startswith("subject:"))
 async def choose_test_size(callback: CallbackQuery) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
     subject = callback.data.split(":", 1)[1]
     subjects = {item["slug"] for item in await db.get_subjects()}
     if subject not in subjects:
-        await callback.answer("Предмет не найден.", show_alert=True)
+        await callback.answer(t(lang, "subject_not_found"), show_alert=True)
         return
     amount = TEST_QUESTIONS
     await callback.message.edit_text(
-        "Полный мок: 60 вопросов — по 20 по математике, английскому и IQ.\n"
-        "Выберите формат теста:",
+        t(lang, "choose_test_size"),
         reply_markup=test_size_keyboard(
             subject,
             amount,
             FULL_TEST_PRICE_STARS,
+            lang,
         ),
     )
     await callback.answer()
@@ -68,20 +69,20 @@ async def choose_test_size(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data.startswith("testsize:"))
 async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
     parts = callback.data.split(":")
     if len(parts) != 3 or parts[2] not in {"regular", "full"}:
-        await callback.answer("Некорректный формат теста.", show_alert=True)
+        await callback.answer(t(lang, "test_invalid_format"), show_alert=True)
         return
     subject, size = parts[1], parts[2]
     subjects = {item["slug"] for item in await db.get_subjects()}
     if size == "regular" and subject not in subjects:
-        await callback.answer("Предмет не найден.", show_alert=True)
+        await callback.answer(t(lang, "subject_not_found"), show_alert=True)
         return
     if size == "full" and subject not in {*FULL_MOCK_SUBJECTS, "all"}:
-        await callback.answer("Предмет не найден.", show_alert=True)
+        await callback.answer(t(lang, "subject_not_found"), show_alert=True)
         return
 
-    lang = await db.get_user_language(callback.from_user.id)
     if size == "full":
         questions = []
         missing_subjects = []
@@ -97,8 +98,7 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
             questions.extend(subject_questions)
         if missing_subjects:
             await callback.message.answer(
-                "Полный мок пока недоступен: не хватает вопросов в предметах "
-                f"{', '.join(missing_subjects)}. Требуется по 20 вопросов для каждого предмета."
+                t(lang, "full_mock_missing", subjects=", ".join(missing_subjects))
             )
             await callback.answer()
             return
@@ -121,7 +121,7 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
         else await db.consume_test_access(callback.from_user.id, subscriber_daily_limit=5)
     )
     if access == "daily_limit":
-        await callback.message.answer("Вы использовали дневную квоту Premium (5 тестов). Новые тесты будут доступны завтра.")
+        await callback.message.answer(t(lang, "daily_limit"))
         await callback.answer()
         return
     if access == "payment_required":
@@ -129,11 +129,11 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
             FULL_TEST_PRICE_STARS if size == "full" else TEST_PRICE_STARS
         )
         payload_type = "full_test" if size == "full" else "test"
-        title = "Полный мок" if size == "full" else "Один тест"
+        title = t(lang, "full_mock_title") if size == "full" else t(lang, "single_test_title")
         description = (
-            "60 вопросов: по 20 по математике, английскому и IQ"
+            t(lang, "full_mock_invoice_description")
             if size == "full"
-            else "Доступ к новому тесту"
+            else t(lang, "test_invoice_description")
         )
         payload = (
             f"{payload_type}:{callback.from_user.id}"
@@ -151,7 +151,7 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
                 prices=[LabeledPrice(label=title, amount=price)],
             )
         except Exception:
-            await callback.message.answer("Не удалось выставить счёт. Попробуйте снова позже.")
+            await callback.message.answer(t(lang, "invoice_failed"))
         await callback.answer()
         return
 
@@ -165,25 +165,28 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
 @router.callback_query(F.data.startswith("mock:"))
 async def start_free_mock(callback: CallbackQuery, state: FSMContext) -> None:
     subject = callback.data.split(":", 1)[1]
-    if subject not in {"english", "mathematics", "iq"}:
-        await callback.answer("Бесплатный мок не найден.", show_alert=True)
+    if subject != "full":
+        await callback.answer(t(await db.get_user_language(callback.from_user.id), "free_mock_not_found"), show_alert=True)
         return
     lang = await db.get_user_language(callback.from_user.id)
-    mock_items = _static_mocks()[subject]
-    questions = [
-        {
-            "id": item["id"],
-            "question": item["question_text"],
-            "options": item["options"],
-            "correct": [item["correct_option_index"]],
-            "explanation": item["explanation"],
-        }
-        for item in mock_items
-    ]
-    if not await db.claim_free_mock(callback.from_user.id, subject):
-        await callback.answer("Этот бесплатный мок уже использован.", show_alert=True)
+    mocks = _static_mocks()
+    questions = []
+    for mock_subject in FULL_MOCK_SUBJECTS:
+        for item in random.sample(mocks[mock_subject], FULL_MOCK_QUESTIONS_PER_SUBJECT):
+            use_uzbek = lang == "uz"
+            questions.append({
+                "id": -(len(questions) + 1),
+                "subject": mock_subject,
+                "question": item["question_text_uz"] if use_uzbek else item["question_text"],
+                "options": item["options_uz"] if use_uzbek else item["options"],
+                "correct": [item["correct_option_index"]],
+                "explanation": item["explanation_uz"] if use_uzbek else item["explanation"],
+            })
+    random.shuffle(questions)
+    if not await db.consume_free_full_mock_credit(callback.from_user.id):
+        await callback.answer(t(lang, "free_mock_not_found"), show_alert=True)
         return
-    await _start_test(callback, state, questions, subject, lang, free_mock=True)
+    await _start_test(callback, state, questions, "full_mock", lang, free_full_mock=True)
     await callback.answer()
 
 
@@ -194,6 +197,7 @@ async def _start_test(
     subject: str,
     lang: str,
     free_mock: bool = False,
+    free_full_mock: bool = False,
 ) -> None:
     await state.set_state(TestFlow.answering)
     await state.update_data(
@@ -205,10 +209,11 @@ async def _start_test(
         score=0,
         option_map={},
         free_mock=free_mock,
+        free_full_mock=free_full_mock,
         full_mock=subject == "full_mock",
     )
 
-    await callback.message.answer(f"🎯 Тест начался. Вопросов: {len(questions)}")
+    await callback.message.answer(t(lang, "test_started", count=len(questions)))
     await _send_question(callback, state, questions[0], 1, len(questions), lang)
 
 
@@ -309,11 +314,19 @@ async def _finish_test(callback: CallbackQuery, state: FSMContext, data: dict, a
             "uz": "To'liq mock · Matematika, Ingliz tili va IQ",
         }.get(lang, "Полный мок")
     else:
-        subject_title = next((item["title"] for item in subjects if item["slug"] == subject), subject)
+        subject_title = SUBJECT_TITLES.get(
+            subject,
+            {},
+        ).get(lang, next((item["title"] for item in subjects if item["slug"] == subject), subject))
     result_id = await db.save_result(
         user_id=callback.from_user.id,
         subject=subject,
-        mode="free_mock" if data.get("free_mock") else "full_mock" if data.get("full_mock") else "practice",
+        mode=(
+            "free_mock" if data.get("free_mock")
+            else "free_full_mock" if data.get("free_full_mock")
+            else "full_mock" if data.get("full_mock")
+            else "practice"
+        ),
         score=score,
         total=total,
         time_sec=max(0, int(time.time() - data["start_time"])),
@@ -322,26 +335,31 @@ async def _finish_test(callback: CallbackQuery, state: FSMContext, data: dict, a
     if data.get("free_mock"):
         await db.complete_free_mock(callback.from_user.id, subject)
     elif data.get("full_mock"):
-        question_ids_by_subject: dict[str, list[int]] = {}
-        for answer in answers:
-            answer_subject = answer.get("subject")
-            if answer_subject:
-                question_ids_by_subject.setdefault(answer_subject, []).append(answer["qid"])
-        for answer_subject, question_ids in question_ids_by_subject.items():
-            await db.record_solved_questions(callback.from_user.id, answer_subject, question_ids)
+        if not data.get("free_full_mock"):
+            question_ids_by_subject: dict[str, list[int]] = {}
+            for answer in answers:
+                answer_subject = answer.get("subject")
+                if answer_subject:
+                    question_ids_by_subject.setdefault(answer_subject, []).append(answer["qid"])
+            for answer_subject, question_ids in question_ids_by_subject.items():
+                await db.record_solved_questions(callback.from_user.id, answer_subject, question_ids)
     else:
         await db.record_solved_questions(callback.from_user.id, subject, [answer["qid"] for answer in answers])
 
     percent = round(score / total * 100) if total else 0
     lines = [
-        f"📊 Ваши результаты по предмету: {escape(subject_title)}",
-        f"Правильно: {score} / {total} ({percent}%)",
+        t(lang, "test_result_subject", subject=escape(subject_title)),
+        t(lang, "test_result_score", score=score, total=total, percent=percent),
         "",
     ]
     for index, answer in enumerate(answers):
-        status = "✅ Верно" if answer["is_correct"] else f"❌ Неверно (Правильный: {answer['correct_letter']})"
+        status = (
+            t(lang, "answer_correct")
+            if answer["is_correct"]
+            else t(lang, "answer_wrong", answer=answer["correct_letter"])
+        )
         lines.append(f"{index + 1}. {answer['selected_letter']} — {status}")
-    lines.extend(["", "💡 Нажмите на номер вопроса ниже, чтобы посмотреть подробный разбор задачи:"])
+    lines.extend(["", t(lang, "result_review_prompt")])
 
     if await db.user_has_active_subscription(callback.from_user.id):
         unlock_subjects = []
@@ -375,12 +393,14 @@ async def review_question(callback: CallbackQuery) -> None:
         _, result_id_text, index_text = callback.data.split(":")
         result_id, index = int(result_id_text), int(index_text)
     except (ValueError, AttributeError):
-        await callback.answer("Не удалось открыть разбор.", show_alert=True)
+        lang = await db.get_user_language(callback.from_user.id)
+        await callback.answer(t(lang, "review_failed"), show_alert=True)
         return
 
     result = await db.get_result_for_user(result_id, callback.from_user.id)
     if result is None or index < 0 or index >= len(result["answers"]):
-        await callback.answer("Результат не найден.", show_alert=True)
+        lang = await db.get_user_language(callback.from_user.id)
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
         return
 
     answer = result["answers"][index]
@@ -391,23 +411,25 @@ async def review_question(callback: CallbackQuery) -> None:
         answer_subject,
     )
     if not has_unlocked_result and not await db.consume_explanation_access(callback.from_user.id):
-        await callback.answer("Подробный разбор доступен по подписке Premium.", show_alert=True)
+        lang = await db.get_user_language(callback.from_user.id)
+        await callback.answer(t(lang, "explanation_premium_only"), show_alert=True)
         await callback.message.answer(
-            "💎 Подробный разбор доступен только подписчикам Premium. Выберите тариф:",
-            reply_markup=premium_keyboard(),
+            t(lang, "explanation_premium_prompt"),
+            reply_markup=premium_keyboard(lang),
         )
         return
 
-    explanation = answer.get("explanation") or "Разбор к этому вопросу пока не добавлен."
+    lang = await db.get_user_language(callback.from_user.id)
+    explanation = answer.get("explanation") or t(lang, "explanation_missing")
     options = answer.get("options", [])
     correct_index = answer.get("correct", 0)
     correct_answer = options[correct_index] if 0 <= correct_index < len(options) else "Не указан"
     steps = [line.strip() for line in explanation.splitlines() if line.strip()]
     formatted_steps = "\n".join(f"\t{escape(step)}" for step in steps)
     text = (
-        f"💡 <b>Разбор вопроса {index + 1}</b>\n\n"
+        f"{t(lang, 'review_title', index=index + 1)}\n\n"
         f"{escape(answer.get('question', ''))}\n\n"
-        f"✅ Правильный ответ: {escape(correct_answer)}\n\n"
+        f"{t(lang, 'correct_answer', answer=escape(correct_answer))}\n\n"
         f"<pre>{formatted_steps}</pre>"
     )
     await callback.message.answer(text)

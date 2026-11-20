@@ -7,8 +7,9 @@ from aiogram.types import CallbackQuery, Message
 
 import database as db
 from bot.keyboards import (
-    gift_keyboard,
+    free_full_mock_keyboard,
     language_keyboard,
+    more_keyboard,
     premium_keyboard,
     profile_keyboard,
     promo_back_keyboard,
@@ -26,18 +27,21 @@ USER_MENU_ACTIONS = {
     "💎 Премиум": "premium",
     "📚 Мои ошибки": "mistakes",
     "🕘 История": "history",
-    "🎁 Подарок": "gift",
+    "✨ Ещё": "more",
     "👤 Profil": "profile",
     "🎯 Test boshlash": "test",
     "💎 Premium": "premium",
     "📚 Xatolarim": "mistakes",
     "🕘 Tarix": "history",
-    "🎁 Sovg'a": "gift",
+    "✨ Boshqa": "more",
     "👤 Profile": "profile",
     "🎯 Start test": "test",
     "📚 My mistakes": "mistakes",
     "🕘 History": "history",
-    "🎁 Gift": "gift",
+    "✨ More": "more",
+    "🎁 Подарок": "more",
+    "🎁 Sovg'a": "more",
+    "🎁 Gift": "more",
 }
 
 # All main menu button texts across all languages — used for FSM auto-cancel
@@ -52,6 +56,7 @@ MENU_TEXTS = {
     # Cancel
     "❌ Отмена",
     "🕘 История", "🕘 Tarix", "🕘 History",
+    "✨ Ещё", "✨ Boshqa", "✨ More",
     "🎁 Подарок", "🎁 Sovg'a", "🎁 Gift",
 }
 
@@ -109,15 +114,16 @@ async def user_profile(callback: CallbackQuery) -> None:
     has_sub = await db.user_has_active_subscription(callback.from_user.id)
     mistakes = await db.get_user_mistakes(callback.from_user.id, limit=5)
 
-    profile_text = (
-        "👤 <b>Профиль</b>\n\n"
-        f"📊 Всего тестов: <b>{stats['total_tests']}</b>\n"
-        f"✅ Правильных ответов: <b>{stats['correct']}</b>\n"
-        f"📈 Точность: <b>{stats['accuracy']}%</b>\n"
-        f"💎 Подписка: <b>{'активна' if has_sub else 'не активна'}</b>\n\n"
-        f"❌ Ошибок: <b>{len(mistakes)}</b>"
+    profile_text = t(
+        lang,
+        "profile",
+        tests=stats["total_tests"],
+        correct=stats["correct"],
+        accuracy=stats["accuracy"],
+        subscription=t(lang, "subscription_active" if has_sub else "subscription_inactive"),
+        mistakes=len(mistakes),
     )
-    await callback.message.edit_text(profile_text, reply_markup=profile_keyboard())
+    await callback.message.edit_text(profile_text, reply_markup=profile_keyboard(lang))
     await callback.answer()
 
 
@@ -141,38 +147,108 @@ async def user_start_test(callback: CallbackQuery, state: FSMContext) -> None:
 async def user_premium(callback: CallbackQuery) -> None:
     lang = await _lang(callback.from_user.id)
     await callback.message.edit_text(
-        "💎 <b>Подписка Premium</b>\n\n"
-        "До 5 тестов в день и подробные разборы без доплаты, пока подписка активна. "
-        "Также доступны история ошибок и расширенный режим подготовки.",
-        reply_markup=premium_keyboard(),
+        t(lang, "premium_description"),
+        reply_markup=premium_keyboard(lang),
     )
     await callback.answer()
 
 
-@router.callback_query(F.data == "user:gift")
-async def user_gift(callback: CallbackQuery) -> None:
-    used_mocks = await db.get_free_mock_status(callback.from_user.id)
-    remaining = 3 - len(used_mocks)
+@router.callback_query(F.data == "user:language")
+async def user_profile_language(callback: CallbackQuery, state: FSMContext) -> None:
+    await state.clear()
+    lang = await _lang(callback.from_user.id)
     await callback.message.edit_text(
-        f"🎁 <b>Бесплатные предметные моки</b>\n\n"
-        f"Доступно: {remaining} из 3 бесплатных предметных моков. Каждый содержит "
-        f"100 фиксированных вопросов по одному предмету и доступен один раз.\n"
-        f"Платные тарифы: тест на 20 вопросов по выбранному предмету — 25 ⭐; "
-        f"полный мок по математике, английскому и IQ (по 20 вопросов) — 60 ⭐.",
-        reply_markup=gift_keyboard(used_mocks),
+        t(lang, "choose_language"),
+        reply_markup=language_keyboard(),
     )
     await callback.answer()
 
 
-@router.callback_query(F.data == "gift:claim")
-async def claim_gift(callback: CallbackQuery) -> None:
-    await callback.answer("Бесплатные моки доступны в меню «Подарок».", show_alert=True)
+def _more_text(free_full_mock_credits: int, lang: str) -> str:
+    mock_status = (
+        t(lang, "more_credits", credits=free_full_mock_credits)
+        if free_full_mock_credits
+        else t(lang, "more_no_credits")
+    )
+    return t(lang, "more_description", mock_status=mock_status)
+
+
+async def _show_more(message: Message, user_id: int, edit: bool = False) -> None:
+    lang = await _lang(user_id)
+    access = await db.get_user_access(user_id)
+    credits = access["free_full_mock_credits"]
+    text = _more_text(credits, lang)
+    markup = more_keyboard(credits, lang)
+    if edit:
+        await message.edit_text(text, reply_markup=markup)
+    else:
+        await message.answer(text, reply_markup=markup)
+
+
+@router.callback_query(F.data == "user:more")
+async def user_more(callback: CallbackQuery, state: FSMContext) -> None:
+    await state.clear()
+    await _show_more(callback.message, callback.from_user.id, edit=True)
+    await callback.answer()
+
+
+@router.callback_query(F.data == "user:free_mocks")
+async def user_free_mocks(callback: CallbackQuery, state: FSMContext) -> None:
+    await state.clear()
+    lang = await _lang(callback.from_user.id)
+    access = await db.get_user_access(callback.from_user.id)
+    credits = access["free_full_mock_credits"]
+    if not credits:
+        await callback.answer(t(lang, "free_mock_no_credit"), show_alert=True)
+        return
+    await callback.message.edit_text(
+        t(lang, "free_mock_available", credits=credits),
+        reply_markup=free_full_mock_keyboard(lang),
+    )
+    await callback.answer()
+
+
+@router.callback_query(F.data == "user:promo_history")
+async def user_promo_history(callback: CallbackQuery, state: FSMContext) -> None:
+    await state.clear()
+    lang = await _lang(callback.from_user.id)
+    redemptions = await db.get_user_promo_redemptions(callback.from_user.id)
+    labels = {
+        "tests": t(lang, "promo_reward_tests"),
+        "full_tests": t(lang, "promo_reward_full_tests"),
+        "free_full_mocks": t(lang, "promo_reward_free_full_mocks"),
+        "explanations": t(lang, "promo_reward_explanations"),
+        "discount": t(lang, "promo_reward_discount"),
+    }
+    lines = [t(lang, "promo_history_title")]
+    if not redemptions:
+        lines.append(t(lang, "promo_history_empty"))
+    else:
+        for item in redemptions:
+            reward = (
+                t(lang, "promo_discount_value", value=item["value"])
+                if item["reward_type"] == "discount"
+                else f"{item['value']} {labels.get(item['reward_type'], item['reward_type'])}"
+            )
+            lines.append(
+                t(lang, "promo_history_item", code=item["code"], reward=reward, date=item["redeemed_at"])
+            )
+    access = await db.get_user_access(callback.from_user.id)
+    await callback.message.edit_text(
+        "\n".join(lines),
+        reply_markup=more_keyboard(access["free_full_mock_credits"], lang),
+    )
+    await callback.answer()
 
 
 @router.callback_query(F.data == "gift:promo")
 async def promo_code_start(callback: CallbackQuery, state: FSMContext) -> None:
+    lang = await _lang(callback.from_user.id)
     await state.set_state(PromoFlow.waiting_code)
-    await callback.message.answer("Введите промокод одним сообщением:", reply_markup=promo_back_keyboard())
+    await callback.message.answer(
+        t(lang, "promo_enter"),
+        reply_markup=promo_back_keyboard(lang),
+    )
     await callback.answer()
 
 
@@ -181,26 +257,30 @@ async def redeem_promo_code(message: Message, state: FSMContext) -> None:
     code = (message.text or "").strip()
     result = await db.redeem_promo_code(message.from_user.id, code)
     await state.clear()
+    lang = await _lang(message.from_user.id)
+    access = await db.get_user_access(message.from_user.id)
+    markup = more_keyboard(access["free_full_mock_credits"], lang)
     if not result:
-        await message.answer("Промокод не найден или отключён.", reply_markup=gift_keyboard())
+        await message.answer(t(lang, "promo_not_found"), reply_markup=markup)
         return
     errors = {
-        "expired": "Срок действия промокода истёк.",
-        "limit": "Лимит активаций этого промокода исчерпан.",
-        "used": "Вы уже активировали этот промокод.",
-        "discount_pending": "Сначала используйте уже активированную скидку на подписку.",
-        "invalid": "Тип промокода не поддерживается.",
+        "expired": t(lang, "promo_expired"),
+        "limit": t(lang, "promo_limit"),
+        "used": t(lang, "promo_used"),
+        "discount_pending": t(lang, "promo_discount_pending"),
+        "invalid": t(lang, "promo_invalid"),
     }
     if "error" in result:
-        await message.answer(errors.get(result["error"], "Не удалось активировать промокод."), reply_markup=gift_keyboard())
+        await message.answer(errors.get(result["error"], t(lang, "promo_failed")), reply_markup=markup)
         return
     reward_messages = {
-        "tests": f"✅ Промокод активирован: начислено {result['value']} тестов.",
-        "full_tests": f"✅ Промокод активирован: начислено {result['value']} полных моков.",
-        "explanations": f"✅ Промокод активирован: начислено {result['value']} разборов.",
-        "discount": f"✅ Скидка {result['value']}% применится к следующей покупке подписки.",
+        "tests": t(lang, "promo_activated_tests", value=result["value"]),
+        "full_tests": t(lang, "promo_activated_full_tests", value=result["value"]),
+        "free_full_mocks": t(lang, "promo_activated_free_full_mocks", value=result["value"]),
+        "explanations": t(lang, "promo_activated_explanations", value=result["value"]),
+        "discount": t(lang, "promo_activated_discount", value=result["value"]),
     }
-    await message.answer(reward_messages[result["reward_type"]], reply_markup=gift_keyboard())
+    await message.answer(reward_messages[result["reward_type"]], reply_markup=markup)
 
 
 @router.callback_query(F.data == "user:mistakes")
@@ -208,15 +288,15 @@ async def user_mistakes(callback: CallbackQuery) -> None:
     lang = await _lang(callback.from_user.id)
     mistakes = await db.get_user_mistakes(callback.from_user.id, limit=10)
     if not mistakes:
-        await callback.message.edit_text("📚 У вас пока нет ошибок. Отличная работа!", reply_markup=profile_keyboard())
+        await callback.message.edit_text(t(lang, "mistakes_empty"), reply_markup=profile_keyboard(lang))
         await callback.answer()
         return
 
-    lines = ["📚 <b>Мои ошибки</b>\n"]
+    lines = [t(lang, "mistakes_title")]
     for idx, item in enumerate(mistakes[:10], start=1):
         lines.append(f"{idx}. {item['question']}\n")
-        lines.append(f"   ✅ Правильный ответ: {item['correct_text']}\n\n")
-    await callback.message.edit_text("".join(lines), reply_markup=profile_keyboard())
+        lines.append(t(lang, "mistake_answer", answer=item["correct_text"]))
+    await callback.message.edit_text("".join(lines), reply_markup=profile_keyboard(lang))
     await callback.answer()
 
 
@@ -231,15 +311,16 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
         stats = await db.get_user_stats(user_id)
         has_sub = await db.user_has_active_subscription(user_id)
         mistakes = await db.get_user_mistakes(user_id, limit=5)
-        text = (
-            "👤 <b>Профиль</b>\n\n"
-            f"📊 Всего тестов: <b>{stats['total_tests']}</b>\n"
-            f"✅ Правильных ответов: <b>{stats['correct']}</b>\n"
-            f"📈 Точность: <b>{stats['accuracy']}%</b>\n"
-            f"💎 Подписка: <b>{'активна' if has_sub else 'не активна'}</b>\n\n"
-            f"❌ Ошибок: <b>{len(mistakes)}</b>"
+        text = t(
+            lang,
+            "profile",
+            tests=stats["total_tests"],
+            correct=stats["correct"],
+            accuracy=stats["accuracy"],
+            subscription=t(lang, "subscription_active" if has_sub else "subscription_inactive"),
+            mistakes=len(mistakes),
         )
-        await message.answer(text, reply_markup=profile_keyboard())
+        await message.answer(text, reply_markup=profile_keyboard(lang))
     elif action == "test":
         subjects = await db.get_subjects()
         await message.answer(
@@ -248,64 +329,79 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
         )
     elif action == "premium":
         await message.answer(
-            "💎 <b>Подписка Premium</b>\n\n"
-            "До 5 тестов в день и подробные разборы без доплаты, пока подписка активна. "
-            "Также доступны история ошибок и расширенный режим подготовки.",
-            reply_markup=premium_keyboard(),
+            t(lang, "premium_description"),
+            reply_markup=premium_keyboard(lang),
         )
-    elif action == "gift":
-        used_mocks = await db.get_free_mock_status(user_id)
-        remaining = 3 - len(used_mocks)
-        await message.answer(
-            f"🎁 <b>Бесплатные предметные моки</b>\n\n"
-            f"Доступно: {remaining} из 3 бесплатных предметных моков. Каждый содержит "
-            f"100 фиксированных вопросов по одному предмету и доступен один раз.\n"
-            f"Платные тарифы: тест на 20 вопросов по выбранному предмету — 25 ⭐; "
-            f"полный мок по математике, английскому и IQ (по 20 вопросов) — 60 ⭐.",
-            reply_markup=gift_keyboard(used_mocks),
-        )
+    elif action == "more":
+        await _show_more(message, user_id)
     elif action == "mistakes":
         mistakes = await db.get_user_mistakes(user_id, limit=10)
         if not mistakes:
-            await message.answer("📚 У вас пока нет ошибок. Отличная работа!", reply_markup=profile_keyboard())
+            await message.answer(t(lang, "mistakes_empty"), reply_markup=profile_keyboard(lang))
             return
-        lines = ["📚 <b>Мои ошибки</b>\n"]
+        lines = [t(lang, "mistakes_title")]
         for index, item in enumerate(mistakes, start=1):
-            lines.append(f"{index}. {item['question']}\n   ✅ Правильный ответ: {item['correct_text']}\n\n")
-        await message.answer("".join(lines), reply_markup=profile_keyboard())
+            lines.append(f"{index}. {item['question']}\n")
+            lines.append(t(lang, "mistake_answer", answer=item["correct_text"]))
+        await message.answer("".join(lines), reply_markup=profile_keyboard(lang))
     elif action == "history":
         results = await db.get_user_results(user_id, limit=10)
         if not results:
-            await message.answer("🕘 История тестов пока пуста.")
+            await message.answer(t(lang, "test_history_empty"))
             return
-        subjects = {item["slug"]: item["title"] for item in await db.get_subjects()}
-        lines = ["🕘 <b>История тестов</b>\n"]
+        subjects = {
+            "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"}.get(lang, "Matematika"),
+            "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"}.get(lang, "Английский"),
+            "iq": "IQ",
+        }
+        subjects.update({
+            item["slug"]: item["title"]
+            for item in await db.get_subjects()
+            if item["slug"] not in subjects
+        })
+        lines = [t(lang, "test_history_title")]
         for result in results:
             subject = subjects.get(result["subject"], result["subject"])
             percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
             lines.append(
-                f"📊 {subject}: <b>{result['score']}/{result['total']} ({percent}%)</b> · "
-                f"{str(result['finished_at'])[:10]}"
+                t(
+                    lang,
+                    "test_history_item",
+                    subject=subject,
+                    score=result["score"],
+                    total=result["total"],
+                    percent=percent,
+                    date=str(result["finished_at"])[:10],
+                )
             )
         from bot.keyboards import result_history_keyboard
-        await message.answer("\n".join(lines), reply_markup=result_history_keyboard(results))
+        await message.answer("\n".join(lines), reply_markup=result_history_keyboard(results, lang))
 
 
 @router.callback_query(F.data.startswith("history:"))
 async def show_history_result(callback: CallbackQuery) -> None:
+    lang = await _lang(callback.from_user.id)
     try:
         result_id = int(callback.data.split(":", 1)[1])
     except (ValueError, AttributeError):
-        await callback.answer("Результат не найден.", show_alert=True)
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
         return
 
     result = await db.get_result_for_user(result_id, callback.from_user.id)
     if result is None:
-        await callback.answer("Результат не найден.", show_alert=True)
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
         return
 
-    lang = await _lang(callback.from_user.id)
-    subjects = {item["slug"]: item["title"] for item in await db.get_subjects()}
+    subjects = {
+        "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"}.get(lang, "Математика"),
+        "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"}.get(lang, "Английский"),
+        "iq": "IQ",
+    }
+    subjects.update({
+        item["slug"]: item["title"]
+        for item in await db.get_subjects()
+        if item["slug"] not in subjects
+    })
     subject = subjects.get(
         result["subject"],
         {
@@ -318,8 +414,8 @@ async def show_history_result(callback: CallbackQuery) -> None:
     )
     percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
     lines = [
-        f"📊 <b>{subject}</b> · {str(result['finished_at'])[:10]}",
-        f"Результат: <b>{result['score']}/{result['total']} ({percent}%)</b>",
+        t(lang, "history_result_title", subject=subject, date=str(result["finished_at"])[:10]),
+        t(lang, "test_result_score", score=result["score"], total=result["total"], percent=percent),
         "",
     ]
     for index, answer in enumerate(result["answers"], start=1):
@@ -328,7 +424,7 @@ async def show_history_result(callback: CallbackQuery) -> None:
             selected_letter = "АБВГДЕЖЗ"[answer.get("selected", 0)]
         status = "✅" if answer.get("is_correct") else "❌"
         lines.append(f"{index}. {selected_letter} — {status}")
-    lines.append("\nВыберите номер, чтобы открыть разбор:")
+    lines.append("\n" + t(lang, "history_review_prompt"))
     from bot.keyboards import result_questions_keyboard
     from bot.pricing import EXPLANATION_PRICE_STARS
     result_subjects = list(dict.fromkeys(
@@ -373,9 +469,13 @@ async def show_language(message: Message, state: FSMContext) -> None:
 @router.callback_query(F.data.startswith("lang:"))
 async def set_language(callback: CallbackQuery, state: FSMContext) -> None:
     lang = callback.data.split(":")[1]
+    if lang not in {"ru", "uz", "en"}:
+        current_lang = await _lang(callback.from_user.id)
+        await callback.answer(t(current_lang, "language_invalid"), show_alert=True)
+        return
     await state.clear()
     await db.set_user_language(callback.from_user.id, lang)
-    await callback.message.edit_text(t(lang, "choose_language"), reply_markup=language_keyboard())
+    await callback.message.edit_text(t(lang, "language_set"))
     await callback.answer(t(lang, "language_set"))
     await callback.message.answer(t(lang, "start"), reply_markup=user_main_menu(lang))
 

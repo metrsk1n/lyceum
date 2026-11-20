@@ -25,10 +25,32 @@ async def _show_stats(message: Message) -> None:
     ))
     results = await db.get_user_results(message.from_user.id, limit=5)
     if results:
-        lines = ["📋 <b>Последние тесты:</b>\n"]
+        titles = {
+            "ru": {
+                "recent_tests": "📋 <b>Последние тесты:</b>\n",
+                "mathematics": "Математика",
+                "english": "Английский",
+                "iq": "IQ",
+            },
+            "uz": {
+                "recent_tests": "📋 <b>So'nggi testlar:</b>\n",
+                "mathematics": "Matematika",
+                "english": "Ingliz tili",
+                "iq": "IQ",
+            },
+            "en": {
+                "recent_tests": "📋 <b>Recent tests:</b>\n",
+                "mathematics": "Mathematics",
+                "english": "English",
+                "iq": "IQ",
+            },
+        }
+        labels = titles.get(lang, titles["ru"])
+        lines = [labels["recent_tests"]]
         for r in results:
             pct = round(r["score"] / r["total"] * 100, 1) if r["total"] else 0
-            lines.append(f"• {r['subject']} — {r['score']}/{r['total']} ({pct}%) — {r['finished_at'][:10]}")
+            subject = labels.get(r["subject"], r["subject"])
+            lines.append(f"• {subject} — {r['score']}/{r['total']} ({pct}%) — {r['finished_at'][:10]}")
         await message.answer("\n".join(lines))
 
 

@@ -316,6 +316,7 @@ async def admin_promos_list(callback: CallbackQuery) -> None:
     labels = {
         "tests": "Тесты",
         "full_tests": "Полные моки",
+        "free_full_mocks": "Бесплатные полные моки",
         "explanations": "Разборы",
         "discount": "Скидка",
     }
@@ -361,6 +362,7 @@ async def admin_promo_toggle(callback: CallbackQuery) -> None:
     labels = {
         "tests": "Тесты",
         "full_tests": "Полные моки",
+        "free_full_mocks": "Бесплатные полные моки",
         "explanations": "Разборы",
         "discount": "Скидка",
     }
@@ -438,9 +440,10 @@ async def admin_promo_add_start(callback: CallbackQuery, state: FSMContext) -> N
     await state.set_state(AdminFlow.promo_waiting)
     await callback.message.answer(
         "Отправьте промокод одной строкой:\n"
-        "<code>КОД tests|full_tests|explanations|discount КОЛИЧЕСТВО [ЛИМИТ] [YYYY-MM-DD]</code>\n\n"
+        "<code>КОД tests|full_tests|free_full_mocks|explanations|discount КОЛИЧЕСТВО [ЛИМИТ] [YYYY-MM-DD]</code>\n\n"
         "Например: <code>JUNE tests 3 100 2026-12-31</code>. "
         "Тип <code>full_tests</code> начисляет полный мок за 60 ⭐. "
+        "Тип <code>free_full_mocks</code> выдаёт бесплатный полный мок на 60 вопросов. "
         "Лимит и срок можно не указывать; лимит 0 означает без ограничений. "
         "Скидка задаётся в процентах, максимум 90%."
     )
@@ -461,8 +464,8 @@ async def admin_promo_add(message: Message, state: FSMContext) -> None:
     if not re.fullmatch(r"[A-Z0-9_-]{3,32}", code):
         await message.answer("Код: 3–32 символа, латинские буквы, цифры, _ или -.")
         return
-    if reward_type not in {"tests", "full_tests", "explanations", "discount"}:
-        await message.answer("Тип: tests, full_tests, explanations или discount.")
+    if reward_type not in {"tests", "full_tests", "free_full_mocks", "explanations", "discount"}:
+        await message.answer("Тип: tests, full_tests, free_full_mocks, explanations или discount.")
         return
 
     try:

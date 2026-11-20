@@ -72,6 +72,7 @@ async def show_payments(message: Message, state: FSMContext) -> None:
 
 @router.callback_query(F.data.startswith("unlock:"))
 async def unlock_answers(callback: CallbackQuery) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
     parts = callback.data.split(":")
     try:
         if len(parts) == 4:
@@ -85,21 +86,20 @@ async def unlock_answers(callback: CallbackQuery) -> None:
         else:
             raise ValueError
     except ValueError:
-        await callback.answer("Некорректный запрос на разбор.", show_alert=True)
+        await callback.answer(t(lang, "unlock_invalid_request"), show_alert=True)
         return
     if price != EXPLANATION_PRICE_STARS:
-        await callback.answer("Цена изменилась. Обновите сообщение и попробуйте снова.", show_alert=True)
+        await callback.answer(t(lang, "unlock_price_changed"), show_alert=True)
         return
     result = await db.get_result_for_user(result_id, callback.from_user.id)
     if result is None:
-        await callback.answer("Результат не найден.", show_alert=True)
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
         return
     if subject is not None and not _result_has_subject(result, subject):
-        await callback.answer("В этом результате нет такого предмета.", show_alert=True)
+        await callback.answer(t(lang, "unlock_subject_not_found"), show_alert=True)
         return
     has_subscription = await db.user_has_active_subscription(callback.from_user.id)
     if subject is None and result["subject"] == "full_mock":
-        lang = await db.get_user_language(callback.from_user.id)
         titles = {
             "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"},
             "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"},
@@ -120,15 +120,15 @@ async def unlock_answers(callback: CallbackQuery) -> None:
             ),
         )
         await callback.answer(
-            "Premium уже открывает разборы без доплаты."
-            if has_subscription else "Выберите предмет для разбора."
+            t(lang, "premium_explanations_unlocked")
+            if has_subscription else t(lang, "unlock_choose_subject")
         )
         return
     if has_subscription:
-        await callback.answer("Premium уже открывает разборы без доплаты.")
+        await callback.answer(t(lang, "premium_explanations_unlocked"))
         return
     if await db.user_has_unlocked_result(callback.from_user.id, result_id, subject):
-        await callback.answer("Разбор этого предмета уже открыт.", show_alert=True)
+        await callback.answer(t(lang, "unlock_already_open"), show_alert=True)
         return
     payment_payload = (
         f"unlock:{callback.from_user.id}:{result_id}:{subject}"
@@ -137,8 +137,8 @@ async def unlock_answers(callback: CallbackQuery) -> None:
     )
     await callback.bot.send_invoice(
         chat_id=callback.from_user.id,
-        title="Разбор предмета",
-        description="Открытие объяснений по выбранному предмету",
+        title=t(lang, "unlock_invoice_title"),
+        description=t(lang, "unlock_invoice_description"),
         payload=payment_payload,
         provider_token="",
         currency="XTR",
@@ -149,10 +149,11 @@ async def unlock_answers(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data.startswith("sub:"))
 async def premium_subscription(callback: CallbackQuery) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
     plan = callback.data.split(":", 1)[1]
     subscription = SUBSCRIPTION_PLANS.get(plan)
     if subscription is None:
-        await callback.answer("Неизвестный тариф.", show_alert=True)
+        await callback.answer(t(lang, "unknown_plan"), show_alert=True)
         return
     base_amount, _ = subscription
     discount = await db.get_user_subscription_discount(callback.from_user.id)
@@ -164,8 +165,8 @@ async def premium_subscription(callback: CallbackQuery) -> None:
 
     await callback.bot.send_invoice(
         chat_id=callback.from_user.id,
-        title="Premium подписка",
-        description="До 5 тестов в день, подробные разборы ответов и история ошибок",
+        title=t(lang, "premium_invoice_title"),
+        description=t(lang, "premium_invoice_description"),
         payload=payload,
         provider_token="",
         currency="XTR",
@@ -214,17 +215,20 @@ async def donation_confirm(callback: CallbackQuery) -> None:
     try:
         amount = int(callback.data.split(":")[1])
     except (IndexError, ValueError):
-        await callback.answer("Некорректная сумма.", show_alert=True)
+        lang = await db.get_user_language(callback.from_user.id)
+        await callback.answer(t(lang, "donation_invalid_amount"), show_alert=True)
         return
     min_s = db.runtime.get_int("donation_min_stars", settings.donation_min_stars)
     max_s = db.runtime.get_int("donation_max_stars", settings.donation_max_stars)
     if not min_s <= amount <= max_s:
-        await callback.answer("Сумма доната недоступна. Начните заново.", show_alert=True)
+        lang = await db.get_user_language(callback.from_user.id)
+        await callback.answer(t(lang, "donation_unavailable"), show_alert=True)
         return
+    lang = await db.get_user_language(callback.from_user.id)
     await callback.bot.send_invoice(
         chat_id=callback.from_user.id,
-        title="Поддержать проект",
-        description=f"Донат {amount} ⭐ Stars",
+        title=t(lang, "donation_invoice_title"),
+        description=t(lang, "donation_invoice_description", amount=amount),
         payload=f"donation:{callback.from_user.id}:{amount}",
         provider_token="",
         currency="XTR",
@@ -235,35 +239,37 @@ async def donation_confirm(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "donate_cancel")
 async def donation_cancel(callback: CallbackQuery, state: FSMContext) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
     await state.clear()
     try:
         await callback.message.delete()
     except Exception:
         pass
-    await callback.answer("Отменено")
+    await callback.answer(t(lang, "cancelled"))
 
 
 # ─── Telegram payment processing ──────────────────────────────────────────────
 
 @router.pre_checkout_query()
 async def pre_checkout(query: PreCheckoutQuery) -> None:
+    lang = await db.get_user_language(query.from_user.id)
     payload = query.invoice_payload
     if payload.startswith("sub:"):
         parts = payload.split(":")
         if len(parts) not in {3, 4} or not parts[2].isdigit() or int(parts[2]) != query.from_user.id:
-            await query.answer(ok=False, error_message="Не удалось проверить подписку.")
+            await query.answer(ok=False, error_message=t(lang, "payment_check_subscription_failed"))
             return
         plan = SUBSCRIPTION_PLANS.get(parts[1])
         discount = await db.get_user_subscription_discount(query.from_user.id)
         if len(parts) == 4:
             if not discount or discount[1] != parts[3]:
-                await query.answer(ok=False, error_message="Скидка больше недоступна.")
+                await query.answer(ok=False, error_message=t(lang, "payment_discount_unavailable"))
                 return
             expected_amount = max(1, round(plan[0] * (100 - discount[0]) / 100)) if plan else 0
         else:
             expected_amount = plan[0] if plan else 0
         if plan is None or query.total_amount != expected_amount or query.currency != "XTR":
-            await query.answer(ok=False, error_message="Тариф или сумма платежа не совпадает.")
+            await query.answer(ok=False, error_message=t(lang, "payment_amount_mismatch"))
             return
     elif payload.startswith("test:"):
         parts = payload.split(":")
@@ -272,7 +278,7 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
             len(parts) != 3 or not parts[1].isdigit() or int(parts[1]) != query.from_user.id
             or parts[2] not in subjects or query.total_amount != TEST_PRICE_STARS or query.currency != "XTR"
         ):
-            await query.answer(ok=False, error_message="Не удалось проверить покупку теста.")
+            await query.answer(ok=False, error_message=t(lang, "payment_check_test_failed"))
             return
     elif payload.startswith("full_test:"):
         parts = payload.split(":")
@@ -284,7 +290,7 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
             or query.total_amount != FULL_TEST_PRICE_STARS
             or query.currency != "XTR"
         ):
-            await query.answer(ok=False, error_message="Не удалось проверить покупку полного мока.")
+            await query.answer(ok=False, error_message=t(lang, "payment_check_full_mock_failed"))
             return
     elif payload.startswith("unlock:"):
         parts = payload.split(":")
@@ -306,7 +312,7 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
             or query.total_amount != EXPLANATION_PRICE_STARS
             or query.currency != "XTR"
         ):
-            await query.answer(ok=False, error_message="Не удалось проверить покупку разбора.")
+            await query.answer(ok=False, error_message=t(lang, "payment_check_explanation_failed"))
             return
     elif payload.startswith("donation:"):
         parts = payload.split(":")
@@ -317,10 +323,10 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
             or not parts[2].isdigit() or int(parts[2]) != query.total_amount
             or not min_s <= query.total_amount <= max_s or query.currency != "XTR"
         ):
-            await query.answer(ok=False, error_message="Не удалось проверить донат.")
+            await query.answer(ok=False, error_message=t(lang, "payment_check_donation_failed"))
             return
     else:
-        await query.answer(ok=False, error_message="Неизвестный платёж.")
+        await query.answer(ok=False, error_message=t(lang, "payment_unknown"))
         return
     await query.answer(ok=True)
 
@@ -344,7 +350,7 @@ async def successful_payment(message: Message) -> None:
             or not min_s <= amount <= max_s or sp.currency != "XTR"
         ):
             logger.error("Invalid donation payment payload=%s amount=%s", payload, amount)
-            await message.answer("Платёж получен, но донат не удалось проверить. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_donation_invalid"))
             return
         await db.create_donation(user_id, charge_id, amount)
         if await db.confirm_donation(charge_id):
@@ -364,7 +370,7 @@ async def successful_payment(message: Message) -> None:
             or (len(parts) == 4 and (not discount or discount[1] != parts[3]))
         ):
             logger.error("Invalid subscription payment payload=%s amount=%s", payload, amount)
-            await message.answer("Платёж получен, но тариф не удалось проверить. Поддержка уже уведомлена.")
+            await message.answer(t(lang, "payment_subscription_invalid"))
             return
 
         previous = await db.get_latest_subscription_expiry(user_id)
@@ -374,13 +380,21 @@ async def successful_payment(message: Message) -> None:
             if len(parts) == 4:
                 await db.consume_user_subscription_discount(user_id, parts[3])
             logger.info("Premium uid=%s plan=%s stars=%s", user_id, parts[1], amount)
-            plan_names = {"week": "1 неделю", "month": "1 месяц", "quarter": "3 месяца"}
+            plan_names = {
+                "ru": {"week": "1 неделю", "month": "1 месяц", "quarter": "3 месяца"},
+                "uz": {"week": "1 hafta", "month": "1 oy", "quarter": "3 oy"},
+                "en": {"week": "1 week", "month": "1 month", "quarter": "3 months"},
+            }.get(lang, {}).get(parts[1], "1 hafta")
             await message.answer(
-                f"✅ Успешная покупка подписки Premium на {plan_names[parts[1]]}.\n"
-                f"Подписка действует до {datetime.fromisoformat(expires_at).strftime('%d.%m.%Y %H:%M')}."
+                t(
+                    lang,
+                    "payment_subscription_success",
+                    plan=plan_names,
+                    date=datetime.fromisoformat(expires_at).strftime("%d.%m.%Y %H:%M"),
+                )
             )
         else:
-            await message.answer("✅ Этот платёж уже обработан, Premium активен.")
+            await message.answer(t(lang, "payment_duplicate_subscription"))
 
     elif payload.startswith("test:"):
         parts = payload.split(":")
@@ -390,15 +404,15 @@ async def successful_payment(message: Message) -> None:
             or parts[2] not in subjects or amount != TEST_PRICE_STARS or sp.currency != "XTR"
         ):
             logger.error("Invalid test payment payload=%s amount=%s", payload, amount)
-            await message.answer("Платёж получен, но покупку теста не удалось проверить. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_test_invalid"))
             return
         if await db.record_test_purchase(user_id, charge_id, payload, amount):
             await message.answer(
-                "✅ Оплата получена. Тест добавлен на ваш баланс.",
-                reply_markup=paid_test_keyboard(),
+                t(lang, "payment_test_success"),
+                reply_markup=paid_test_keyboard(lang),
             )
         else:
-            await message.answer("✅ Этот платёж уже был обработан.")
+            await message.answer(t(lang, "payment_duplicate"))
 
     elif payload.startswith("full_test:"):
         parts = payload.split(":")
@@ -410,15 +424,15 @@ async def successful_payment(message: Message) -> None:
             or amount != FULL_TEST_PRICE_STARS or sp.currency != "XTR"
         ):
             logger.error("Invalid full test payment payload=%s amount=%s", payload, amount)
-            await message.answer("Платёж получен, но покупку полного мока не удалось проверить. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_full_mock_invalid"))
             return
         if await db.record_full_test_purchase(user_id, charge_id, payload, amount):
             await message.answer(
-                "✅ Оплата получена. Полный мок (60 вопросов: по 20 по математике, английскому и IQ) добавлен на баланс.",
-                reply_markup=paid_full_test_keyboard(),
+                t(lang, "payment_full_mock_success"),
+                reply_markup=paid_full_test_keyboard(lang),
             )
         else:
-            await message.answer("✅ Этот платёж уже был обработан.")
+            await message.answer(t(lang, "payment_duplicate"))
 
     elif payload.startswith("unlock:"):
         parts = payload.split(":")
@@ -434,13 +448,13 @@ async def successful_payment(message: Message) -> None:
             or sp.currency != "XTR"
         ):
             logger.error("Invalid unlock payment payload=%s amount=%s", payload, amount)
-            await message.answer("Платёж получен, но покупку разбора не удалось проверить. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_explanation_invalid"))
             return
         result_id = int(parts[2])
         result = await db.get_result_for_user(result_id, user_id)
         if result is None:
             logger.error("Paid unlock refers to missing result: uid=%s result_id=%s", user_id, result_id)
-            await message.answer("Платёж получен, но результат не найден. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_result_not_found"))
             return
         subject = parts[3] if len(parts) == 4 else None
         if subject is not None and not _result_has_subject(result, subject):
@@ -450,7 +464,7 @@ async def successful_payment(message: Message) -> None:
                 result_id,
                 subject,
             )
-            await message.answer("Платёж получен, но предмет не найден. Обратитесь в поддержку.")
+            await message.answer(t(lang, "payment_subject_not_found"))
             return
         if await db.record_paid_payment(user_id, charge_id, payload, amount, "unlock"):
             logger.info("Unlock uid=%s stars=%s", user_id, amount)
