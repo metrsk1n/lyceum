@@ -5,6 +5,8 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Callable
 
+from question_translations import translate_fields
+
 
 ROOT = Path(__file__).parent
 serial = 0
@@ -812,8 +814,20 @@ actual = {
 if actual != expected or len(questions) != 300:
     raise RuntimeError(f"Question bank count mismatch: {actual}")
 
+for question in questions:
+    question.update(translate_fields(question))
+
+uzbek_questions = []
+for question in questions:
+    uzbek_question = {**question, "language": "uz"}
+    uzbek_question["topic"] = question["topic_uz"]
+    uzbek_question["question_text"] = question["question_text_uz"]
+    uzbek_question["options"] = question["options_uz"]
+    uzbek_question["explanation"] = question["explanation_uz"]
+    uzbek_questions.append(uzbek_question)
+
 (ROOT / "questions.json").write_text(
-    json.dumps(questions, ensure_ascii=False, indent=2) + "\n",
+    json.dumps([*questions, *uzbek_questions], ensure_ascii=False, indent=2) + "\n",
     encoding="utf-8",
 )
 
@@ -829,6 +843,8 @@ for subject in ("english", "mathematics", "iq"):
         iq_mock_extras()
     extras = questions[extras_start:]
     del questions[extras_start:]
+    for question in extras:
+        question.update(translate_fields(question))
     items = [question for question in items if question["difficulty"] != "easy"] + extras
     items.sort(key=lambda question: {"hard": 0, "medium": 1, "easy": 2}[question["difficulty"]])
     if len(items) != 100 or len({question["question_text"] for question in items}) != 100:
