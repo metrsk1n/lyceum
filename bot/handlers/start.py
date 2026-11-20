@@ -3,7 +3,7 @@ from __future__ import annotations
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery, Message
+from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message
 
 import database as db
 from bot.keyboards import (
@@ -63,6 +63,18 @@ MENU_TEXTS = {
 
 async def _lang(user_id: int) -> str:
     return await db.get_user_language(user_id)
+
+
+async def _test_choice_keyboard(user_id: int, lang: str) -> InlineKeyboardMarkup:
+    results = await db.get_user_results(user_id, limit=10)
+    unfinished = next(
+        (result for result in results if result.get("status") == "in_progress"),
+        None,
+    )
+    return test_choice_keyboard(
+        lang,
+        resume_session_id=unfinished["id"] if unfinished else None,
+    )
 
 
 # ─── Cancel / main menu auto-clear ────────────────────────────────────────────
@@ -138,7 +150,7 @@ async def user_start_test(callback: CallbackQuery, state: FSMContext) -> None:
         return
     await callback.message.edit_text(
         t(lang, "choose_subject"),
-        reply_markup=test_choice_keyboard(lang),
+        reply_markup=await _test_choice_keyboard(callback.from_user.id, lang),
     )
     await callback.answer()
 
@@ -326,7 +338,7 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
         subjects = await db.get_subjects()
         await message.answer(
             t(lang, "choose_subject") if subjects else t(lang, "no_questions"),
-            reply_markup=test_choice_keyboard(lang) if subjects else None,
+            reply_markup=await _test_choice_keyboard(user_id, lang) if subjects else None,
         )
     elif action == "premium":
         text, keyboard = await premium_presentation(user_id, lang)
@@ -549,7 +561,7 @@ async def show_subjects(message: Message, state: FSMContext) -> None:
         return
     await message.answer(
         t(lang, "choose_subject"),
-        reply_markup=test_choice_keyboard(lang),
+        reply_markup=await _test_choice_keyboard(message.from_user.id, lang),
     )
 
 
@@ -571,7 +583,7 @@ async def goto_test(callback: CallbackQuery, state: FSMContext) -> None:
     subjects = await db.get_subjects()
     await callback.message.answer(
         t(lang, "choose_subject") if subjects else t(lang, "no_questions"),
-        reply_markup=test_choice_keyboard(lang) if subjects else None,
+        reply_markup=await _test_choice_keyboard(callback.from_user.id, lang) if subjects else None,
     )
     await callback.answer()
 
