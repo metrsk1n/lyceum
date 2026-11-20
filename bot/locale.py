@@ -11,10 +11,13 @@ _cache: dict[str, dict] = {}
 
 def get_locale(lang: str) -> dict:
     if lang not in _cache:
+        fallback_path = _LOCALES_DIR / "ru.json"
+        fallback = json.loads(fallback_path.read_text(encoding="utf-8"))
         path = _LOCALES_DIR / f"{lang}.json"
-        if not path.exists():
-            path = _LOCALES_DIR / "ru.json"
-        _cache[lang] = json.loads(path.read_text(encoding="utf-8"))
+        if lang == "ru" or not path.exists():
+            _cache[lang] = fallback
+        else:
+            _cache[lang] = {**fallback, **json.loads(path.read_text(encoding="utf-8"))}
     return _cache[lang]
 
 
