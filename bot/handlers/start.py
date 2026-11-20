@@ -10,12 +10,12 @@ from bot.keyboards import (
     free_full_mock_keyboard,
     language_keyboard,
     more_keyboard,
-    premium_keyboard,
     profile_keyboard,
     promo_back_keyboard,
     test_choice_keyboard,
     user_main_menu,
 )
+from bot.subscriptions import premium_presentation
 from bot.locale import t
 from bot.states import PromoFlow
 
@@ -146,9 +146,10 @@ async def user_start_test(callback: CallbackQuery, state: FSMContext) -> None:
 @router.callback_query(F.data == "user:premium")
 async def user_premium(callback: CallbackQuery) -> None:
     lang = await _lang(callback.from_user.id)
+    text, keyboard = await premium_presentation(callback.from_user.id, lang)
     await callback.message.edit_text(
-        t(lang, "premium_description"),
-        reply_markup=premium_keyboard(lang),
+        text,
+        reply_markup=keyboard,
     )
     await callback.answer()
 
@@ -328,9 +329,10 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
             reply_markup=test_choice_keyboard(lang) if subjects else None,
         )
     elif action == "premium":
+        text, keyboard = await premium_presentation(user_id, lang)
         await message.answer(
-            t(lang, "premium_description"),
-            reply_markup=premium_keyboard(lang),
+            text,
+            reply_markup=keyboard,
         )
     elif action == "more":
         await _show_more(message, user_id)
@@ -353,6 +355,11 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
             "mathematics": {"ru": "Математика", "en": "Mathematics", "uz": "Matematika"}.get(lang, "Matematika"),
             "english": {"ru": "Английский", "en": "English", "uz": "Ingliz tili"}.get(lang, "Английский"),
             "iq": "IQ",
+            "full_mock": {
+                "ru": "Полный мок",
+                "en": "Full mock",
+                "uz": "To'liq mock",
+            }.get(lang, "Полный мок"),
         }
         subjects.update({
             item["slug"]: item["title"]
@@ -362,20 +369,44 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
         lines = [t(lang, "test_history_title")]
         for result in results:
             subject = subjects.get(result["subject"], result["subject"])
-            percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
-            lines.append(
-                t(
-                    lang,
-                    "test_history_item",
-                    subject=subject,
-                    score=result["score"],
-                    total=result["total"],
-                    percent=percent,
-                    date=str(result["finished_at"])[:10],
+            if result.get("status") == "in_progress":
+                lines.append(
+                    t(
+                        lang,
+                        "session_history_in_progress",
+                        subject=subject,
+                        answered=len(result["answers"]),
+                        total=result["total"],
+                        date=str(result.get("started_at") or result["finished_at"])[:10],
+                    )
                 )
-            )
+            else:
+                percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
+                lines.append(
+                    t(
+                        lang,
+                        "test_history_item",
+                        subject=subject,
+                        score=result["score"],
+                        total=result["total"],
+                        percent=percent,
+                        date=str(result["finished_at"])[:10],
+                    )
+                )
         from bot.keyboards import result_history_keyboard
         await message.answer("\n".join(lines), reply_markup=result_history_keyboard(results, lang))
+
+
+@router.callback_query(F.data.startswith("history:resume:"))
+async def resume_test_session_callback(callback: CallbackQuery, state: FSMContext) -> None:
+    from bot.handlers.tests import resume_test_session
+    await resume_test_session(callback, state)
+
+
+@router.callback_query(F.data.startswith("history:retake:"))
+async def retake_test_session_callback(callback: CallbackQuery, state: FSMContext) -> None:
+    from bot.handlers.tests import retake_test_session
+    await retake_test_session(callback, state)
 
 
 @router.callback_query(F.data.startswith("history:"))
@@ -414,10 +445,24 @@ async def show_history_result(callback: CallbackQuery) -> None:
     )
     percent = round(result["score"] / result["total"] * 100) if result["total"] else 0
     lines = [
-        t(lang, "history_result_title", subject=subject, date=str(result["finished_at"])[:10]),
+        t(
+            lang,
+            "history_result_title",
+            subject=subject,
+            date=str(result.get("started_at") if result.get("status") == "in_progress" else result["finished_at"])[:10],
+        ),
         t(lang, "test_result_score", score=result["score"], total=result["total"], percent=percent),
         "",
     ]
+    if result.get("status") == "in_progress":
+        lines.append(
+            t(
+                lang,
+                "session_progress",
+                answered=len(result["answers"]),
+                total=result["total"],
+            )
+        )
     for index, answer in enumerate(result["answers"], start=1):
         selected_letter = answer.get("selected_letter", "")
         if not selected_letter:
@@ -451,6 +496,9 @@ async def show_history_result(callback: CallbackQuery) -> None:
             EXPLANATION_PRICE_STARS,
             lang,
             unlock_subjects,
+            session_id=result_id,
+            session_status=result.get("status"),
+            can_retake=bool(result.get("questions")),
         ),
     )
     await callback.answer()

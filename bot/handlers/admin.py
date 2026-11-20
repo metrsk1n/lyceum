@@ -440,12 +440,20 @@ async def admin_promo_add_start(callback: CallbackQuery, state: FSMContext) -> N
     await state.set_state(AdminFlow.promo_waiting)
     await callback.message.answer(
         "Отправьте промокод одной строкой:\n"
-        "<code>КОД tests|full_tests|free_full_mocks|explanations|discount КОЛИЧЕСТВО [ЛИМИТ] [YYYY-MM-DD]</code>\n\n"
-        "Например: <code>JUNE tests 3 100 2026-12-31</code>. "
-        "Тип <code>full_tests</code> начисляет полный мок за 60 ⭐. "
-        "Тип <code>free_full_mocks</code> выдаёт бесплатный полный мок на 60 вопросов. "
-        "Лимит и срок можно не указывать; лимит 0 означает без ограничений. "
-        "Скидка задаётся в процентах, максимум 90%."
+        "<code>КОД ТИП КОЛИЧЕСТВО [ЛИМИТ] [ГГГГ-ММ-ДД]</code>\n\n"
+        "<b>Типы наград:</b>\n"
+        "• <code>tests</code> — тестовые кредиты по одному предмету;\n"
+        "• <code>full_tests</code> — платные кредиты полного мока;\n"
+        "• <code>free_full_mocks</code> — бесплатные полные моки;\n"
+        "• <code>explanations</code> — разборы отдельных вопросов;\n"
+        "• <code>discount</code> — скидка на подписку, от 1 до 100%.\n\n"
+        "<b>Примеры:</b>\n"
+        "<code>MATH1 tests 1 50</code> — 1 тест, максимум 50 активаций;\n"
+        "<code>FULL1 free_full_mocks 1</code> — 1 бесплатный полный мок;\n"
+        "<code>PREMIUM100 discount 100 20 2026-12-31</code> — бесплатная подписка "
+        "на выбранный срок, максимум 20 активаций до указанной даты.\n\n"
+        "Лимит и срок необязательны; лимит 0 означает без ограничений. "
+        "Четвёртым параметром можно указать лимит или дату."
     )
     await callback.answer()
 
@@ -470,16 +478,30 @@ async def admin_promo_add(message: Message, state: FSMContext) -> None:
 
     try:
         value = int(parts[2])
-        max_uses = int(parts[3]) if len(parts) >= 4 else 0
+        max_uses = 0
         expires_at = None
-        if len(parts) == 5:
-            expires_at = datetime.strptime(parts[4], "%Y-%m-%d").replace(hour=23, minute=59, second=59).isoformat()
+        if len(parts) == 4:
+            if parts[3].isdigit():
+                max_uses = int(parts[3])
+            else:
+                expires_at = datetime.strptime(parts[3], "%Y-%m-%d").replace(
+                    hour=23,
+                    minute=59,
+                    second=59,
+                ).isoformat()
+        elif len(parts) == 5:
+            max_uses = int(parts[3])
+            expires_at = datetime.strptime(parts[4], "%Y-%m-%d").replace(
+                hour=23,
+                minute=59,
+                second=59,
+            ).isoformat()
     except ValueError:
         await message.answer("Количество, лимит или дата указаны неверно.")
         return
 
-    if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 90):
-        await message.answer("Количество должно быть больше 0, лимит неотрицательным, скидка — 1–90%.")
+    if value < 1 or max_uses < 0 or (reward_type == "discount" and value > 100):
+        await message.answer("Количество должно быть больше 0, лимит неотрицательным, скидка — 1–100%.")
         return
     try:
         await db.create_promo_code(code, reward_type, value, max_uses, expires_at, message.from_user.id)
@@ -1284,16 +1306,28 @@ async def _show_donations(callback: CallbackQuery, page: int) -> None:
 SETTING_DEFAULTS = {
     "donation_min_stars": settings.donation_min_stars,
     "donation_max_stars": settings.donation_max_stars,
+    "premium_week_stars": 200,
+    "premium_month_stars": 700,
+    "premium_quarter_stars": 2000,
+    "premium_discount_percent": 0,
 }
 
 SETTING_RANGES = {
     "donation_min_stars": (1, 100),
     "donation_max_stars": (100, 100000),
+    "premium_week_stars": (1, 100000),
+    "premium_month_stars": (1, 100000),
+    "premium_quarter_stars": (1, 100000),
+    "premium_discount_percent": (0, 100),
 }
 
 SETTING_LABELS = {
     "donation_min_stars": "⭐ Минимальный донат",
     "donation_max_stars": "⭐ Максимальный донат",
+    "premium_week_stars": "💎 Цена Premium на неделю, Stars",
+    "premium_month_stars": "💎 Цена Premium на месяц, Stars",
+    "premium_quarter_stars": "💎 Цена Premium на 3 месяца, Stars",
+    "premium_discount_percent": "🏷️ Общая скидка Premium, %",
 }
 
 
@@ -1325,10 +1359,14 @@ async def admin_set_setting_start(callback: CallbackQuery, state: FSMContext) ->
     current_val = db.runtime.get_int(key, SETTING_DEFAULTS[key])
     await state.set_state(AdminFlow.set_value)
     await state.update_data(set_key=key)
+    hint = (
+        "Введите новое значение (0 отключает скидку):"
+        if key == "premium_discount_percent"
+        else "Введите новое значение:"
+    )
     await callback.message.answer(
         f"⚙️ <b>{label}</b>\n\nТекущее значение: <b>{current_val}</b>\n"
-        f"Допустимый диапазон: {rng[0]} – {rng[1]}\n\n"
-        "Введите новое значение:",
+        f"Допустимый диапазон: {rng[0]} – {rng[1]}\n\n{hint}",
         reply_markup=cancel_keyboard(),
     )
     await callback.answer()
@@ -1344,7 +1382,7 @@ async def admin_set_setting_value(message: Message, state: FSMContext) -> None:
     text = (message.text or "").strip()
 
     if not text.isdigit():
-        await message.answer("❌ Введите целое положительное число:")
+        await message.answer("❌ Введите целое число:")
         return
 
     value = int(text)

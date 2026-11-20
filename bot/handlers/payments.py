@@ -28,15 +28,14 @@ from bot.pricing import (
     TEST_PRICE_STARS,
 )
 from bot.states import DonationFlow
+from bot.subscriptions import (
+    SUBSCRIPTION_PLANS,
+    get_subscription_quote,
+)
 from config import settings
 
 logger = logging.getLogger(__name__)
 router = Router()
-SUBSCRIPTION_PLANS = {
-    "week": (200, 7),
-    "month": (700, 30),
-    "quarter": (2000, 90),
-}
 
 
 def _result_has_subject(result: dict, subject: str) -> bool:
@@ -151,15 +150,38 @@ async def unlock_answers(callback: CallbackQuery) -> None:
 async def premium_subscription(callback: CallbackQuery) -> None:
     lang = await db.get_user_language(callback.from_user.id)
     plan = callback.data.split(":", 1)[1]
-    subscription = SUBSCRIPTION_PLANS.get(plan)
-    if subscription is None:
+    quote = await get_subscription_quote(callback.from_user.id, plan)
+    if quote is None:
         await callback.answer(t(lang, "unknown_plan"), show_alert=True)
         return
-    base_amount, _ = subscription
-    discount = await db.get_user_subscription_discount(callback.from_user.id)
-    discount_code = discount[1] if discount else None
-    amount = max(1, round(base_amount * (100 - discount[0]) / 100)) if discount else base_amount
-    payload = f"sub:{plan}:{callback.from_user.id}"
+    discount_code = quote.discount_code
+    if quote.amount == 0:
+        expires_at = await db.grant_free_subscription_from_discount(
+            callback.from_user.id,
+            plan,
+            quote.days,
+            discount_code,
+        )
+        if expires_at is None:
+            await callback.answer(t(lang, "payment_discount_unavailable"), show_alert=True)
+            return
+        plan_names = {
+            "ru": {"week": "1 неделю", "month": "1 месяц", "quarter": "3 месяца"},
+            "uz": {"week": "1 hafta", "month": "1 oy", "quarter": "3 oy"},
+            "en": {"week": "1 week", "month": "1 month", "quarter": "3 months"},
+        }
+        await callback.message.answer(
+            t(
+                lang,
+                "payment_subscription_free",
+                plan=plan_names.get(lang, plan_names["ru"])[plan],
+                date=expires_at.strftime("%d.%m.%Y %H:%M"),
+            )
+        )
+        await callback.answer()
+        return
+    amount = quote.amount
+    payload = f"sub2:{plan}:{callback.from_user.id}:{amount}"
     if discount_code:
         payload += f":{discount_code}"
 
@@ -259,16 +281,32 @@ async def pre_checkout(query: PreCheckoutQuery) -> None:
         if len(parts) not in {3, 4} or not parts[2].isdigit() or int(parts[2]) != query.from_user.id:
             await query.answer(ok=False, error_message=t(lang, "payment_check_subscription_failed"))
             return
-        plan = SUBSCRIPTION_PLANS.get(parts[1])
-        discount = await db.get_user_subscription_discount(query.from_user.id)
-        if len(parts) == 4:
-            if not discount or discount[1] != parts[3]:
-                await query.answer(ok=False, error_message=t(lang, "payment_discount_unavailable"))
-                return
-            expected_amount = max(1, round(plan[0] * (100 - discount[0]) / 100)) if plan else 0
-        else:
-            expected_amount = plan[0] if plan else 0
-        if plan is None or query.total_amount != expected_amount or query.currency != "XTR":
+        quote = await get_subscription_quote(query.from_user.id, parts[1])
+        expected_amount = quote.amount if quote else 0
+        if (len(parts) == 4) != bool(quote and quote.discount_code):
+            await query.answer(ok=False, error_message=t(lang, "payment_discount_unavailable"))
+            return
+        if len(parts) == 4 and quote and quote.discount_code != parts[3]:
+            await query.answer(ok=False, error_message=t(lang, "payment_discount_unavailable"))
+            return
+        if quote is None or query.total_amount != expected_amount or query.currency != "XTR":
+            await query.answer(ok=False, error_message=t(lang, "payment_amount_mismatch"))
+            return
+    elif payload.startswith("sub2:"):
+        parts = payload.split(":")
+        valid_payload = (
+            len(parts) in {4, 5}
+            and parts[2].isdigit()
+            and int(parts[2]) == query.from_user.id
+            and parts[3].isdigit()
+        )
+        quote = await get_subscription_quote(query.from_user.id, parts[1]) if valid_payload else None
+        code = parts[4] if len(parts) == 5 else None
+        if (
+            not valid_payload or quote is None or int(parts[3]) < 1
+            or quote.amount != int(parts[3]) or quote.discount_code != code
+            or query.total_amount != int(parts[3]) or query.currency != "XTR"
+        ):
             await query.answer(ok=False, error_message=t(lang, "payment_amount_mismatch"))
             return
     elif payload.startswith("test:"):
@@ -357,17 +395,32 @@ async def successful_payment(message: Message) -> None:
             logger.info("Donation uid=%s stars=%s", user_id, amount)
         await message.answer(t(lang, "support_thanks", amount=amount))
 
-    elif payload.startswith("sub:"):
+    elif payload.startswith(("sub:", "sub2:")):
         parts = payload.split(":")
-        plan = SUBSCRIPTION_PLANS.get(parts[1]) if len(parts) in {3, 4} and parts[2].isdigit() and int(parts[2]) == user_id else None
-        discount = await db.get_user_subscription_discount(user_id)
-        if len(parts) == 4 and discount and discount[1] == parts[3] and plan:
-            expected_amount = max(1, round(plan[0] * (100 - discount[0]) / 100))
+        is_quoted = parts[0] == "sub2"
+        valid_shape = (
+            len(parts) in ({4, 5} if is_quoted else {3, 4})
+            and parts[2].isdigit()
+            and int(parts[2]) == user_id
+            and (not is_quoted or parts[3].isdigit())
+        )
+        plan = SUBSCRIPTION_PLANS.get(parts[1]) if valid_shape else None
+        discount_code = (
+            parts[4] if is_quoted and len(parts) == 5
+            else parts[3] if not is_quoted and len(parts) == 4
+            else None
+        )
+        if is_quoted and valid_shape and parts[3].isdigit():
+            expected_amount = int(parts[3])
         else:
-            expected_amount = plan[0] if plan else 0
+            quote = await get_subscription_quote(user_id, parts[1]) if plan else None
+            expected_amount = quote.amount if quote else 0
+            if quote and quote.discount_code != discount_code:
+                expected_amount = 0
+        user_discount = await db.get_user_subscription_discount(user_id)
         if (
-            plan is None or amount != expected_amount or sp.currency != "XTR"
-            or (len(parts) == 4 and (not discount or discount[1] != parts[3]))
+            plan is None or expected_amount < 1 or amount != expected_amount or sp.currency != "XTR"
+            or (discount_code and (not user_discount or user_discount[1] != discount_code))
         ):
             logger.error("Invalid subscription payment payload=%s amount=%s", payload, amount)
             await message.answer(t(lang, "payment_subscription_invalid"))
@@ -377,8 +430,8 @@ async def successful_payment(message: Message) -> None:
         starts_at = max(datetime.now(), previous) if previous else datetime.now()
         expires_at = (starts_at + timedelta(days=plan[1])).isoformat(timespec="seconds")
         if await db.record_paid_payment(user_id, charge_id, payload, amount, "subscription", expires_at):
-            if len(parts) == 4:
-                await db.consume_user_subscription_discount(user_id, parts[3])
+            if discount_code:
+                await db.consume_user_subscription_discount(user_id, discount_code)
             logger.info("Premium uid=%s plan=%s stars=%s", user_id, parts[1], amount)
             plan_names = {
                 "ru": {"week": "1 неделю", "month": "1 месяц", "quarter": "3 месяца"},

@@ -23,23 +23,27 @@ async def _show_stats(message: Message) -> None:
         accuracy=stats["accuracy"],
         best=stats["best"],
     ))
-    results = await db.get_user_results(message.from_user.id, limit=5)
+    results = [
+        result
+        for result in await db.get_user_results(message.from_user.id, limit=10)
+        if result.get("status") == "completed"
+    ][:5]
     if results:
         titles = {
             "ru": {
-                "recent_tests": "📋 <b>Последние тесты:</b>\n",
+                "recent_tests": "📋 <b>Последние сессии:</b>\n",
                 "mathematics": "Математика",
                 "english": "Английский",
                 "iq": "IQ",
             },
             "uz": {
-                "recent_tests": "📋 <b>So'nggi testlar:</b>\n",
+                "recent_tests": "📋 <b>So'nggi seanslar:</b>\n",
                 "mathematics": "Matematika",
                 "english": "Ingliz tili",
                 "iq": "IQ",
             },
             "en": {
-                "recent_tests": "📋 <b>Recent tests:</b>\n",
+                "recent_tests": "📋 <b>Recent sessions:</b>\n",
                 "mathematics": "Mathematics",
                 "english": "English",
                 "iq": "IQ",

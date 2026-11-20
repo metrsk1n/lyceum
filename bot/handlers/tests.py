@@ -13,7 +13,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, LabeledPrice
 
 import database as db
-from bot.keyboards import answer_keyboard, premium_keyboard, result_questions_keyboard, test_size_keyboard
+from bot.keyboards import answer_keyboard, result_questions_keyboard, test_size_keyboard
+from bot.subscriptions import premium_presentation
 from bot.locale import t
 from bot.pricing import (
     EXPLANATION_PRICE_STARS,
@@ -199,13 +200,28 @@ async def _start_test(
     free_mock: bool = False,
     free_full_mock: bool = False,
 ) -> None:
+    mode = (
+        "free_mock" if free_mock
+        else "free_full_mock" if free_full_mock
+        else "full_mock" if subject == "full_mock"
+        else "practice"
+    )
+    session_id = await db.create_test_session(
+        callback.from_user.id,
+        subject,
+        mode,
+        len(questions),
+        questions,
+    )
+    started_at = time.time()
     await state.set_state(TestFlow.answering)
     await state.update_data(
+        session_id=session_id,
         questions=questions,
         answers=[],
         current=0,
         subject=subject,
-        start_time=time.time(),
+        start_time=started_at,
         score=0,
         option_map={},
         free_mock=free_mock,
@@ -288,6 +304,17 @@ async def handle_answer(callback: CallbackQuery, state: FSMContext) -> None:
     score = data["score"] + (1 if is_correct else 0)
     next_idx = data["current"] + 1
     await state.update_data(answers=answers, current=next_idx, score=score)
+    if data.get("session_id") is not None:
+        await db.update_test_session(
+            data["session_id"],
+            callback.from_user.id,
+            score=score,
+            total=len(data["questions"]),
+            time_sec=max(0, int(time.time() - data["start_time"])),
+            answers=answers,
+            current_index=next_idx,
+            status="in_progress",
+        )
 
     try:
         await callback.message.edit_reply_markup(reply_markup=None)
@@ -318,20 +345,32 @@ async def _finish_test(callback: CallbackQuery, state: FSMContext, data: dict, a
             subject,
             {},
         ).get(lang, next((item["title"] for item in subjects if item["slug"] == subject), subject))
-    result_id = await db.save_result(
-        user_id=callback.from_user.id,
-        subject=subject,
-        mode=(
-            "free_mock" if data.get("free_mock")
-            else "free_full_mock" if data.get("free_full_mock")
-            else "full_mock" if data.get("full_mock")
-            else "practice"
-        ),
+    session_id = data.get("session_id")
+    if session_id is None:
+        session_id = await db.create_test_session(
+            callback.from_user.id,
+            subject,
+            (
+                "free_mock" if data.get("free_mock")
+                else "free_full_mock" if data.get("free_full_mock")
+                else "full_mock" if data.get("full_mock")
+                else "practice"
+            ),
+            len(data["questions"]),
+            data["questions"],
+        )
+    if not await db.update_test_session(
+        session_id,
+        callback.from_user.id,
         score=score,
-        total=total,
+        total=len(data["questions"]),
         time_sec=max(0, int(time.time() - data["start_time"])),
         answers=answers,
-    )
+        current_index=total,
+        status="completed",
+    ):
+        raise RuntimeError(f"Unable to complete test session {session_id}")
+    result_id = session_id
     if data.get("free_mock"):
         await db.complete_free_mock(callback.from_user.id, subject)
     elif data.get("full_mock"):
@@ -381,10 +420,81 @@ async def _finish_test(callback: CallbackQuery, state: FSMContext, data: dict, a
             EXPLANATION_PRICE_STARS,
             lang,
             unlock_subjects,
+            session_id=result_id,
+            session_status="completed",
+            can_retake=True,
         ),
     )
 
     await state.clear()
+
+
+async def _load_test_session(session_id: int, user_id: int) -> dict | None:
+    session = await db.get_result_for_user(session_id, user_id)
+    if session is None or not session.get("questions"):
+        return None
+    return session
+
+
+async def resume_test_session(callback: CallbackQuery, state: FSMContext) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
+    try:
+        session_id = int(callback.data.rsplit(":", 1)[1])
+    except (ValueError, AttributeError):
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
+        return
+    session = await _load_test_session(session_id, callback.from_user.id)
+    if session is None or session["status"] != "in_progress":
+        await callback.answer(t(lang, "session_not_resumable"), show_alert=True)
+        return
+
+    questions = session["questions"]
+    current = min(session["current_index"], len(questions))
+    data = {
+        "session_id": session_id,
+        "questions": questions,
+        "answers": session["answers"],
+        "current": current,
+        "subject": session["subject"],
+        "start_time": time.time() - session["time_sec"],
+        "score": session["score"],
+        "option_map": {},
+        "free_mock": session["mode"] == "free_mock",
+        "free_full_mock": session["mode"] == "free_full_mock",
+        "full_mock": session["subject"] == "full_mock",
+    }
+    await state.set_state(TestFlow.answering)
+    await state.set_data(data)
+    if current >= len(questions):
+        await _finish_test(callback, state, data, data["answers"], data["score"], lang)
+    else:
+        await callback.message.answer(t(lang, "session_resumed"))
+        await _send_question(callback, state, questions[current], current + 1, len(questions), lang)
+    await callback.answer()
+
+
+async def retake_test_session(callback: CallbackQuery, state: FSMContext) -> None:
+    lang = await db.get_user_language(callback.from_user.id)
+    try:
+        session_id = int(callback.data.rsplit(":", 1)[1])
+    except (ValueError, AttributeError):
+        await callback.answer(t(lang, "result_not_found"), show_alert=True)
+        return
+    session = await _load_test_session(session_id, callback.from_user.id)
+    if session is None:
+        await callback.answer(t(lang, "session_not_retakable"), show_alert=True)
+        return
+    await state.clear()
+    await _start_test(
+        callback,
+        state,
+        session["questions"],
+        session["subject"],
+        lang,
+        free_mock=session["mode"] == "free_mock",
+        free_full_mock=session["mode"] == "free_full_mock",
+    )
+    await callback.answer()
 
 
 @router.callback_query(F.data.startswith("review:"))
@@ -413,9 +523,13 @@ async def review_question(callback: CallbackQuery) -> None:
     if not has_unlocked_result and not await db.consume_explanation_access(callback.from_user.id):
         lang = await db.get_user_language(callback.from_user.id)
         await callback.answer(t(lang, "explanation_premium_only"), show_alert=True)
+        premium_text, premium_markup = await premium_presentation(
+            callback.from_user.id,
+            lang,
+        )
         await callback.message.answer(
-            t(lang, "explanation_premium_prompt"),
-            reply_markup=premium_keyboard(lang),
+            f"{t(lang, 'explanation_premium_prompt')}\n\n{premium_text}",
+            reply_markup=premium_markup,
         )
         return
 
