@@ -844,7 +844,8 @@ async def get_user_results(user_id: int, limit: int = 10) -> list[dict]:
         rows = await _all(
             conn,
             "SELECT * FROM results WHERE user_id=? "
-            "ORDER BY started_at DESC,id DESC LIMIT ?",
+            "ORDER BY CASE WHEN status='in_progress' THEN 0 ELSE 1 END,"
+            "started_at DESC,id DESC LIMIT ?",
             (user_id, limit),
         )
         result = []
