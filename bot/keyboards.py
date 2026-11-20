@@ -288,7 +288,10 @@ def subject_keyboard(subjects: list[dict]) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def test_choice_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+def test_choice_keyboard(
+    lang: str = "ru",
+    resume_session_id: int | None = None,
+) -> InlineKeyboardMarkup:
     rows = []
     localized_labels = {
         "ru": ("Математика", "Английский", "IQ", "Полный мок"),
@@ -296,6 +299,16 @@ def test_choice_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
         "uz": ("Matematika", "Ingliz tili", "IQ", "To'liq mock"),
     }
     labels = localized_labels.get(lang, localized_labels["ru"])
+    resume_labels = {
+        "ru": "▶️ Продолжить незавершённый тест",
+        "en": "▶️ Resume unfinished test",
+        "uz": "▶️ Tugallanmagan testni davom ettirish",
+    }
+    if resume_session_id is not None:
+        rows.append([InlineKeyboardButton(
+            text=resume_labels.get(lang, resume_labels["ru"]),
+            callback_data=f"history:resume:{resume_session_id}",
+        )])
     question_word = {"ru": "вопросов", "en": "questions", "uz": "savol"}.get(lang, "questions")
     subject_slugs = ("mathematics", "english", "iq")
     for slug, title in zip(subject_slugs, labels):
