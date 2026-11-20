@@ -1,0 +1,11 @@
+{
+  "promo_activated_discount": "✅ Your {value}% discount will apply to your next subscription selection. At 100%, the subscription is free.",
+  "test_history_empty": "🕘 Your session history is empty.",
+  "test_history_title": "🕘 <b>Session history</b>\n",
+  "session_history_in_progress": "⏸ {subject}: {answered}/{total} answered · {date}",
+  "session_progress": "⏸ Session incomplete: {answered} of {total} questions answered.",
+  "session_resumed": "▶️ Resuming your saved session.",
+  "session_not_resumable": "This session cannot be resumed.",
+  "session_not_retakable": "This session has no saved question set to retake.",
+  "payment_subscription_free": "✅ 100% discount applied: Premium for {plan} is now active for free.\nYour subscription is valid until {date}."
+}
