@@ -107,6 +107,9 @@ def result_questions_keyboard(
     unlock_price: int = EXPLANATION_PRICE_STARS,
     lang: str = "ru",
     unlock_subjects: list[tuple[str, str]] | None = None,
+    session_id: int | None = None,
+    session_status: str | None = None,
+    can_retake: bool = False,
 ) -> InlineKeyboardMarkup:
     buttons = [
         InlineKeyboardButton(text=str(index + 1), callback_data=f"review:{result_id}:{index}")
@@ -123,6 +126,23 @@ def result_questions_keyboard(
             text=labels.get(lang, labels["ru"]).format(subject=title, price=unlock_price)[:64],
             callback_data=f"unlock:{result_id}:{subject}:{unlock_price}",
         )])
+    if session_id is not None:
+        action_labels = {
+            "ru": ("▶️ Продолжить сессию", "🔄 Пересдать этот набор"),
+            "uz": ("▶️ Seansni davom ettirish", "🔄 Shu testni qayta topshirish"),
+            "en": ("▶️ Resume session", "🔄 Retake this set"),
+        }
+        resume_label, retake_label = action_labels.get(lang, action_labels["ru"])
+        if session_status == "in_progress":
+            rows.append([InlineKeyboardButton(
+                text=resume_label,
+                callback_data=f"history:resume:{session_id}",
+            )])
+        if can_retake:
+            rows.append([InlineKeyboardButton(
+                text=retake_label,
+                callback_data=f"history:retake:{session_id}",
+            )])
     nav_labels = {
         "ru": ("💎 Premium", "🎯 Новый тест"),
         "uz": ("💎 Premium", "🎯 Yangi test"),
@@ -136,17 +156,18 @@ def result_questions_keyboard(
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
-def premium_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+def premium_keyboard(lang: str = "ru", prices: dict[str, int] | None = None) -> InlineKeyboardMarkup:
     labels = {
-        "ru": ("🟢 1 неделя — 200 ⭐", "🟡 1 месяц — 700 ⭐", "🔥 3 месяца — 2000 ⭐ · выгодно", "🔙 Назад"),
-        "uz": ("🟢 1 hafta — 200 ⭐", "🟡 1 oy — 700 ⭐", "🔥 3 oy — 2000 ⭐ · foydali", "🔙 Orqaga"),
-        "en": ("🟢 1 week — 200 ⭐", "🟡 1 month — 700 ⭐", "🔥 3 months — 2000 ⭐ · best value", "🔙 Back"),
+        "ru": ("🟢 1 неделя", "🟡 1 месяц", "🔥 3 месяца · выгодно", "🔙 Назад"),
+        "uz": ("🟢 1 hafta", "🟡 1 oy", "🔥 3 oy · foydali", "🔙 Orqaga"),
+        "en": ("🟢 1 week", "🟡 1 month", "🔥 3 months · best value", "🔙 Back"),
     }
     week, month, quarter, back = labels.get(lang, labels["ru"])
+    prices = prices or {"week": 200, "month": 700, "quarter": 2000}
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=week, callback_data="sub:week")],
-        [InlineKeyboardButton(text=month, callback_data="sub:month")],
-        [InlineKeyboardButton(text=quarter, callback_data="sub:quarter")],
+        [InlineKeyboardButton(text=f"{week} — {prices['week']} ⭐", callback_data="sub:week")],
+        [InlineKeyboardButton(text=f"{month} — {prices['month']} ⭐", callback_data="sub:month")],
+        [InlineKeyboardButton(text=f"{quarter} — {prices['quarter']} ⭐", callback_data="sub:quarter")],
         [InlineKeyboardButton(text=back, callback_data="user:main")],
     ])
 
@@ -293,8 +314,12 @@ def test_choice_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
 def result_history_keyboard(results: list[dict], lang: str = "ru") -> InlineKeyboardMarkup:
     rows = []
     for result in results:
-        date = str(result.get("finished_at", ""))[:10]
-        label = f"{date} · {result['score']}/{result['total']}"
+        date = str(result.get("started_at") or result.get("finished_at", ""))[:10]
+        answered = len(result.get("answers", []))
+        if result.get("status") == "in_progress":
+            label = f"⏸ {date} · {answered}/{result['total']}"
+        else:
+            label = f"{date} · {result['score']}/{result['total']}"
         rows.append([InlineKeyboardButton(text=label, callback_data=f"history:{result['id']}")])
     back_labels = {"ru": "🔙 В меню", "uz": "🔙 Menyu", "en": "🔙 Menu"}
     rows.append([InlineKeyboardButton(text=back_labels.get(lang, back_labels["ru"]), callback_data="user:main")])
@@ -563,6 +588,10 @@ def admin_settings_keyboard(current: dict, defaults: dict) -> InlineKeyboardMark
     keys = [
         ("donation_min_stars",  "🟢 Мин. донат Stars"),
         ("donation_max_stars",  "🔴 Макс. донат Stars"),
+        ("premium_week_stars", "💎 Premium: неделя ⭐"),
+        ("premium_month_stars", "💎 Premium: месяц ⭐"),
+        ("premium_quarter_stars", "💎 Premium: 3 месяца ⭐"),
+        ("premium_discount_percent", "🏷️ Скидка Premium %"),
     ]
     rows = []
     for key, label in keys:
