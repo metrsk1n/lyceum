@@ -93,6 +93,7 @@ async def init_db() -> None:
                 username    TEXT,
                 first_name  TEXT,
                 language    TEXT NOT NULL DEFAULT 'ru',
+                language_selected INTEGER NOT NULL DEFAULT 1,
                 is_banned   INTEGER NOT NULL DEFAULT 0,
                 created_at  TEXT NOT NULL DEFAULT (datetime('now'))
             );
@@ -229,6 +230,11 @@ async def init_db() -> None:
 
         user_columns_cursor = await conn.execute("PRAGMA table_info(users)")
         user_columns = {row[1] for row in await user_columns_cursor.fetchall()}
+        if "language_selected" not in user_columns:
+            await conn.execute(
+                "ALTER TABLE users ADD COLUMN language_selected INTEGER NOT NULL DEFAULT 1"
+            )
+        await conn.execute("UPDATE users SET language='ru' WHERE language='en'")
         if "is_banned" not in user_columns:
             await conn.execute(
                 "ALTER TABLE users ADD COLUMN is_banned INTEGER NOT NULL DEFAULT 0"
@@ -338,7 +344,8 @@ async def get_or_create_user(user_id: int, first_name: str | None, username: str
         row = await _one(conn, "SELECT * FROM users WHERE id=?", (user_id,))
         if row is None:
             await conn.execute(
-                "INSERT INTO users (id, username, first_name, language) VALUES (?,?,?,?)",
+                "INSERT INTO users (id, username, first_name, language, language_selected) "
+                "VALUES (?,?,?,?,0)",
                 (user_id, username, first_name, settings.default_language),
             )
             await conn.commit()
@@ -365,7 +372,10 @@ async def get_user_language(user_id: int) -> str:
 
 async def set_user_language(user_id: int, language: str) -> None:
     async with _db() as conn:
-        await conn.execute("UPDATE users SET language=? WHERE id=?", (language, user_id))
+        await conn.execute(
+            "UPDATE users SET language=?, language_selected=1 WHERE id=?",
+            (language, user_id),
+        )
         await conn.commit()
 
 
