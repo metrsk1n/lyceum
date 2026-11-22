@@ -90,6 +90,12 @@ async def cmd_start(message: Message, state: FSMContext) -> None:
         message.from_user.username,
     )
     lang = user["language"]
+    if not user["language_selected"]:
+        await message.answer(
+            t(lang, "choose_language"),
+            reply_markup=language_keyboard(),
+        )
+        return
     await message.answer(t(lang, "start"), reply_markup=user_main_menu(lang))
 
 
@@ -529,7 +535,7 @@ async def show_language(message: Message, state: FSMContext) -> None:
 @router.callback_query(F.data.startswith("lang:"))
 async def set_language(callback: CallbackQuery, state: FSMContext) -> None:
     lang = callback.data.split(":")[1]
-    if lang not in {"ru", "uz", "en"}:
+    if lang not in {"ru", "uz"}:
         current_lang = await _lang(callback.from_user.id)
         await callback.answer(t(current_lang, "language_invalid"), show_alert=True)
         return
