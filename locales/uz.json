@@ -1,6 +1,6 @@
 {
   "start": "✨ Imtihonga tayyorgarlik shu yerdan boshlanadi!\n\nBu shunchaki test emas — bilimlaringizni tez va qulay sinab ko'ring. Fan va test turini tanlang, natijangizni kuzating.\n\nAmalni tanlang:",
-  "help": "📚 <b>Botdan foydalanish:</b>\n\n⚡ «Testni boshlash» tugmasini bosing\n🎯 Fan va formatni tanlang: 20 ta savolli test yoki 60 ta savolli to'liq mock\n🧠 Savollarga javob bering va natijangizni ko'ring\n\n📝 <b>Narxlar:</b>\n• 20 ta savolli test — 25 ⭐\n• 60 ta savolli to'liq mock — 60 ⭐\n• Test tahlili — 25 ⭐\n• Premium: joriy narx va chegirma obuna menyusida ko'rsatiladi\n\n🎁 «Yana» bo'limida promokodni faollashtirib, 60 ta savolli bepul to'liq mock olishingiz mumkin.\n\n⚡️ <b>Fanlar:</b>\n🔴 Matematika   🟢 Ingliz tili   🟣 IQ\n\n─────────────────────\n💬 <b>Savollaringiz bormi?</b>\n\n🤝 <b>Tashkiliy masalalar, hamkorlik va savollar mazmuni bo'yicha:</b>\n👤 <a href=\"https://t.me/Saidkhuja_Asadullayev\">@Saidkhuja_Asadullayev</a>\n\n🤖 <b>Botdagi texnik muammolar, xatolar va nosozliklar bo'yicha:</b>\n👤 <a href=\"https://t.me/msd1shka\">@msd1shka</a>",
+  "help": "📚 <b>Botdan foydalanish:</b>\n\n⚡ «Testni boshlash» tugmasini bosing\n🎯 Fan va formatni tanlang: 20 ta savolli test yoki 60 ta savolli to'liq mock\n🧠 Savollarga javob bering va natijangizni ko'ring\n\n📝 <b>Narxlar:</b>\n• 20 ta savolli test — 25 ⭐\n• 60 ta savolli to'liq mock — 60 ⭐\n• Test tahlili — 25 ⭐\n• Premium: kuniga 3 tagacha test va obuna faol bo'lgan davrda barcha testlarning bepul tahlili. Narx va chegirma obuna menyusida ko'rsatiladi.\n\n🎁 «Yana» bo'limida promokodni faollashtirib, 60 ta savolli bepul to'liq mock olishingiz mumkin.\n\n⚡️ <b>Fanlar:</b>\n🔴 Matematika   🟢 Ingliz tili   🟣 IQ\n\n─────────────────────\n💬 <b>Savollaringiz bormi?</b>\n\n🤝 <b>Tashkiliy masalalar, hamkorlik va savollar mazmuni bo'yicha:</b>\n👤 <a href=\"https://t.me/Saidkhuja_Asadullayev\">@Saidkhuja_Asadullayev</a>\n\n🤖 <b>Botdagi texnik muammolar, xatolar va nosozliklar bo'yicha:</b>\n👤 <a href=\"https://t.me/msd1shka\">@msd1shka</a>",
   "menu": {
     "start_test": "📚 Testni boshlash",
     "statistics": "📊 Statistika",
@@ -36,6 +36,16 @@
   "payments_empty": "💳 Sizda hali to'lovlar yo'q.",
   "payments_list": "💳 <b>To'lovlaringiz:</b>\n\n",
   "payment_item": "• {date} — {type} — {amount} ⭐ — {status}\n",
+  "payment_types": {
+    "subscription": "Premium obunasi",
+    "test": "Test",
+    "full_test": "To'liq mock",
+    "unlock": "Tahlil"
+  },
+  "payment_statuses": {
+    "paid": "To'langan",
+    "pending": "To'lov kutilmoqda"
+  },
   "support_prompt": "💰 Loyihani qo'llab-quvvatlang!\n\nStars miqdorini kiriting ({min} dan {max} gacha):",
   "support_invalid": "❌ {min} dan {max} gacha bo'lgan sonni kiriting.",
   "support_preview": "⭐ Siz <b>{amount} Stars</b> yubormoqchisiz.",
@@ -45,7 +55,7 @@
   "profile": "👤 <b>Profil</b>\n\n📊 Jami testlar: <b>{tests}</b>\n✅ To'g'ri javoblar: <b>{correct}</b>\n📈 Aniqlik: <b>{accuracy}%</b>\n💎 Obuna: <b>{subscription}</b>\n\n❌ Xatolar: <b>{mistakes}</b>",
   "subscription_active": "faol",
   "subscription_inactive": "faol emas",
-  "premium_description": "💎 <b>Premium obuna</b>\n\nObuna faol bo'lganda kuniga 5 tagacha test va batafsil tahlillar bepul. Xatolar tarixi va kengaytirilgan tayyorgarlik rejimi ham mavjud.",
+  "premium_description": "💎 <b>Premium obuna</b>\n\nObuna faol bo'lganda kuniga 3 tagacha test va barcha testlarning batafsil tahlili bepul. Xatolar tarixi va kengaytirilgan tayyorgarlik rejimi ham mavjud.",
   "more_credits": "🎁 Bepul to'liq mocklar soni: <b>{credits}</b>.",
   "more_no_credits": "🎁 60 ta savolli bepul to'liq mock promokod faollashtirilgandan keyin ochiladi.",
   "more_description": "✨ <b>Yana</b>\n\nBonus olish uchun promokodni faollashtiring va faollashtirishlar tarixini ko'ring.\n{mock_status}\n\n🤝 <b>Jamoa bilan bog'lanish</b>\nTashkiliy masalalar, hamkorlik va savollar mazmuni bo'yicha bosh administratorga murojaat qiling: <a href=\"https://t.me/Saidkhuja_Asadullayev\">@Saidkhuja_Asadullayev</a>.\nBot, kod yoki xatolar bilan bog'liq texnik muammolar bo'yicha texnik administratorga yozing: <a href=\"https://t.me/msd1shka\">@msd1shka</a>.",
@@ -89,7 +99,7 @@
   "choose_test_size": "To'liq mock: 60 ta savol — matematika, ingliz tili va IQ fanlaridan 20 tadan.\nTest formatini tanlang:",
   "test_invalid_format": "Test formati noto'g'ri.",
   "full_mock_missing": "To'liq mock hozircha mavjud emas. Quyidagi fanlarda savollar yetarli emas: {subjects}. Har bir fandan 20 tadan savol kerak.",
-  "daily_limit": "Premium kunlik limitingizdan (5 ta test) foydalandingiz. Yangi testlardan ertaga foydalanishingiz mumkin.",
+  "daily_limit": "Premium kunlik limitingizdan (3 ta test) foydalandingiz. Yangi testlardan ertaga foydalanishingiz mumkin.",
   "full_mock_title": "To'liq mock",
   "single_test_title": "Bitta test",
   "full_mock_invoice_description": "60 ta savol: matematika, ingliz tili va IQ fanlaridan 20 tadan",
@@ -104,6 +114,7 @@
   "explanation_missing": "Bu savol uchun tahlil hali qo'shilmagan.",
   "review_title": "💡 <b>{index}-savol tahlili</b>",
   "correct_answer": "✅ To'g'ri javob: {answer}",
+  "answer_not_provided": "Ko'rsatilmagan",
   "test_result_subject": "📊 Fan bo'yicha natijangiz: {subject}",
   "test_result_score": "To'g'ri javoblar: {score} / {total} ({percent}%)",
   "answer_correct": "✅ To'g'ri",
@@ -121,7 +132,7 @@
   "unlock_invoice_description": "Tanlangan fan bo'yicha izohlarni ochish",
   "unknown_plan": "Tarif topilmadi.",
   "premium_invoice_title": "Premium obunasi",
-  "premium_invoice_description": "Kuniga 5 tagacha test, batafsil tahlillar va xatolar tarixi",
+  "premium_invoice_description": "Kuniga 3 tagacha test, barcha testlarning bepul tahlili va xatolar tarixi",
   "donation_invalid_amount": "Miqdor noto'g'ri.",
   "donation_unavailable": "Bu xayriya miqdori mavjud emas. Qaytadan boshlang.",
   "donation_invoice_title": "Loyihani qo'llab-quvvatlash",
