@@ -130,7 +130,7 @@ async def user_profile(callback: CallbackQuery) -> None:
     lang = await _lang(callback.from_user.id)
     stats = await db.get_user_stats(callback.from_user.id)
     has_sub = await db.user_has_active_subscription(callback.from_user.id)
-    mistakes = await db.get_user_mistakes(callback.from_user.id, limit=5)
+    mistakes = await db.get_user_mistake_count(callback.from_user.id)
 
     profile_text = t(
         lang,
@@ -139,7 +139,7 @@ async def user_profile(callback: CallbackQuery) -> None:
         correct=stats["correct"],
         accuracy=stats["accuracy"],
         subscription=t(lang, "subscription_active" if has_sub else "subscription_inactive"),
-        mistakes=len(mistakes),
+        mistakes=mistakes,
     )
     await callback.message.edit_text(profile_text, reply_markup=profile_keyboard(lang))
     await callback.answer()
@@ -329,7 +329,7 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
     if action == "profile":
         stats = await db.get_user_stats(user_id)
         has_sub = await db.user_has_active_subscription(user_id)
-        mistakes = await db.get_user_mistakes(user_id, limit=5)
+        mistakes = await db.get_user_mistake_count(user_id)
         text = t(
             lang,
             "profile",
@@ -337,7 +337,7 @@ async def handle_user_menu_button(message: Message, state: FSMContext) -> None:
             correct=stats["correct"],
             accuracy=stats["accuracy"],
             subscription=t(lang, "subscription_active" if has_sub else "subscription_inactive"),
-            mistakes=len(mistakes),
+            mistakes=mistakes,
         )
         await message.answer(text, reply_markup=profile_keyboard(lang))
     elif action == "test":

@@ -47,6 +47,12 @@ def _result_has_subject(result: dict, subject: str) -> bool:
     return subject == result["subject"]
 
 
+def _payment_label(lang: str, category: str, value: str) -> str:
+    key = f"{category}.{value}"
+    translation = t(lang, key)
+    return value if translation == key else translation
+
+
 # ─── Payment history ──────────────────────────────────────────────────────────
 
 @router.message(F.text.in_({"💳 Платежи", "💳 Payments", "💳 To'lovlar"}))
@@ -61,8 +67,10 @@ async def show_payments(message: Message, state: FSMContext) -> None:
     lines = [t(lang, "payments_list")]
     for p in payments:
         lines.append(t(lang, "payment_item",
-            date=p["created_at"][:10], type=p["product_type"],
-            amount=p["amount"], status=p["status"],
+            date=p["created_at"][:10],
+            type=_payment_label(lang, "payment_types", p["product_type"]),
+            amount=p["amount"],
+            status=_payment_label(lang, "payment_statuses", p["status"]),
         ))
     await message.answer("".join(lines))
 

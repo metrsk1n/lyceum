@@ -117,9 +117,9 @@ async def start_test(callback: CallbackQuery, state: FSMContext) -> None:
             return
 
     access = (
-        await db.consume_full_test_access(callback.from_user.id, subscriber_daily_limit=5)
+        await db.consume_full_test_access(callback.from_user.id)
         if size == "full"
-        else await db.consume_test_access(callback.from_user.id, subscriber_daily_limit=5)
+        else await db.consume_test_access(callback.from_user.id)
     )
     if access == "daily_limit":
         await callback.message.answer(t(lang, "daily_limit"))
@@ -537,7 +537,11 @@ async def review_question(callback: CallbackQuery) -> None:
     explanation = answer.get("explanation") or t(lang, "explanation_missing")
     options = answer.get("options", [])
     correct_index = answer.get("correct", 0)
-    correct_answer = options[correct_index] if 0 <= correct_index < len(options) else "Не указан"
+    correct_answer = (
+        options[correct_index]
+        if 0 <= correct_index < len(options)
+        else t(lang, "answer_not_provided")
+    )
     steps = [line.strip() for line in explanation.splitlines() if line.strip()]
     formatted_steps = "\n".join(f"\t{escape(step)}" for step in steps)
     text = (
