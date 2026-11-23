@@ -963,7 +963,7 @@ async def consume_free_full_mock_credit(user_id: int) -> bool:
         return cursor.rowcount == 1
 
 
-async def consume_test_access(user_id: int, subscriber_daily_limit: int = 5) -> str:
+async def consume_test_access(user_id: int, subscriber_daily_limit: int = 3) -> str:
     if user_id in settings.admin_ids:
         return "subscriber"
 
@@ -996,7 +996,7 @@ async def consume_test_access(user_id: int, subscriber_daily_limit: int = 5) -> 
         return "payment_required"
 
 
-async def consume_full_test_access(user_id: int, subscriber_daily_limit: int = 5) -> str:
+async def consume_full_test_access(user_id: int, subscriber_daily_limit: int = 3) -> str:
     if user_id in settings.admin_ids:
         return "subscriber"
 
@@ -1501,6 +1501,21 @@ async def get_user_mistakes(user_id: int, limit: int = 10) -> list[dict]:
                     if len(mistakes) >= limit:
                         return mistakes
         return mistakes
+
+
+async def get_user_mistake_count(user_id: int) -> int:
+    async with _db() as conn:
+        rows = await _all(
+            conn,
+            "SELECT answers_json FROM results "
+            "WHERE user_id=? AND status='completed'",
+            (user_id,),
+        )
+        return sum(
+            not answer.get("is_correct")
+            for row in rows
+            for answer in (json.loads(row["answers_json"]) if row["answers_json"] else [])
+        )
 
 
 async def get_user_subscription(user_id: int) -> dict | None:
